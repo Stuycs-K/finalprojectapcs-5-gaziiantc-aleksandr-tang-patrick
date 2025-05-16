@@ -19,7 +19,7 @@ Patrick Tang
 
 2. Clash royale
 
-  It’s clash royale. 
+  It’s clash royale. Autobattler where you destroy enemy towers
 
   Link: https://supercell.com/en/games/clashroyale/
   
