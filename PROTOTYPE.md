@@ -14,7 +14,8 @@ Critical Features: First we make physics, then we add gameplay. These are the re
 Nice to have features: Multiplayer PVP
 Diagrams
 
-![image](https://github.com/user-attachments/assets/c6d3f27b-9015-4f67-bdc5-359bb8f5cc4b)
+![image](https://github.com/user-attachments/assets/f80c1f82-36f6-4c8b-be68-d4bd06547dfe)
+
 
 
 # Technical Details:
@@ -23,7 +24,8 @@ We will be using a stack to make fast collision detection
 
 # Project Design
 
-![image](https://github.com/user-attachments/assets/1ce60827-d4e1-4d6d-b55c-f0a49d89178f)
+![image](https://github.com/user-attachments/assets/75676294-061d-449d-81c2-7dd7c356e8cd)
+
 
 Objects will be handled with an abstract AObject class. This AObject class will contain some basic info about the object and an abstract tick() method. 
 
