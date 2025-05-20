@@ -2,8 +2,7 @@ Period 5
 
 Members: Aleksandr Gaziiantc, Patrick Tang
 
-Group Name: 
-
+Group Name: Better than (F)Art Majors 
 
 
 
