@@ -17,6 +17,10 @@ Diagrams
 
 ![image](https://github.com/user-attachments/assets/8e04842d-cfc0-4bd4-bd7b-a00c691fcfd7)
 
+Nice to have features:
+![image](https://github.com/user-attachments/assets/157cf15b-f2ce-4843-8280-be41f1cd4cea)
+
+
 
 
 # Technical Details:
