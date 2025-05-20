@@ -16,6 +16,8 @@ Diagrams
 
 ![image](https://github.com/user-attachments/assets/fac54002-5361-4e1d-870a-b6f93a9b8bba)
 
+![image](https://github.com/user-attachments/assets/8e04842d-cfc0-4bd4-bd7b-a00c691fcfd7)
+
 
 
 # Technical Details:
