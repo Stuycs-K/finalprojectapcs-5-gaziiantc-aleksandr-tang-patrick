@@ -5,7 +5,7 @@ Members: Aleksandr Gaziiantc, Patrick Tang
 Group Name: Better than (F)Art Majors 
 
 
-
+Project Description: This game is a tower defense game where you try and protect your base from attacks. You can spend money to buy building defenses, such as a wood plank or a metal sheet, or special defenses, such as a void or black hole spell. Attacks will become progressively harder and in greater number.
 
 
 
