@@ -5,8 +5,18 @@ abstract class AObject {
 
 	public Stack<Chunk> chunks; 
 
-	public abstract void tick();
 
+  public AObject(int x, int y, int sizex, int sizey){
+     this.x = x;
+     this.y = y;
+     this.sizeX = sizex;
+     this.sizeY = sizey;
+  }
+
+
+
+	public abstract void tick();
+  
 
 	/*we're making our own polar coordinate system out here fr
 	 180
@@ -20,12 +30,13 @@ abstract class AObject {
 
 
 
-	public void setHitbox(boolean state){
+public void setHitbox(boolean state){
+  double tempAngle = angle - Math.PI/2;
 		if(state){
 			if(angle > 180){
-				drawSlopedRect(x-sizeX, y-sizeY, Math.tan(angle-180), sizeX, sizeY); 				
+				drawLeftSlopedRect(x, y, Math.tan(tempAngle-180), sizeX, sizeY); 				
 			}else{
-				drawSlopedRect(x, y, Math.tan(angle), sizeX, sizeY);
+				drawRightSlopedRect(x, y, Math.tan(tempAngle), sizeX, sizeY);
 			}
 		}else{
 			while(chunks.size() > 0){
