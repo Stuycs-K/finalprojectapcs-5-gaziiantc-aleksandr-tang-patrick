@@ -1,6 +1,6 @@
 abstract class AObject {
 	public int x; public int y;
-	public int sizeX, public int sizeY;
+	public int sizeX; public int sizeY;
 	public double angle;
 
 	public Stack<Chunk> chunks; 
@@ -23,11 +23,13 @@ abstract class AObject {
 	public void setHitbox(boolean state){
 		if(state){
 			if(angle > 180){
-				
+				drawSlopedRect(x-sizeX, y-sizeY, Math.tan(angle-180), sizeX, sizeY); 				
+			}else{
+				drawSlopedRect(x, y, Math.tan(angle), sizeX, sizeY);
 			}
 		}else{
 			while(chunks.size() > 0){
-				chunks.pop.taken()=false;
+				chunks.pop().taken=false;
 			}
 		}
 	}
