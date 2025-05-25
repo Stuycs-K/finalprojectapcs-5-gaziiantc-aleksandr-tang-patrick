@@ -33,12 +33,8 @@ abstract class AObject {
 public void setHitbox(boolean state){
   double tempAngle = angle - Math.PI/2;
 		if(state){
-			if(angle > 180){
-				drawLeftSlopedRect(x, y, Math.tan(tempAngle-180), sizeX, sizeY); 				
-			}else{
-				drawRightSlopedRect(x, y, Math.tan(tempAngle), sizeX, sizeY);
-			}
-		}else{
+		  drawParaSquare(this.x, this.y, this.sizeX, this.sizeY, Math.sin(tempAngle), Math.cos(tempAngle));
+    }else{
 			while(chunks.size() > 0){
 				chunks.pop().taken=false;
 			}

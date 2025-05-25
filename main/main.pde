@@ -20,128 +20,20 @@ int getLoc(int x, int y){
   return x/Chunk.size + ((y/Chunk.size) * (width/Chunk.size));
 }
 
-void drawRightSlopedRect(int x_start, int y_start, double slope, int w, int h){
-  //divine intellect rasterization from ohio that came to me in a dream during gym last monday
-  /*if(Math.abs(slope) < 0.1){
-    println("whar");
-      for(int x = x_start+h; x >= x_start; x--){
-        for(int y = y_start; y<y_start+w; y++){
-          int pos = getLoc(x, y);
-          if(pos < map.size() && pos > 0){
-            map.get(pos).taken = true;
-          }
-        }
-      }
-      println("???");
-      return;
-  }*/
-  if(Math.abs(slope) < 1){
-    for(int x = x_start; x < x_start+h; x++){
-      for(int i=0; (i)<w && slope*i<h; i++){
-        //System.out.println("x : " + x + " y: " + (y_start + slope * i));
-        int pos = getLoc(x + i, (int)(y_start + slope * i));
-        if(pos < map.size() && pos > 0){
-          map.get(pos).taken = true;
-        }
-      }
-    }
-  }else if (Math.abs(slope) < 3.5){
-    for(int x = x_start; x < x_start+h; x++){
-      for(int i=0; (i)<w && Math.abs(slope*i)<h; i++){
-        //System.out.println("x : " + x + " y: " + (y_start + slope * i));
-        int pos = getLoc((int)(x + Math.abs((i / slope))), (int)(y_start + slope * i));
-        if(pos < map.size() && pos > 0){
-          map.get(pos).taken = true;
-        }
-      }
-    }
-  } else {
-    //just draw a normal rectangle at that point
-    if(slope > 0){
-      for(int x = x_start; x<x_start+h; x++){
-        for(int y = y_start; y<y_start+w; y++){
-          int pos = getLoc(x, y);
-          if(pos < map.size() && pos > 0){
-            map.get(pos).taken = true;
-          }
-        }
-      }
-    }else{
-      for(int x = x_start; x<x_start+h; x++){
-        for(int y = y_start; y>y_start-w; y--){
-          int pos = getLoc(x, y);
-          if(pos < map.size() && pos > 0){
-            map.get(pos).taken = true;
-          }
-        }
-      }
-    }
+void drawParaLine(int pX, int pY, int len, double dx, double dy){
+  for(int t=0; t<len; t++){
+    map.get(getLoc((int)(x + dx * t), (int)(y + dy * t))).taken = true;
   }
-  //System.out.println((double)(System.nanoTime()-time) / 1_000_000_000);
 }
 
-void drawLeftSlopedRect(int x_start, int y_start, double slope, int w, int h){
-  //divine intellect rasterization from ohio that came to me in a dream during gym last monday
-  /*if(Math.abs(slope) < 0.1){
-    println("whal");
-      for(int x = x_start+h; x >= x_start; x--){
-        for(int y = y_start; y<y_start+w; y++){
-          int pos = getLoc(x, y);
-          if(pos < map.size() && pos > 0){
-            map.get(pos).taken = true;
-          }
-        }
-      }
-      println(">????");
-      return;
-  }*/
-  if(Math.abs(slope) < 1){
-    for(int x = x_start+h; x >= x_start; x--){
-      for(int i=0; (i)<w && slope*i<h; i++){
-        //System.out.println("x : " + x + " y: " + (y_start + slope * i));
-        int pos = getLoc(x + i, (int)(y_start - slope * i));
-        if(pos < map.size() && pos > 0){
-          map.get(pos).taken = true;
-        }
-      }
-    }
-  }else if (Math.abs(slope) < 3.5){
-    for(int x = x_start+h; x >= x_start; x--){
-      for(int i=0; (i)<w && Math.abs(slope*i)<h; i++){
-        //System.out.println("x : " + x + " y: " + (y_start + slope * i));
-        int pos = getLoc((int)(x + Math.abs((i / slope))), (int)(y_start - slope * i));
-        if(pos < map.size() && pos > 0){
-          map.get(pos).taken = true;
-        }
-      }
-    }
-  } else {
-    //just draw a normal rectangle at that point
-    if(slope > 0){
-      for(int x = x_start+h; x >= x_start; x--){
-        for(int y = y_start; y<y_start+w; y++){
-          int pos = getLoc(x, y);
-          if(pos < map.size() && pos > 0){
-            map.get(pos).taken = true;
-          }
-        }
-      }
-    }else{
-      for(int x = x_start+h; x >= x_start; x--){
-        for(int y = y_start; y>y_start-w; y--){
-          int pos = getLoc(x, y);
-          if(pos < map.size() && pos > 0){
-            map.get(pos).taken = true;
-          }
-        }
-      }
-    }
+void drawParaSquare(int pX, int pY, int sX, int sY, double dx, double dy){ //naming standards vs calculus epic rap battles of history
+  for(int x = 0; x<sX; x++){
+    drawParaLine(x + pX, pY, sY, dx, dy);
   }
-  //System.out.println((double)(System.nanoTime()-time) / 1_000_000_000);
 }
 
 void debugDraw(){
-  //debug function so written poorly
+  //debug function so kinda slow
   for(int i=0; i<map.size(); i++){
     if(map.get(i).taken){
       map.get(i).taken = false;
