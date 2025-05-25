@@ -11,7 +11,11 @@ abstract class AObject {
   public double ddy;
   //vector2f or whatever processing calls it is for the weak
   public double mass;
-  private boolean FLAG; //not a fan of the prospect of calling this "edge-flag" so it will be staying ambiguous, with this comment being the only way of knowing what it means.
+  public int FLAGx; //not a fan of the prospect of calling this "edgeFlag" so it will be staying ambiguous, with this comment being the only way of knowing what it means.
+  public int FLAGy;
+
+  public color clr;
+
 
   public Stack<Chunk> chunks;
 
@@ -27,10 +31,13 @@ abstract class AObject {
     this.dy = 0;
     this.ddx = 0;
     this.ddy = 0;
+    this.clr = color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255));
   }
 
 
   public abstract void tick();
+
+  public abstract void draw();
 
 
 
@@ -38,11 +45,17 @@ abstract class AObject {
     return x/Chunk.size + ((y/Chunk.size) * (width/Chunk.size));
   }
 
-  boolean isOnBorder(int x, int y) {
-    return (x > width / Chunk.size) || (x < 0) || (y > height / Chunk.size) || (y < 0);
-  }
   boolean isOnBorder(double x, double y) {
-    return (x > width - 1) || (x <= 0) || (y > height) || (y < 0);
+    if((x >= width - 10) || (x <= 10)){
+      FLAGx++;
+      if((y >= height-10) || (y <= 10)) FLAGy++;
+      return true;
+    }else if((y >= height-10) || (y <= 10)){
+      FLAGy++;
+      if((x >= width-10) || (x <= 10)) FLAGx++;
+      return true;
+    }
+    return false;
   }
   void drawParaLine(int pX, int pY, int len, double dx, double dy) {
     for (int t=-1 * len / 2; t<len / 2; t++) {
@@ -68,8 +81,6 @@ abstract class AObject {
             return map.get(getLoc((int)(pX + dx * t), (int)(pY + dy * t))).obj;
           }
         }
-      } else {
-        FLAG = true;
       }
     }
     return null;
@@ -120,7 +131,8 @@ abstract class AObject {
     this.ddy = 0; //newton's 0th law fr
     AObject obj = this.tryMove(this.dx, this.dy);
     if (obj!=null) {
-      obj.applyForce(this.dx * this.mass, this.dy * this.mass);
+      obj.applyForce(this.dx * this.mass / obj.mass, this.dy * this.mass / obj.mass);
+      this.applyForce(-1 * this.dx * this.mass / obj.mass, -1 * this.dy * this.mass / obj.mass);
       this.doCollisionStuff(obj);
       obj.doCollisionStuff(this);
     }
@@ -140,10 +152,8 @@ abstract class AObject {
       this.dy += 0.005;
     }
 
-    if (FLAG) {
-      this.doOutOfBoundsStuff();
-      FLAG = false;
-    }
+    this.doBoundsStuff();
+    FLAGx = 0; FLAGy = 0;
   }
 
 
@@ -153,7 +163,7 @@ abstract class AObject {
     //Not abstract because overriding this just to have it do nothing would be dumb and stupid ok
   }
 
-  public void doOutOfBoundsStuff() {
+  public void doBoundsStuff() {
     
   }
 }
