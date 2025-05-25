@@ -15,9 +15,9 @@ void setup(){
   }
   noStroke();
   test = new TestClass();
-  //test2 = new TestClass();
-  //test2.x += 80;
-  //test2.y += 52;
+  test2 = new TestClass();
+  test2.x += 79;
+  test2.y += 38;
 }
 
 
@@ -41,9 +41,9 @@ void debugDraw(){
 
 
 void draw(){
-  //test2.setHitbox(true);
+  test2.setHitbox(true);
   test.tick();
-  test.angle += 0.01;
+  test.angle += 0.0033;
   test.angle %= 2 * Math.PI;
   //println(test.angle);
   debugDraw();

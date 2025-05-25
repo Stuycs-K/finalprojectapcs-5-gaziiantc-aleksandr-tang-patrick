@@ -70,7 +70,7 @@ abstract class AObject {
 
   public void setHitbox(boolean state){
     if(state){
-      drawParaSquare(this.x-this.sizeX, this.y, this.sizeX, this.sizeY, Math.sin(angle), Math.cos(angle));
+      drawParaSquare(this.x, this.y, this.sizeX, this.sizeY, Math.sin(angle), Math.cos(angle));
     }else{
       while(chunks.size() > 0){
         chunks.pop().unTake();
