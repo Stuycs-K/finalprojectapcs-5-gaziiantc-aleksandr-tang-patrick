@@ -13,11 +13,15 @@ void setup(){
       rect(x, y, Chunk.size, Chunk.size);
     }
   }
-  noStroke();
+  //noStroke();
   test = new TestClass();
+  test.applyForce(100, 100);
   test2 = new TestClass();
+  test2.mass = 10;
+  test2.sizeX -= 5;
+  test2.sizeY -= 5;
   test2.x += 79;
-  test2.y += 38;
+  test2.y += 50;
 }
 
 
@@ -41,10 +45,15 @@ void debugDraw(){
 
 
 void draw(){
+  
   test2.setHitbox(true);
+  test.setHitbox(true);
+  
+  test2.tick();
   test.tick();
-  test.angle += 0.0033;
+  test.angle += test.dx / 25;
   test.angle %= 2 * Math.PI;
-  //println(test.angle);
+  println(test.dx);
+  println(test2.dx);
   debugDraw();
 }
