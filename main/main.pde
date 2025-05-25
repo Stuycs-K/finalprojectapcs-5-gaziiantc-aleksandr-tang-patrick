@@ -2,6 +2,7 @@ import java.util.*;
 
 List<Chunk> map;
 TestClass test;
+TestClass test2;
 void setup(){
   size(700, 700, P2D);
   map = new ArrayList<>();
@@ -13,25 +14,16 @@ void setup(){
     }
   }
   test = new TestClass();
-  
+  test2 = new TestClass();
+  test2.x += 80;
+  test2.y += 52;
 }
 
-int getLoc(int x, int y){
-  return x/Chunk.size + ((y/Chunk.size) * (width/Chunk.size));
-}
 
-void drawParaLine(int pX, int pY, int len, double dx, double dy, AObject obj){
-  for(int t=0; t<len; t++){
-    map.get(getLoc((int)(x + dx * t), (int)(y + dy * t))).taken = true;
-    map.get(getLoc((int)(x + dx * t), (int)(y + dy * t))).obj = obj;
-  }
-}
 
-void drawParaSquare(int pX, int pY, int sX, int sY, double dx, double dy, AObject obj){ //naming standards vs calculus epic rap battles of history
-  for(int x = 0; x<sX; x++){
-    drawParaLine(x + pX, pY, sY, dx, dy);
-  }
-}
+
+
+
 
 void debugDraw(){
   //debug function so kinda slow
@@ -48,9 +40,10 @@ void debugDraw(){
 
 
 void draw(){
+  test2.setHitbox(true);
   test.tick();
   test.angle += 0.01;
   test.angle %= 2 * Math.PI;
-  println(test.angle);
+  //println(test.angle);
   debugDraw();
 }

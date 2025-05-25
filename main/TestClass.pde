@@ -6,6 +6,7 @@ class TestClass extends AObject{
 
 	@Override
 	public void tick(){
+    this.tryMove(1, 1);
 		this.setHitbox(true);
 	}
 }
