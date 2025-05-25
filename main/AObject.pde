@@ -43,8 +43,8 @@ abstract class AObject {
   }
 
   void drawParaSquare(int pX, int pY, int sX, int sY, double dx, double dy){ //naming standards vs calculus epic rap battles of history
-    for(int x=0; x<sX; x++){
-      drawParaLine(x + pX, (int)(dy * x + pY), sY, dx, dy);
+    for(int t=0; t<sX; t++){
+      drawParaLine((int)(pX + dx * t), (int)(pY + dy * t), sY, dy * -1, dx);
     }
   }
   boolean readParaLine(int pX, int pY, int len, double dx, double dy){
