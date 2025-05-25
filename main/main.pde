@@ -13,6 +13,7 @@ void setup(){
       rect(x, y, Chunk.size, Chunk.size);
     }
   }
+  noStroke();
   test = new TestClass();
   //test2 = new TestClass();
   //test2.x += 80;

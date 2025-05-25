@@ -34,7 +34,7 @@ abstract class AObject {
   }
 
   void drawParaLine(int pX, int pY, int len, double dx, double dy){
-    for(int t=0; t<len; t++){
+    for(int t=-1 * len / 2; t<len / 2; t++){
       if(getLoc((int)(pX + dx * t), (int)(pY + dy * t)) < map.size() && getLoc((int)(pX + dx * t), (int)(pY + dy * t)) > 0){
         map.get(getLoc((int)(pX + dx * t), (int)(pY + dy * t))).taken = true;
         map.get(getLoc((int)(pX + dx * t), (int)(pY + dy * t))).obj = this;
@@ -43,24 +43,24 @@ abstract class AObject {
   }
 
   void drawParaSquare(int pX, int pY, int sX, int sY, double dx, double dy){ //naming standards vs calculus epic rap battles of history
-    for(int t=0; t<sX; t++){
+    for(int t=-1 * sX / 2; t<sX / 2; t++){
       drawParaLine((int)(pX + dx * t), (int)(pY + dy * t), sY, dy * -1, dx);
     }
   }
   boolean readParaLine(int pX, int pY, int len, double dx, double dy){
-    for(int t=0; t<len; t++){
-      if(getLoc((int)(pX + dx * t), (int)(pY + dy * t)) < map.size() && map.get(getLoc((int)(pX + dx * t), (int)(pY + dy * t))).obj != this && map.get(getLoc((int)(pX + dx * t), (int)(pY + dy * t))).obj != null){
-        //out-of-bounds is not a barrier here
-         //println(pX + dx *t);
-         return false; 
+    for(int t=-1 * len / 2; t<len / 2; t++){
+      if(getLoc((int)(pX + dx * t), (int)(pY + dy * t)) < map.size() && getLoc((int)(pX + dx * t), (int)(pY + dy * t)) > 0){
+        if(map.get(getLoc((int)(pX + dx * t), (int)(pY + dy * t))).taken && map.get(getLoc((int)(pX + dx * t), (int)(pY + dy * t))).obj != this){
+          return false;
+        }
       }
     }
     return true;
   }
 
   boolean readParaSquare(int pX, int pY, int sX, int sY, double dx, double dy){
-    for(int x=0; x<sX; x++){
-      if(!readParaLine(x + pX, pY, sY, dx, dy)){
+   for(int t=-1 * sX / 2; t<sX / 2; t++){
+      if(!readParaLine((int)(pX + dx * t), (int)(pY + dy * t), sY, dy * -1, dx)){
         return false;
       }
     }
@@ -70,7 +70,7 @@ abstract class AObject {
 
   public void setHitbox(boolean state){
     if(state){
-      drawParaSquare(this.x, this.y, this.sizeX, this.sizeY, Math.sin(angle), Math.cos(angle));
+      drawParaSquare(this.x-this.sizeX, this.y, this.sizeX, this.sizeY, Math.sin(angle), Math.cos(angle));
     }else{
       while(chunks.size() > 0){
         chunks.pop().unTake();
