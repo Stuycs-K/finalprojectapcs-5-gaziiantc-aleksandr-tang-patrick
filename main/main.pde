@@ -15,11 +15,12 @@ void setup(){
   }
   noStroke();
   test = new TestClass();
-  test.applyForce(200, 200);
+  test.applyForce(100, 100);
   test2 = new TestClass();
   test2.mass = 10;
   test2.sizeX -= 5;
   test2.sizeY -= 5;
+  test.sizeY += 25;
   test2.x += 79;
   test2.y += 50;
   
@@ -75,6 +76,9 @@ void draw(){
   
 }
 
-void keyPressed(){
-   frameRate(2);
+void mouseDragged(){
+   stroke(0);
+   line(mouseX, mouseY, pmouseX, pmouseY);
+   noStroke();
+   test.applyForce((mouseX-pmouseX) / 2, (mouseY-pmouseY) / 2); 
 }
