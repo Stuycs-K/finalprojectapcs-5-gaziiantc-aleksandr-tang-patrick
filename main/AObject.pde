@@ -35,7 +35,7 @@ abstract class AObject {
 
   void drawParaLine(int pX, int pY, int len, double dx, double dy){
     for(int t=0; t<len; t++){
-      if(getLoc((int)(pX + dx * t), (int)(pY + dy * t)) < map.size()){
+      if(getLoc((int)(pX + dx * t), (int)(pY + dy * t)) < map.size() && getLoc((int)(pX + dx * t), (int)(pY + dy * t)) > 0){
         map.get(getLoc((int)(pX + dx * t), (int)(pY + dy * t))).taken = true;
         map.get(getLoc((int)(pX + dx * t), (int)(pY + dy * t))).obj = this;
       }
@@ -44,14 +44,14 @@ abstract class AObject {
 
   void drawParaSquare(int pX, int pY, int sX, int sY, double dx, double dy){ //naming standards vs calculus epic rap battles of history
     for(int x=0; x<sX; x++){
-      drawParaLine(x + pX, pY, sY, dx, dy);
+      drawParaLine(x + pX, (int)(dy * x + pY), sY, dx, dy);
     }
   }
   boolean readParaLine(int pX, int pY, int len, double dx, double dy){
     for(int t=0; t<len; t++){
       if(getLoc((int)(pX + dx * t), (int)(pY + dy * t)) < map.size() && map.get(getLoc((int)(pX + dx * t), (int)(pY + dy * t))).obj != this && map.get(getLoc((int)(pX + dx * t), (int)(pY + dy * t))).obj != null){
-        //out-of-bounds is not a barrier
-         println(pX + dx *t);
+        //out-of-bounds is not a barrier here
+         //println(pX + dx *t);
          return false; 
       }
     }
