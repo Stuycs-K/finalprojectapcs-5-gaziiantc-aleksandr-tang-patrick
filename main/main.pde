@@ -20,13 +20,14 @@ int getLoc(int x, int y){
   return x/Chunk.size + ((y/Chunk.size) * (width/Chunk.size));
 }
 
-void drawParaLine(int pX, int pY, int len, double dx, double dy){
+void drawParaLine(int pX, int pY, int len, double dx, double dy, AObject obj){
   for(int t=0; t<len; t++){
     map.get(getLoc((int)(x + dx * t), (int)(y + dy * t))).taken = true;
+    map.get(getLoc((int)(x + dx * t), (int)(y + dy * t))).obj = obj;
   }
 }
 
-void drawParaSquare(int pX, int pY, int sX, int sY, double dx, double dy){ //naming standards vs calculus epic rap battles of history
+void drawParaSquare(int pX, int pY, int sX, int sY, double dx, double dy, AObject obj){ //naming standards vs calculus epic rap battles of history
   for(int x = 0; x<sX; x++){
     drawParaLine(x + pX, pY, sY, dx, dy);
   }
