@@ -16,8 +16,10 @@ abstract class AObject {
 
   public color clr;
 
-
   public Stack<Chunk> chunks;
+  public int iframes;
+
+  public static final double FRICTION_CONST = 0;
 
 
   public AObject(double x, double y, int sizex, int sizey, double mass) {
@@ -32,6 +34,7 @@ abstract class AObject {
     this.ddx = 0;
     this.ddy = 0;
     this.clr = color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255));
+    iframes = 0;
   }
 
 
@@ -120,8 +123,10 @@ abstract class AObject {
 
 
   public void applyForce(double ddx, double ddy) {
-    this.ddx += ddx/this.mass;
-    this.ddy += ddy/this.mass;
+    if(iframes <= 0){
+      this.ddx += ddx/this.mass;
+      this.ddy += ddy/this.mass;
+    }
   }
 
   public void doMovementTick() {
@@ -131,29 +136,32 @@ abstract class AObject {
     this.ddy = 0; //newton's 0th law fr
     AObject obj = this.tryMove(this.dx, this.dy);
     if (obj!=null) {
-      obj.applyForce(this.dx * this.mass / obj.mass, this.dy * this.mass / obj.mass);
-      this.applyForce(-1 * this.dx * this.mass / obj.mass, -1 * this.dy * this.mass / obj.mass);
+      double totaldx = (this.dx * this.mass + obj.dx * obj.mass) / (this.mass + obj.mass);
+      double totaldy = (this.dy * this.mass + obj.dy * obj.mass) / (this.mass + obj.mass);
+      obj.dx = totaldx; obj.dy = totaldy;
+      this.dx = totaldx; this.dy = totaldy;
       this.doCollisionStuff(obj);
       obj.doCollisionStuff(this);
     }
     if (Math.abs(this.dx) < 0.01) {
       this.dx = 0;
     } else if (this.dx > 0) {
-      this.dx -= 0.005;
+      this.dx -= 0.005 * FRICTION_CONST;
     } else if (this.dx < 0) {
-      this.dx += 0.005;
+      this.dx += 0.005 * FRICTION_CONST;
     }
 
     if (Math.abs(this.dy) < 0.01) {
       this.dy = 0;
     } else if (this.dy > 0) {
-      this.dy -= 0.005;
+      this.dy -= 0.005 * FRICTION_CONST;
     } else if (this.dx < 0) {
-      this.dy += 0.005;
+      this.dy += 0.005 * FRICTION_CONST;
     }
 
     this.doBoundsStuff();
     FLAGx = 0; FLAGy = 0;
+    iframes--;
   }
 
 
