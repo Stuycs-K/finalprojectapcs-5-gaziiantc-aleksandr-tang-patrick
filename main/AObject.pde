@@ -111,12 +111,15 @@ abstract class AObject {
   }
 
   public AObject tryMove(double dx, double dy) {
-    AObject obj =  readParaSquare((int)(this.x + dx), (int)(this.y + dy), this.sizeX, this.sizeY, Math.sin(angle), Math.cos(angle));
+    this.x += dx;
+	this.y += dy;
+    AObject obj =  readParaSquare((int)(this.x), (int)(this.y), this.sizeX, this.sizeY, Math.sin(angle), Math.cos(angle));
     if (obj==null) {
-      this.x += dx;
-      this.y += dy;
       return null;
     } else {
+	  //doing it this way will reuslt in stuff pushing maybe?
+	  this.x -= dx;
+	  this.y -= dy;
       return obj;
     }
   }
@@ -136,10 +139,7 @@ abstract class AObject {
     this.ddy = 0; //newton's 0th law fr
     AObject obj = this.tryMove(this.dx, this.dy);
     if (obj!=null) {
-      double totaldx = (this.dx * this.mass + obj.dx * obj.mass) / (this.mass + obj.mass);
-      double totaldy = (this.dy * this.mass + obj.dy * obj.mass) / (this.mass + obj.mass);
-      obj.dx = totaldx; obj.dy = totaldy;
-      this.dx = totaldx; this.dy = totaldy;
+      
       this.doCollisionStuff(obj);
       obj.doCollisionStuff(this);
     }
