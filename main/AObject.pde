@@ -19,7 +19,7 @@ abstract class AObject {
   public Stack<Chunk> chunks;
   public int iframes;
 
-  public static final double FRICTION_CONST = 0;
+  public static final double FRICTION_CONST = 1;
 
 
   public AObject(double x, double y, int sizex, int sizey, double mass) {
@@ -142,6 +142,9 @@ abstract class AObject {
       
       this.doCollisionStuff(obj);
       obj.doCollisionStuff(this);
+      if(obj instanceof ADefense){
+         ((ADefense)obj).onHit(this); 
+      }
     }
     if (Math.abs(this.dx) < 0.01) {
       this.dx = 0;
