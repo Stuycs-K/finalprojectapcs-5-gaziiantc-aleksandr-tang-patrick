@@ -3,6 +3,7 @@ import java.util.*;
 List<Chunk> map;
 TestClass test;
 TestClass test2;
+boolean inventory=false;
 void setup(){
   size(700, 700, P2D);
   map = new ArrayList<>();
@@ -73,6 +74,18 @@ void draw(){
   //test.angle += 0.01;
   //println(test.dx);
   //println(test2.dx);
+  text(mouseX,500,10);
+    text(mouseY,500,20);
+  if(inventory){
+    fill(235,213,179);
+    rect(400,400,400,500);
+    fill(0);
+    for(int i=0;i<5;i++){
+      for(int j=0;j<7;j++){
+        rect(120+50*i,120+50*j,25,25);
+      }
+    }
+  }
   
 }
 
@@ -81,4 +94,11 @@ void mouseDragged(){
    line(mouseX, mouseY, pmouseX, pmouseY);
    noStroke();
    test.applyForce((mouseX-pmouseX) / 2, (mouseY-pmouseY) / 2); 
+}
+
+void keyPressed(){
+  if(keyCode=='E'||keyCode=='e'){
+    inventory=!inventory;
+  }
+
 }
