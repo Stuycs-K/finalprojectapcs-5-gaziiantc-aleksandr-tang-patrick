@@ -3,11 +3,9 @@ import java.util.*;
 List<Chunk> map;
 TestClass test;
 TestClass test2;
-<<<<<<< HEAD
-boolean inventory=false;
-=======
+boolean shop=false;
+boolean select=false;
 TestDefense test3;
->>>>>>> 9e7b44a42fa55378210b38b4712d19c35ff55dc9
 void setup(){
   size(700, 700, P2D);
   map = new ArrayList<>();
@@ -87,15 +85,17 @@ void draw(){
   //println(test2.dx);
   text(mouseX,500,10);
     text(mouseY,500,20);
-  if(inventory){
+  if(shop){
     fill(235,213,179);
     rect(400,400,400,500);
     fill(0);
+    textSize(24);
     for(int i=0;i<5;i++){
-      for(int j=0;j<7;j++){
-        rect(120+50*i,120+50*j,25,25);
+      for(int j=0;j<6;j++){
+        rect(250+75*i,220+75*j,50,50);
       }
     }
+    text("Shop",350,175);
   }
   
 }
@@ -109,7 +109,16 @@ void mouseDragged(){
 
 void keyPressed(){
   if(keyCode=='E'||keyCode=='e'){
-    inventory=!inventory;
+    shop=!shop;
   }
+}
 
+void mousePressed(){
+  if(shop){
+    select=true;
+  }
+  if(select){
+    rect(mouseX,mouseY,50,50);
+      
+  }
 }
