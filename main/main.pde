@@ -3,7 +3,11 @@ import java.util.*;
 List<Chunk> map;
 TestClass test;
 TestClass test2;
+<<<<<<< HEAD
 boolean inventory=false;
+=======
+TestDefense test3;
+>>>>>>> 9e7b44a42fa55378210b38b4712d19c35ff55dc9
 void setup(){
   size(700, 700, P2D);
   map = new ArrayList<>();
@@ -27,6 +31,10 @@ void setup(){
   
   test.x += 150;
   test2.x += 150;
+  
+  test3 = new TestDefense();
+  test3.x += 250;
+  test3.sizeX += 400;
 }
 
 
@@ -60,10 +68,13 @@ void draw(){
   rect(width/2, height/2, width, height);
   //debugDraw();
   clearMap();
+  test3.setHitbox(true);
   test2.setHitbox(true);
   test.setHitbox(true);
+  test3.draw();
   test2.draw();
   test.draw();
+  test3.tick();
   test2.tick();
   test.tick();
 
