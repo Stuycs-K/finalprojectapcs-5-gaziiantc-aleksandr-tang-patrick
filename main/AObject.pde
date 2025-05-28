@@ -111,15 +111,15 @@ abstract class AObject {
   }
 
   public AObject tryMove(double dx, double dy) {
-    this.x += dx;
-	this.y += dy;
+
     AObject obj =  readParaSquare((int)(this.x), (int)(this.y), this.sizeX, this.sizeY, Math.sin(angle), Math.cos(angle));
     if (obj==null) {
+          this.x += dx;
+  this.y += dy;
       return null;
     } else {
 	  //doing it this way will reuslt in stuff pushing maybe?
-	  this.x -= dx;
-	  this.y -= dy;
+
       return obj;
     }
   }
