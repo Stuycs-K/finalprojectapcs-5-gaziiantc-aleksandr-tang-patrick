@@ -21,6 +21,7 @@ class TestDefense extends ADefense{
 
 	@Override
 	public void onHit(AObject obj){
+    this.applyForce(obj.dx * obj.mass, obj.dy * obj.mass);
 		obj.dx *= -1; obj.dy *= -1;
     this.dx *= 0.5; this.dy *= 0.5;
 	}

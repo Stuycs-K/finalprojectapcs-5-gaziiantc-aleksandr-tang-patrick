@@ -19,7 +19,7 @@ abstract class AObject {
   public Stack<Chunk> chunks;
   public int iframes;
 
-  public static final double FRICTION_CONST = 1;
+  public static final double FRICTION_CONST = 4;
 
 
   public AObject(double x, double y, int sizex, int sizey, double mass) {
@@ -118,8 +118,6 @@ abstract class AObject {
       return null;
     } else {
 	  //doing it this way will reuslt in stuff pushing maybe?
-	  this.x -= dx;
-	  this.y -= dy;
       return obj;
     }
   }
@@ -143,7 +141,7 @@ abstract class AObject {
       this.doCollisionStuff(obj);
       obj.doCollisionStuff(this);
       if(obj instanceof ADefense){
-         ((ADefense)obj).onHit(this); 
+         ((ADefense)obj).onHit(this); //in retrospect, this is completely useless, but whatever maybe we can do a oncolliison fire onhit chicanery or whatvere the hell idk :skull:
       }
     }
     if (Math.abs(this.dx) < 0.01) {
