@@ -6,9 +6,11 @@ ArrayList<AObject> objects;
 
 boolean shop=false;
 boolean placingBlock=false;
+boolean voidplaced=false;
 Block selectedBlock=null;
 List<Block> placedBlocks=new ArrayList<Block>();
 void setup(){
+  objects = new ArrayList<>();
   size(700, 700, P2D);
   map = new ArrayList<>();
   fill(255);
@@ -72,7 +74,7 @@ void draw(){
   //debugDraw(); //this broke gg
   clearMap();
   for(int i=0; i<objects.size(); i++){	
-	objects.get(i).setHitbox(true);
+	  objects.get(i).setHitbox(true);
   }
   for(int i=0; i<objects.size(); i++){	
 	objects.get(i).tick();
@@ -81,8 +83,8 @@ void draw(){
 	objects.get(i).draw();
   }
   
-  test.angle+=test.dx/25;
-  test2.angle+=test2.dx/25;
+  objects.get(1).angle+=objects.get(1).dx/25;
+  objects.get(2).angle+=objects.get(2).dx/25;
   text(mouseX,500,10);
   text(mouseY,500,20);
   if(shop){
@@ -111,7 +113,7 @@ void mouseDragged(){
    stroke(0);
    line(mouseX, mouseY, pmouseX, pmouseY);
    noStroke();
-   test.applyForce((mouseX-pmouseX) / 2, (mouseY-pmouseY) / 2); 
+   objects.get(1).applyForce((mouseX-pmouseX) / 2, (mouseY-pmouseY) / 2); 
 }
 
 void keyPressed(){
@@ -121,6 +123,11 @@ void keyPressed(){
       placingBlock=false;
       selectedBlock=null;
     }
+  }
+  if(keyCode=='v'||keyCode=='V'){
+    Void test4=new Void(mouseX,mouseY);
+    voidplaced=true;
+    objects.add(test4);
   }
 }
 
