@@ -27,3 +27,8 @@ Just tweaked some numbers in collision calculation
 ### 2025-05-27 
 
 Made the ADefense abstract class
+
+### 2025-05-29
+
+changed git.config username
+Attribute class, WallWooden class, MainBase class, 
