@@ -7,6 +7,7 @@ boolean shop=false;
 boolean placingBlock=false;
 WallWooden test3;
 Void test4;
+Shield test5;
 boolean voidplaced=false;
 Block selectedBlock=null;
 List<Block> placedBlocks=new ArrayList<Block>();
@@ -31,6 +32,7 @@ void setup(){
   test.sizeY += 25;
   test2.x += 79;
   test2.y += 50;
+  test5=new Shield(500,500);
   
   test.x += 150;
   test2.x += 150;
@@ -84,6 +86,10 @@ void draw(){
   if(voidplaced){
   test4.draw();
   test4.tick();
+  }
+  if(millis()<test5.duration){
+    test5.draw();
+    test5.tick();
   }
   
   
