@@ -1,0 +1,4 @@
+enum Attribute{	
+	FLAMMABLE,
+	FRAGILE
+}
