@@ -176,7 +176,7 @@ abstract class AObject {
   
   //do not override this unless you REALLY need to
   public void collision(AObject obj){
-     this.doCollisionStuff(obj);
+     doCollisionStuff(obj);
   }
   
 }

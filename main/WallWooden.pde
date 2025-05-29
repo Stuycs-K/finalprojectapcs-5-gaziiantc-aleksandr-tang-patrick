@@ -8,6 +8,7 @@ class WallWooden extends ADefense {
 		this.applyForce(obj.dx * obj.mass, obj.dy * obj.mass);
 		this.dx *= 0.7; this.dy *= 0.7;
 		obj.dx *= -1; obj.dy *= -1;
+		obj.x += obj.dx; obj.y += obj.dy;
 	}
   @Override
   public void draw(){
