@@ -6,6 +6,8 @@ TestClass test2;
 boolean shop=false;
 boolean placingBlock=false;
 WallWooden test3;
+Void test4;
+boolean voidplaced=false;
 Block selectedBlock=null;
 List<Block> placedBlocks=new ArrayList<Block>();
 MainBase plr;
@@ -34,7 +36,6 @@ void setup(){
   test2.x += 150;
   
   test3 = new WallWooden(width/2-100, height/2);
-  
   plr = new MainBase(width / 2, height / 2);
 }
 
@@ -80,7 +81,10 @@ void draw(){
   test3.tick();
   test2.tick();
   test.tick();
-  
+  if(voidplaced){
+  test4.draw();
+  test4.tick();
+  }
   
   
   test.angle+=test.dx/25;
@@ -123,6 +127,10 @@ void keyPressed(){
       placingBlock=false;
       selectedBlock=null;
     }
+  }
+  if(keyCode=='v'||keyCode=='V'){
+    test4=new Void(mouseX,mouseY);
+    voidplaced=true;
   }
 }
 
