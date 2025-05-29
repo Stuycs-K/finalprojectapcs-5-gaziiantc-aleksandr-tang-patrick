@@ -4,8 +4,11 @@ List<Chunk> map;
 TestClass test;
 TestClass test2;
 boolean shop=false;
-boolean select=false;
+boolean placingBlock=false;
 TestDefense test3;
+Block selectedBlock=null;
+List<Block> placedBlocks=new ArrayList<Block>();
+
 void setup(){
   size(700, 700, P2D);
   map = new ArrayList<>();
@@ -60,10 +63,9 @@ void clearMap(){
   }
 }
 
-
 void draw(){
   fill(255);
-  rect(width/2, height/2, width, height);
+  rect(width/2,height/2,width,height);
   //debugDraw();
   clearMap();
   test3.setHitbox(true);
@@ -75,16 +77,13 @@ void draw(){
   test3.tick();
   test2.tick();
   test.tick();
-
   
-
-  test.angle += test.dx / 25;
-  test2.angle += test2.dx / 25;
-  //test.angle += 0.01;
-  //println(test.dx);
-  //println(test2.dx);
+  
+  
+  test.angle+=test.dx/25;
+  test2.angle+=test2.dx/25;
   text(mouseX,500,10);
-    text(mouseY,500,20);
+  text(mouseY,500,20);
   if(shop){
     fill(235,213,179);
     rect(400,400,400,500);
@@ -97,7 +96,14 @@ void draw(){
     }
     text("Shop",350,175);
   }
-  
+  for(Block block:placedBlocks){
+    block.display();
+  }
+  if(placingBlock&&selectedBlock!=null){
+    selectedBlock.x=mouseX-selectedBlock.size/2;
+    selectedBlock.y=mouseY-selectedBlock.size/2;
+    selectedBlock.display();
+  }
 }
 
 void mouseDragged(){
@@ -110,15 +116,30 @@ void mouseDragged(){
 void keyPressed(){
   if(keyCode=='E'||keyCode=='e'){
     shop=!shop;
+    if(!shop&&placingBlock){
+      placingBlock=false;
+      selectedBlock=null;
+    }
   }
 }
 
 void mousePressed(){
   if(shop){
-    select=true;
-  }
-  if(select){
-    rect(mouseX,mouseY,50,50);
-      
+    for(int i=0;i<5;i++){
+      for(int j=0;j<6;j++){
+        float boxX=250+75*i;
+        float boxY=220+75*j;
+        if(mouseX>boxX&&mouseX<boxX+50&&mouseY>boxY&&mouseY<boxY+50){
+          selectedBlock=new Block(mouseX,mouseY,color(0));
+          placingBlock=true;
+          shop=false;
+          return;
+        }
+      }
+    }
+  }else if(placingBlock){
+    placedBlocks.add(new Block(mouseX-selectedBlock.size/2,mouseY-selectedBlock.size/2,selectedBlock.blockColor));
+    placingBlock=false;
+    selectedBlock=null;
   }
 }
