@@ -25,8 +25,8 @@ class TestClass extends AObject{
   public void doCollisionStuff(AObject obj){
     //double totaldx = (this.dx * this.mass + obj.dx * obj.mass) / (this.mass + obj.mass);
     //double totaldy = (this.dy * this.mass + obj.dy * obj.mass) / (this.mass + obj.mass);
-    this.x += obj.x - this.x;
-    this.y += obj.y - this.dy;
+    this.x -= obj.x - this.x;
+    this.y -= obj.y - this.y;
     this.applyForce(obj.dx, obj.dy);
   }
   
