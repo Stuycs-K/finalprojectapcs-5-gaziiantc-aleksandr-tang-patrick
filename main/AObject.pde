@@ -111,11 +111,10 @@ abstract class AObject {
   }
 
   public AObject tryMove(double dx, double dy) {
-
+	this.y += dy;
+	this.x += dx;
     AObject obj =  readParaSquare((int)(this.x), (int)(this.y), this.sizeX, this.sizeY, Math.sin(angle), Math.cos(angle));
     if (obj==null) {
-          this.x += dx;
-  this.y += dy;
       return null;
     } else {
 	  //doing it this way will reuslt in stuff pushing maybe?
@@ -139,12 +138,9 @@ abstract class AObject {
     this.ddy = 0; //newton's 0th law fr
     AObject obj = this.tryMove(this.dx, this.dy);
     if (obj!=null) {
+      this.collision(obj);
+      obj.collision(this);
       
-      this.doCollisionStuff(obj);
-      obj.doCollisionStuff(this);
-      if(obj instanceof ADefense){
-         ((ADefense)obj).onHit(this); //in retrospect, this is completely useless, but whatever maybe we can do a oncolliison fire onhit chicanery or whatvere the hell idk :skull:
-      }
     }
     if (Math.abs(this.dx) < 0.01) {
       this.dx = 0;
@@ -177,4 +173,10 @@ abstract class AObject {
   public void doBoundsStuff() {
     
   }
+  
+  //do not override this unless you REALLY need to
+  public void collision(AObject obj){
+     this.doCollisionStuff(obj);
+  }
+  
 }

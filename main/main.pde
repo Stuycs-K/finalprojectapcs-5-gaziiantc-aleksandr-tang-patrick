@@ -5,10 +5,10 @@ TestClass test;
 TestClass test2;
 boolean shop=false;
 boolean placingBlock=false;
-TestDefense test3;
+WallWooden test3;
 Block selectedBlock=null;
 List<Block> placedBlocks=new ArrayList<Block>();
-
+MainBase plr;
 void setup(){
   size(700, 700, P2D);
   map = new ArrayList<>();
@@ -33,9 +33,9 @@ void setup(){
   test.x += 150;
   test2.x += 150;
   
-  test3 = new TestDefense();
-  test3.x += 250;
-  test3.sizeX += 400;
+  test3 = new WallWooden(width/2-100, height/2);
+  
+  plr = new MainBase(width / 2, height / 2);
 }
 
 
@@ -66,14 +66,17 @@ void clearMap(){
 void draw(){
   fill(255);
   rect(width/2,height/2,width,height);
-  //debugDraw();
+  //debugDraw(); //this broke gg
   clearMap();
+  plr.setHitbox(true);
   test3.setHitbox(true);
   test2.setHitbox(true);
   test.setHitbox(true);
+  plr.draw();
   test3.draw();
   test2.draw();
   test.draw();
+  plr.tick();
   test3.tick();
   test2.tick();
   test.tick();
