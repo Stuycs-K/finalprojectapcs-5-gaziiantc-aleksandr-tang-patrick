@@ -1,17 +1,16 @@
 import java.util.*;
 
 List<Chunk> map;
-TestClass test;
-TestClass test2;
+ArrayList<AObject> objects;
+
+
 boolean shop=false;
 boolean placingBlock=false;
-WallWooden test3;
-Void test4;
 boolean voidplaced=false;
 Block selectedBlock=null;
 List<Block> placedBlocks=new ArrayList<Block>();
-MainBase plr;
 void setup(){
+  objects = new ArrayList<>();
   size(700, 700, P2D);
   map = new ArrayList<>();
   fill(255);
@@ -22,9 +21,9 @@ void setup(){
     }
   }
   noStroke();
-  test = new TestClass();
+  TestClass test = new TestClass();
   test.applyForce(100, 100);
-  test2 = new TestClass();
+  TestClass test2 = new TestClass();
   test2.mass = 10;
   test2.sizeX -= 5;
   test2.sizeY -= 5;
@@ -35,8 +34,13 @@ void setup(){
   test.x += 150;
   test2.x += 150;
   
-  test3 = new WallWooden(width/2-100, height/2);
-  plr = new MainBase(width / 2, height / 2);
+  WallWooden test3 = new WallWooden(width/2-100, height/2);
+  
+  MainBase plr = new MainBase(width / 2, height / 2);
+  objects.add(plr);
+  objects.add(test);
+  objects.add(test2);
+  objects.add(test3);
 }
 
 
@@ -69,26 +73,18 @@ void draw(){
   rect(width/2,height/2,width,height);
   //debugDraw(); //this broke gg
   clearMap();
-  plr.setHitbox(true);
-  test3.setHitbox(true);
-  test2.setHitbox(true);
-  test.setHitbox(true);
-  plr.draw();
-  test3.draw();
-  test2.draw();
-  test.draw();
-  plr.tick();
-  test3.tick();
-  test2.tick();
-  test.tick();
-  if(voidplaced){
-  test4.draw();
-  test4.tick();
+  for(int i=0; i<objects.size(); i++){	
+	  objects.get(i).setHitbox(true);
+  }
+  for(int i=0; i<objects.size(); i++){	
+	objects.get(i).tick();
+  }
+  for(int i=0; i<objects.size(); i++){	
+	objects.get(i).draw();
   }
   
-  
-  test.angle+=test.dx/25;
-  test2.angle+=test2.dx/25;
+  objects.get(1).angle+=objects.get(1).dx/25;
+  objects.get(2).angle+=objects.get(2).dx/25;
   text(mouseX,500,10);
   text(mouseY,500,20);
   if(shop){
@@ -117,7 +113,7 @@ void mouseDragged(){
    stroke(0);
    line(mouseX, mouseY, pmouseX, pmouseY);
    noStroke();
-   test.applyForce((mouseX-pmouseX) / 2, (mouseY-pmouseY) / 2); 
+   objects.get(1).applyForce((mouseX-pmouseX) / 2, (mouseY-pmouseY) / 2); 
 }
 
 void keyPressed(){
@@ -129,8 +125,9 @@ void keyPressed(){
     }
   }
   if(keyCode=='v'||keyCode=='V'){
-    test4=new Void(mouseX,mouseY);
+    Void test4=new Void(mouseX,mouseY);
     voidplaced=true;
+    objects.add(test4);
   }
 }
 
