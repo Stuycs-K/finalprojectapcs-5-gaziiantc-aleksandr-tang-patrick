@@ -138,12 +138,12 @@ abstract class AObject {
     this.ddy = 0; //newton's 0th law fr
     AObject obj = this.tryMove(this.dx, this.dy);
     if (obj!=null) {
-      
-      this.doCollisionStuff(obj);
-      obj.doCollisionStuff(this);
       if(obj instanceof ADefense){
          ((ADefense)obj).onHit(this); //in retrospect, this is completely useless, but whatever maybe we can do a oncolliison fire onhit chicanery or whatvere the hell idk :skull:
       }
+      this.doCollisionStuff(obj);
+      obj.doCollisionStuff(this);
+      
     }
     if (Math.abs(this.dx) < 0.01) {
       this.dx = 0;

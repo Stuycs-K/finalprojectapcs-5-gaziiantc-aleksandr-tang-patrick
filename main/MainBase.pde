@@ -1,20 +1,19 @@
 class MainBase extends ADefense {
 	public static final int maxHP = 10000;
 	public MainBase(int x, int y){
-		super(100, x, y, 50, 50, 25000); 
+		super(maxHP, x, y, 50, 50, 25000); 
 		this.clr = color(0);
 	}
 
 	public void onHit(AObject obj){	
     this.applyForce(obj.dx * obj.mass, obj.dy * obj.mass);
     this.dx *= 0.5; this.dy *= 0.5;
-		this.hp -= (obj.dx + obj.dy) * obj.mass / 250;
-    print("hit");
+		this.hp -= (Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass;
+    print("hit " + this.hp);
 		if(this.hp > 0){
 			//it gets weaker as it takes more damage n stuff
-			this.mass = 25000 * (this.hp/100); 
-      print("mass changed");
-			this.clr = color(255 - hp * 2.55, 255 - hp * 2.55, 255 - hp * 2.55);
+			this.mass = 2000 * (double)this.hp/maxHP + 500; 
+			this.clr = color((int)((maxHP-hp) * (200.0d/maxHP)), (int)((maxHP-hp) * (200.0d/maxHP)), (int)((maxHP-hp) * (200.0d/maxHP)));
 		}
     obj.dx *= -1; obj.dy *= -1;
 
@@ -24,6 +23,7 @@ class MainBase extends ADefense {
   @Override
   public void tick(){
      this.doMovementTick(); 
+     this.angle += this.dx / 180 * 3.14;
   }
   
   @Override
@@ -35,6 +35,25 @@ class MainBase extends ADefense {
     rectMode(CENTER);
     rect(0, 0, (float)this.sizeX, (float)this.sizeY);
     popMatrix();
+  }
+
+  @Override
+  public void doBoundsStuff(){ 
+     if(this.x > width - (this.sizeX/2 * Math.cos(this.angle))){
+        this.x -= this.sizeX/2; 
+         dx = -0.9 * dx;
+     }else if(this.x < (this.sizeX/2 * Math.cos(this.angle))){
+        this.x += this.sizeX/2; 
+        dx = -0.9 * dx;
+     }
+     if(this.y > height - (this.sizeY/2 * Math.sin(this.angle))){
+        this.y -= this.sizeY/2; 
+         dy = -0.9 * dy;
+     }else if(this.y < (this.sizeY/2 * Math.sin(this.angle)-5)){
+        this.y += this.sizeY/2; 
+        dy = -0.9 * dy;
+     }
+          
   }
 
 }
