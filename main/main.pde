@@ -9,6 +9,7 @@ boolean placingBlock=false;
 WallWooden test3;
 Void test4;
 Shield test5;
+BlackHole test6;
 boolean voidplaced=false;
 Block selectedBlock=null;
 List<Block> placedBlocks=new ArrayList<Block>();
@@ -34,6 +35,7 @@ void setup(){
   test2.x += 79;
   test2.y += 50;
   test5=new Shield(500,500);
+  test6=new BlackHole(100,500);
   
   test.x += 150;
   test2.x += 150;
@@ -90,7 +92,10 @@ void draw(){
     test5.draw();
     test5.tick();
   }
-  
+    if(millis()<test6.duration){
+    test6.draw();
+    test6.tick();
+  }
   objects.get(1).angle+=objects.get(1).dx/25;
   objects.get(2).angle+=objects.get(2).dx/25;
   text(mouseX,500,10);
