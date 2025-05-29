@@ -93,8 +93,15 @@ void draw(){
   
   objects.get(1).angle+=objects.get(1).dx/25;
   objects.get(2).angle+=objects.get(2).dx/25;
+  fill(0);
   text(mouseX,500,10);
   text(mouseY,500,20);
+  int IHATETHISBLOODYLANGUAGESOMUCHOHMYGOD = 0;
+  //FOURTH TIME REWRITIN G THIS FUNCTUON BYTN OWgyuggu
+  for(int i=0; i<objects.size(); i++){
+     IHATETHISBLOODYLANGUAGESOMUCHOHMYGOD+=objects.get(i).mass * (Math.pow(objects.get(i).dx, 2) + Math.pow(objects.get(i).dy, 2));
+  }
+  text("Total energy in system: " + IHATETHISBLOODYLANGUAGESOMUCHOHMYGOD, 100, 10);
   if(shop){
     fill(235,213,179);
     rect(400,400,400,500);
