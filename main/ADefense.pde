@@ -26,7 +26,7 @@ abstract class ADefense extends AObject {
   @Override
   public void collision(AObject obj){
      super.collision(obj);
-     this.onHit(obj);
+     onHit(obj);
   }
 	
 }
