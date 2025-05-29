@@ -4,8 +4,15 @@ This document must be updated daily every time you finish a work session.
 
 ## Patrick Tang CHANGE THE NAME FOOL!
 
-### 2025-05-23 - Worked on game design
+### 2025-05-23 
 Spent whole period creating ideas and layouts for game
+Finalized backend progression ideas at home
 
-### 2024-05-27 - Brief description
-Expanded description including how much time was spent on task.
+### 2024-05-25
+Created code to allow for block placement
+
+### 2024-05-27
+Created basic code for inventory management
+
+### 2024-05-28 
+Changed inventory code to shop code
