@@ -1,13 +1,17 @@
 class MainBase extends ADefense {
 	public static final int maxHP = 10000;
 	public MainBase(int x, int y){
-		super(maxHP, x, y, 50, 50, 25000); 
+		super(maxHP, x, y, 50, 50, 25000); //can't really be moved the first time it gets hit
 		this.clr = color(0);
 	}
-
-	public void onHit(AObject obj){	
+  @Override
+  public void doCollisionStuff(AObject obj){
     this.applyForce(obj.dx * obj.mass, obj.dy * obj.mass);
     this.dx *= 0.5; this.dy *= 0.5;
+    obj.dx *= -1; obj.dy *= -1; 
+  }
+	public void onHit(AObject obj){	
+    
 		this.hp -= (Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass;
     print("hit " + this.hp);
 		if(this.hp > 0){
@@ -15,7 +19,7 @@ class MainBase extends ADefense {
 			this.mass = 2000 * (double)this.hp/maxHP + 500; 
 			this.clr = color((int)((maxHP-hp) * (200.0d/maxHP)), (int)((maxHP-hp) * (200.0d/maxHP)), (int)((maxHP-hp) * (200.0d/maxHP)));
 		}
-    obj.dx *= -1; obj.dy *= -1;
+    
 
 
 	}

@@ -5,7 +5,7 @@ TestClass test;
 TestClass test2;
 boolean shop=false;
 boolean placingBlock=false;
-TestDefense test3;
+WallWooden test3;
 Block selectedBlock=null;
 List<Block> placedBlocks=new ArrayList<Block>();
 MainBase plr;
@@ -33,9 +33,7 @@ void setup(){
   test.x += 150;
   test2.x += 150;
   
-  test3 = new TestDefense();
-  test3.x += 250;
-  test3.sizeX += 400;
+  test3 = new WallWooden(width/2-100, height/2);
   
   plr = new MainBase(width / 2, height / 2);
 }

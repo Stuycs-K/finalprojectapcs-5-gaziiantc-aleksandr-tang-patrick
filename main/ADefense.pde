@@ -20,5 +20,13 @@ abstract class ADefense extends AObject {
 		//do stuff here ig
 		//not abstract in case the user wants to leave this blank
 	}
+
+
+  //do not override this unless you REALLY need to
+  @Override
+  public void collision(AObject obj){
+     super.collision(obj);
+     this.onHit(obj);
+  }
 	
 }
