@@ -6,12 +6,9 @@ ArrayList<AObject> objects;
 
 boolean shop=false;
 boolean placingBlock=false;
-<<<<<<< HEAD
 WallWooden test3;
 Void test4;
 Shield test5;
-=======
->>>>>>> b121504840e5779a65255abb29b75bd1d1cee56c
 boolean voidplaced=false;
 Block selectedBlock=null;
 List<Block> placedBlocks=new ArrayList<Block>();
