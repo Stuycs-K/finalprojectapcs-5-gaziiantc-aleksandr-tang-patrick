@@ -79,6 +79,10 @@ void clearMap(){
 }
 
 void draw(){
+  if(keyCode=='l'||keyCode=='L'){
+     objects.add(new Laser());
+     println("a");
+  }
   fill(255);
   rect(width/2,height/2,width,height);
   if(key=='d'){
@@ -105,6 +109,7 @@ void draw(){
   objects.get(1).angle+=objects.get(1).dx/25;
   objects.get(2).angle+=objects.get(2).dx/25;
   fill(0);
+  textSize(25);
   text(mouseX,500,10);
   text(mouseY,500,20);
   int IHATETHISBLOODYLANGUAGESOMUCHOHMYGOD = 0;
@@ -144,6 +149,7 @@ void keyPressed(){
     voidplaced=true;
     objects.add(test4);
   }
+  
 }
 
 void mousePressed(){
