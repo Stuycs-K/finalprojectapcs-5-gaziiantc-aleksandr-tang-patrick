@@ -3,12 +3,17 @@ import java.util.*;
 List<Chunk> map;
 ArrayList<AObject> objects;
 
-
+int selectedDefenseIndex=-1;
+ADefense[] defenses={new WallWooden(0,0),new WallStone(0,0),new Void(0,0),new Shield(0,0),new BlackHole(0,0)};
+String[] defenseNames={"Wooden","Stone","Void","Shield","BlackHole"};
 boolean shop=false;
 boolean placingBlock=false;
+boolean placingDefense=false;
+ADefense selectedDefense=null;
 WallWooden test3;
 Void test4;
 Shield test5;
+BlackHole test6;
 boolean voidplaced=false;
 Block selectedBlock=null;
 List<Block> placedBlocks=new ArrayList<Block>();
@@ -34,6 +39,7 @@ void setup(){
   test2.x += 79;
   test2.y += 50;
   test5=new Shield(500,500);
+  test6=new BlackHole(100,500);
   
   test.x += 150;
   test2.x += 150;
@@ -92,7 +98,10 @@ void draw(){
     test5.draw();
     test5.tick();
   }
-  
+    if(millis()<test6.duration){
+    test6.draw();
+    test6.tick();
+  }
   objects.get(1).angle+=objects.get(1).dx/25;
   objects.get(2).angle+=objects.get(2).dx/25;
   fill(0);
@@ -105,24 +114,13 @@ void draw(){
   }
   text("Total energy in system: " + IHATETHISBLOODYLANGUAGESOMUCHOHMYGOD, 100, 10);
   if(shop){
-    fill(235,213,179);
-    rect(400,400,400,500);
-    fill(0);
-    textSize(24);
-    for(int i=0;i<5;i++){
-      for(int j=0;j<6;j++){
-        rect(250+75*i,220+75*j,50,50);
-      }
-    }
-    text("Shop",350,175);
+    drawShop();
   }
-  for(Block block:placedBlocks){
-    block.display();
-  }
-  if(placingBlock&&selectedBlock!=null){
-    selectedBlock.x=mouseX-selectedBlock.size/2;
-    selectedBlock.y=mouseY-selectedBlock.size/2;
-    selectedBlock.display();
+  if(placingDefense&&selectedDefenseIndex>=0){
+    pushMatrix();
+    translate(mouseX,mouseY);
+    defenses[selectedDefenseIndex].draw();
+    popMatrix();
   }
 }
 
@@ -136,9 +134,9 @@ void mouseDragged(){
 void keyPressed(){
   if(keyCode=='E'||keyCode=='e'){
     shop=!shop;
-    if(!shop&&placingBlock){
-      placingBlock=false;
-      selectedBlock=null;
+    if(!shop&&placingDefense){
+      placingDefense=false;
+      selectedDefenseIndex=-1;
     }
   }
   if(keyCode=='v'||keyCode=='V'){
@@ -151,20 +149,49 @@ void keyPressed(){
 void mousePressed(){
   if(shop){
     for(int i=0;i<5;i++){
-      for(int j=0;j<6;j++){
-        float boxX=250+75*i;
-        float boxY=220+75*j;
-        if(mouseX>boxX&&mouseX<boxX+50&&mouseY>boxY&&mouseY<boxY+50){
-          selectedBlock=new Block(mouseX,mouseY,color(0));
-          placingBlock=true;
-          shop=false;
-          return;
-        }
+      float x=250+75*i;
+      float y=220;
+      if(mouseX>x&&mouseX<x+50&&mouseY>y&&mouseY<y+50){
+        selectedDefenseIndex=i;
+        placingDefense=true;
+        shop=false;
+        return;
       }
     }
-  }else if(placingBlock){
-    placedBlocks.add(new Block(mouseX-selectedBlock.size/2,mouseY-selectedBlock.size/2,selectedBlock.blockColor));
-    placingBlock=false;
-    selectedBlock=null;
+  }else if(placingDefense){
+    switch(selectedDefenseIndex){
+      case 0:objects.add(new WallWooden(mouseX,mouseY));break;
+      case 1:objects.add(new WallStone(mouseX,mouseY));break;
+      case 2:objects.add(new Void(mouseX,mouseY));break;
+      case 3:objects.add(new Shield(mouseX,mouseY));break;
+      case 4:objects.add(new BlackHole(mouseX,mouseY));break;
+    }
+    placingDefense=false;
+    selectedDefenseIndex=-1;
   }
+}
+void drawShop(){
+  fill(235,213,179);
+  rect(400,400,400,500);
+  fill(0);
+  textSize(24);
+  for(int i=0;i<5;i++){
+    float x=250+75*i;
+    float y=220;
+    pushMatrix();
+    translate(x+25,y+25);
+    scale(0.4);
+    defenses[i].draw();
+    popMatrix();
+    textSize(14);
+    text(defenseNames[i],x-15,y+80);
+    if(selectedDefenseIndex==i){
+      noFill();
+      stroke(255,0,0);
+      rect(x,y,50,50);
+      noStroke();
+    }
+  }
+  textSize(24);
+  text("Shop",350,175);
 }
