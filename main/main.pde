@@ -89,7 +89,11 @@ void draw(){
      debugDraw(); //this broke gg
   }
   clearMap();
-  for(int i=0; i<objects.size(); i++){	
+  for(int i=0; i<objects.size(); i++){
+    if(Math.abs(objects.get(i).x) > 2000 || Math.abs(objects.get(i).y) > 2000){
+       objects.remove(i);
+       i--;
+    }	
 	  objects.get(i).setHitbox(true);
   }
   for(int i=0; i<objects.size(); i++){	

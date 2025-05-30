@@ -1,6 +1,6 @@
 class Laser extends AObject {	
 	public Laser(){	
-		super(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, 25, 10, 10);
+		super(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, 25, 10, 0.1);
 		this.dx = (width/2 - this.x) / 60;
 		this.dy = (height/2 - this.y) / 60;
 		this.angle = Math.atan(this.dx / this.dy);
