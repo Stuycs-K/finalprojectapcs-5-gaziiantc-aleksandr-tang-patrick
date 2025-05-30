@@ -3,7 +3,9 @@ import java.util.*;
 List<Chunk> map;
 ArrayList<AObject> objects;
 
-
+int selectedDefenseIndex=-1;
+ADefense[] defenses={new WallWooden(0,0),new WallStone(0,0),new Void(0,0),new Shield(0,0),new BlackHole(0,0)};
+String[] defenseNames={"Wooden","Stone","Void","Shield","BlackHole"};
 boolean shop=false;
 boolean placingBlock=false;
 boolean placingDefense=false;
@@ -103,29 +105,13 @@ void draw(){
   text(mouseX,500,10);
   text(mouseY,500,20);
   if(shop){
-    fill(235,213,179);
-    rect(400,400,400,500);
-    fill(0);
-    textSize(24);
-    for(int i=0;i<5;i++){
-      for(int j=0;j<6;j++){
-        rect(250+75*i,220+75*j,50,50);
-      }
-    }
-    text("Shop",350,175);
+    drawShop();
   }
-  for(Block block:placedBlocks){
-    block.display();
-  }
-  if(placingBlock&&selectedBlock!=null){
-    selectedBlock.x=mouseX-selectedBlock.size/2;
-    selectedBlock.y=mouseY-selectedBlock.size/2;
-    selectedBlock.display();
-  }
-  if(placingDefense&&selectedDefense!=null){
-    selectedDefense.x=mouseX;
-    selectedDefense.y=mouseY;
-    selectedDefense.draw();
+  if(placingDefense&&selectedDefenseIndex>=0){
+    pushMatrix();
+    translate(mouseX,mouseY);
+    defenses[selectedDefenseIndex].draw();
+    popMatrix();
   }
 }
 
@@ -139,9 +125,9 @@ void mouseDragged(){
 void keyPressed(){
   if(keyCode=='E'||keyCode=='e'){
     shop=!shop;
-    if(!shop&&placingBlock){
-      placingBlock=false;
-      selectedBlock=null;
+    if(!shop&&placingDefense){
+      placingDefense=false;
+      selectedDefenseIndex=-1;
     }
   }
   if(keyCode=='v'||keyCode=='V'){
@@ -154,32 +140,25 @@ void keyPressed(){
 void mousePressed(){
   if(shop){
     for(int i=0;i<5;i++){
-      float boxX=250+75*i;
-      float boxY=220;
-      if(mouseX>boxX&&mouseX<boxX+50&&mouseY>boxY&&mouseY<boxY+50){
-        switch(i){
-          case 0: selectedDefense=new WallWooden(mouseX,mouseY); break;
-          case 1: selectedDefense=new WallStone(mouseX,mouseY); break;
-          case 2: selectedDefense=new Void(mouseX,mouseY); break;
-          case 3: selectedDefense=new Shield(mouseX,mouseY); break;
-          case 4: selectedDefense=new BlackHole(mouseX,mouseY); break;
-        }
+      float x=250+75*i;
+      float y=220;
+      if(mouseX>x&&mouseX<x+50&&mouseY>y&&mouseY<y+50){
+        selectedDefenseIndex=i;
         placingDefense=true;
         shop=false;
         return;
       }
     }
   }else if(placingDefense){
-    ADefense newDefense;
-    if(selectedDefense instanceof WallWooden) newDefense=new WallWooden(mouseX,mouseY);
-    else if(selectedDefense instanceof WallStone) newDefense=new WallStone(mouseX,mouseY);
-    else if(selectedDefense instanceof Void) newDefense=new Void(mouseX,mouseY);
-    else if(selectedDefense instanceof Shield) newDefense=new Shield(mouseX,mouseY);
-    else newDefense=new BlackHole(mouseX,mouseY);
-    
-    objects.add(newDefense);
+    switch(selectedDefenseIndex){
+      case 0:objects.add(new WallWooden(mouseX,mouseY));break;
+      case 1:objects.add(new WallStone(mouseX,mouseY));break;
+      case 2:objects.add(new Void(mouseX,mouseY));break;
+      case 3:objects.add(new Shield(mouseX,mouseY));break;
+      case 4:objects.add(new BlackHole(mouseX,mouseY));break;
+    }
     placingDefense=false;
-    selectedDefense=null;
+    selectedDefenseIndex=-1;
   }
 }
 void drawShop(){
@@ -187,20 +166,23 @@ void drawShop(){
   rect(400,400,400,500);
   fill(0);
   textSize(24);
-  ADefense[] defenses={new WallWooden(0,0),new WallStone(0,0),new Void(0,0),new Shield(0,0),new BlackHole(0,0)};
-  String[] names={"Wooden","Stone","Void","Shield","BlackHole"};
   for(int i=0;i<5;i++){
-    float boxX=250+75*i;
-    float boxY=220;
-    rect(boxX,boxY,50,50);
+    float x=250+75*i;
+    float y=220;
     pushMatrix();
-    translate(boxX+25,boxY+25);
-    scale(0.5); 
+    translate(x+25,y+25);
+    scale(0.4);
     defenses[i].draw();
     popMatrix();
-    fill(255);
-    text(names[i],boxX-10,boxY+80);
-    fill(0);
+    textSize(14);
+    text(defenseNames[i],x-15,y+80);
+    if(selectedDefenseIndex==i){
+      noFill();
+      stroke(255,0,0);
+      rect(x,y,50,50);
+      noStroke();
+    }
   }
+  textSize(24);
   text("Shop",350,175);
 }
