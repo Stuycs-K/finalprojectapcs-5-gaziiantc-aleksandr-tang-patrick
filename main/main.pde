@@ -6,6 +6,8 @@ ArrayList<AObject> objects;
 
 boolean shop=false;
 boolean placingBlock=false;
+boolean placingDefense=false;
+ADefense selectedDefense=null;
 WallWooden test3;
 Void test4;
 Shield test5;
@@ -120,6 +122,11 @@ void draw(){
     selectedBlock.y=mouseY-selectedBlock.size/2;
     selectedBlock.display();
   }
+  if(placingDefense&&selectedDefense!=null){
+    selectedDefense.x=mouseX;
+    selectedDefense.y=mouseY;
+    selectedDefense.draw();
+  }
 }
 
 void mouseDragged(){
@@ -147,20 +154,53 @@ void keyPressed(){
 void mousePressed(){
   if(shop){
     for(int i=0;i<5;i++){
-      for(int j=0;j<6;j++){
-        float boxX=250+75*i;
-        float boxY=220+75*j;
-        if(mouseX>boxX&&mouseX<boxX+50&&mouseY>boxY&&mouseY<boxY+50){
-          selectedBlock=new Block(mouseX,mouseY,color(0));
-          placingBlock=true;
-          shop=false;
-          return;
+      float boxX=250+75*i;
+      float boxY=220;
+      if(mouseX>boxX&&mouseX<boxX+50&&mouseY>boxY&&mouseY<boxY+50){
+        switch(i){
+          case 0: selectedDefense=new WallWooden(mouseX,mouseY); break;
+          case 1: selectedDefense=new WallStone(mouseX,mouseY); break;
+          case 2: selectedDefense=new Void(mouseX,mouseY); break;
+          case 3: selectedDefense=new Shield(mouseX,mouseY); break;
+          case 4: selectedDefense=new BlackHole(mouseX,mouseY); break;
         }
+        placingDefense=true;
+        shop=false;
+        return;
       }
     }
-  }else if(placingBlock){
-    placedBlocks.add(new Block(mouseX-selectedBlock.size/2,mouseY-selectedBlock.size/2,selectedBlock.blockColor));
-    placingBlock=false;
-    selectedBlock=null;
+  }else if(placingDefense){
+    ADefense newDefense;
+    if(selectedDefense instanceof WallWooden) newDefense=new WallWooden(mouseX,mouseY);
+    else if(selectedDefense instanceof WallStone) newDefense=new WallStone(mouseX,mouseY);
+    else if(selectedDefense instanceof Void) newDefense=new Void(mouseX,mouseY);
+    else if(selectedDefense instanceof Shield) newDefense=new Shield(mouseX,mouseY);
+    else newDefense=new BlackHole(mouseX,mouseY);
+    
+    objects.add(newDefense);
+    placingDefense=false;
+    selectedDefense=null;
   }
+}
+void drawShop(){
+  fill(235,213,179);
+  rect(400,400,400,500);
+  fill(0);
+  textSize(24);
+  ADefense[] defenses={new WallWooden(0,0),new WallStone(0,0),new Void(0,0),new Shield(0,0),new BlackHole(0,0)};
+  String[] names={"Wooden","Stone","Void","Shield","BlackHole"};
+  for(int i=0;i<5;i++){
+    float boxX=250+75*i;
+    float boxY=220;
+    rect(boxX,boxY,50,50);
+    pushMatrix();
+    translate(boxX+25,boxY+25);
+    scale(0.5); 
+    defenses[i].draw();
+    popMatrix();
+    fill(255);
+    text(names[i],boxX-10,boxY+80);
+    fill(0);
+  }
+  text("Shop",350,175);
 }
