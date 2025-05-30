@@ -16,3 +16,9 @@ Created basic code for inventory management
 
 ### 2024-05-28 
 Changed inventory code to shop code
+
+### 2024-05-29 
+Added void, blackhole, stone wall, and shield classes
+
+### 2024-05-30 
+Changed the shop code layout and displayed defenses in shop
