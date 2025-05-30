@@ -20,6 +20,7 @@ Block selectedBlock=null;
 List<Block> placedBlocks=new ArrayList<Block>();
 double cash=100.0;
 double cashflow=.1;
+int cashTime=30000;
 void setup(){
   objects = new ArrayList<>();
   size(700, 700, P2D);
@@ -105,6 +106,10 @@ void draw(){
     test6.draw();
     test6.tick();
   }
+  if(millis()>cashTime){
+    cashflow+=0.7;
+    cashTime*=3;
+  }
   objects.get(1).angle+=objects.get(1).dx/25;
   objects.get(2).angle+=objects.get(2).dx/25;
   fill(0);
@@ -127,6 +132,7 @@ void draw(){
   }
   cash+=cashflow;
   text("Cash: "+(double)(int)(cash*10000)/10000,100,100);
+
 }
 
 void mouseDragged(){
