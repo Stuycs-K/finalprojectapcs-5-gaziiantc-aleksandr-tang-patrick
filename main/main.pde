@@ -79,10 +79,7 @@ void clearMap(){
 }
 
 void draw(){
-  if(keyCode=='l'||keyCode=='L'){
-     objects.add(new Laser());
-     println("a");
-  }
+  
   fill(255);
   rect(width/2,height/2,width,height);
   if(key=='d'){
@@ -148,6 +145,9 @@ void keyPressed(){
     Void test4=new Void(mouseX,mouseY);
     voidplaced=true;
     objects.add(test4);
+  }
+  if(keyCode=='l'||keyCode=='L'){
+     objects.add(new Laser());
   }
   
 }
