@@ -4,8 +4,9 @@ List<Chunk> map;
 ArrayList<AObject> objects;
 
 int selectedDefenseIndex=-1;
-ADefense[] defenses={new WallWooden(0,0),new WallStone(0,0),new Void(0,0),new Shield(0,0),new BlackHole(0,0)};
-String[] defenseNames={"Wooden","Stone","Void","Shield","BlackHole"};
+ADefense[] defenses={new WallWooden(0,0),new WallStone(0,0),new Void(0,0),new Shield(0,0),new BlackHole(0,0),new Adsense(0,0)};
+int[] cost={50,75,50,175,250,400};
+String[] defenseNames={"Wooden","Stone","Void","Shield","Black Hole","Adsense"};
 boolean shop=false;
 boolean placingBlock=false;
 boolean placingDefense=false;
@@ -17,6 +18,8 @@ BlackHole test6;
 boolean voidplaced=false;
 Block selectedBlock=null;
 List<Block> placedBlocks=new ArrayList<Block>();
+double cash=100.0;
+double cashflow=.1;
 void setup(){
   objects = new ArrayList<>();
   size(700, 700, P2D);
@@ -79,6 +82,7 @@ void clearMap(){
 }
 
 void draw(){
+  
   fill(255);
   rect(width/2,height/2,width,height);
   if(key=='d'){
@@ -105,6 +109,7 @@ void draw(){
   objects.get(1).angle+=objects.get(1).dx/25;
   objects.get(2).angle+=objects.get(2).dx/25;
   fill(0);
+  textSize(25);
   text(mouseX,500,10);
   text(mouseY,500,20);
   int IHATETHISBLOODYLANGUAGESOMUCHOHMYGOD = 0;
@@ -122,6 +127,8 @@ void draw(){
     defenses[selectedDefenseIndex].draw();
     popMatrix();
   }
+  cash+=cashflow;
+  text("Cash: "+(double)(int)(cash*10000)/10000,100,100);
 }
 
 void mouseDragged(){
@@ -144,6 +151,10 @@ void keyPressed(){
     voidplaced=true;
     objects.add(test4);
   }
+  if(keyCode=='l'||keyCode=='L'){
+     objects.add(new Laser());
+  }
+  
 }
 
 void mousePressed(){
@@ -151,7 +162,7 @@ void mousePressed(){
     for(int i=0;i<5;i++){
       float x=250+75*i;
       float y=220;
-      if(mouseX>x&&mouseX<x+50&&mouseY>y&&mouseY<y+50){
+      if(mouseX>x&&mouseX<x+50&&mouseY>y&&mouseY<y+50&&cash>cost[i]){
         selectedDefenseIndex=i;
         placingDefense=true;
         shop=false;
@@ -159,13 +170,17 @@ void mousePressed(){
       }
     }
   }else if(placingDefense){
+    
     switch(selectedDefenseIndex){
       case 0:objects.add(new WallWooden(mouseX,mouseY));break;
       case 1:objects.add(new WallStone(mouseX,mouseY));break;
       case 2:objects.add(new Void(mouseX,mouseY));break;
       case 3:objects.add(new Shield(mouseX,mouseY));break;
       case 4:objects.add(new BlackHole(mouseX,mouseY));break;
+      case 5:objects.add(new Adsense(mouseX,mouseY));  break;
+
     }
+    cash-=cost[selectedDefenseIndex];
     placingDefense=false;
     selectedDefenseIndex=-1;
   }
@@ -185,6 +200,7 @@ void drawShop(){
     popMatrix();
     textSize(14);
     text(defenseNames[i],x-15,y+80);
+    text("cost: "+cost[i],x-15,y+90);
     if(selectedDefenseIndex==i){
       noFill();
       stroke(255,0,0);

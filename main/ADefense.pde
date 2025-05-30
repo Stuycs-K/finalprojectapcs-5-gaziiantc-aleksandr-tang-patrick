@@ -1,6 +1,5 @@
 abstract class ADefense extends AObject {
 	
-	public ArrayList<Attribute> attribs; 
 	public int hp;
 	public ADefense(int hp, double x, double y, int sizex, int sizey, double mass){
 		super(x, y, sizex, sizey, mass);
@@ -8,13 +7,7 @@ abstract class ADefense extends AObject {
 		this.hp = hp;
 	}
 
-	public void addAttrib(Attribute attrib){	
-		attribs.add(attrib);
-	}
-
-	public boolean containsAttrib(Attribute attrib){	
-		return attribs.contains(attrib);
-	}
+	
 
 	public void onHit(AObject obj){
 		//do stuff here ig
