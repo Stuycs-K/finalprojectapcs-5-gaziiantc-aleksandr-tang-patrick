@@ -28,6 +28,7 @@ class TestClass extends AObject{
     //this.x -= this.dx;
     //this.y -= this.dy;
     obj.applyForce(this.dx, this.dy);
+    
     this.applyForce(this.dx * -1, this.dy * -1);
   }
   

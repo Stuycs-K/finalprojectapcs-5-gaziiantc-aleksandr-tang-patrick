@@ -19,7 +19,7 @@ abstract class AObject {
   public Stack<Chunk> chunks;
   public int iframes;
 
-  public static final double FRICTION_CONST = 4;
+  public static final double FRICTION_CONST = 0;
 
 
   public AObject(double x, double y, int sizex, int sizey, double mass) {

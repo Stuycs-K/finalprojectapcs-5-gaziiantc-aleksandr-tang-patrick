@@ -81,7 +81,9 @@ void clearMap(){
 void draw(){
   fill(255);
   rect(width/2,height/2,width,height);
-  //debugDraw(); //this broke gg
+  if(key=='d'){
+     debugDraw(); //this broke gg
+  }
   clearMap();
   for(int i=0; i<objects.size(); i++){	
 	  objects.get(i).setHitbox(true);
@@ -102,8 +104,15 @@ void draw(){
   }
   objects.get(1).angle+=objects.get(1).dx/25;
   objects.get(2).angle+=objects.get(2).dx/25;
+  fill(0);
   text(mouseX,500,10);
   text(mouseY,500,20);
+  int IHATETHISBLOODYLANGUAGESOMUCHOHMYGOD = 0;
+  //FOURTH TIME REWRITIN G THIS FUNCTUON BYTN OWgyuggu
+  for(int i=0; i<objects.size(); i++){
+     IHATETHISBLOODYLANGUAGESOMUCHOHMYGOD+=objects.get(i).mass * (Math.pow(objects.get(i).dx, 2) + Math.pow(objects.get(i).dy, 2));
+  }
+  text("Total energy in system: " + IHATETHISBLOODYLANGUAGESOMUCHOHMYGOD, 100, 10);
   if(shop){
     drawShop();
   }
