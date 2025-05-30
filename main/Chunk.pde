@@ -1,5 +1,5 @@
 class Chunk {
-  public static final int size = 4;
+  public static final int size = 2;
 
   public int x; public int y; //programming standards my beloved
   public boolean taken;

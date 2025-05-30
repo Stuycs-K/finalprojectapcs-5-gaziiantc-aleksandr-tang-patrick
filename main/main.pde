@@ -75,7 +75,9 @@ void clearMap(){
 void draw(){
   fill(255);
   rect(width/2,height/2,width,height);
-  //debugDraw(); //this broke gg
+  if(key=='d'){
+     debugDraw(); //this broke gg
+  }
   clearMap();
   for(int i=0; i<objects.size(); i++){	
 	  objects.get(i).setHitbox(true);
