@@ -189,8 +189,8 @@ void mousePressed(){
     switch(selectedDefenseIndex){
       case 0: objects.add(new WallWooden(mouseX,mouseY)); break;
       case 1: objects.add(new WallStone(mouseX,mouseY)); break;
-      case 2: objects.add(new Void(mouseX,mouseY)); break;
-      case 3: objects.add(new SheetMetal(mouseX,mouseY));
+      case 2: objects.add(new SheetMetal(mouseX,mouseY)); break;
+      case 3: objects.add(new Void(mouseX,mouseY));
       case 4: objects.add(new Shield(mouseX,mouseY)); break;
       case 5: objects.add(new BlackHole(mouseX,mouseY)); break;
       case 6: 
@@ -198,9 +198,10 @@ void mousePressed(){
         cashflow *= 2;
         break;
     }
+    print(objects.get(objects.size()-1));
     purchaseCount[selectedDefenseIndex]++;
-    cost[selectedDefenseIndex] = baseCost[selectedDefenseIndex] + (25 * purchaseCount[selectedDefenseIndex]);
     cash -= cost[selectedDefenseIndex];
+    cost[selectedDefenseIndex] = baseCost[selectedDefenseIndex] + (25 * purchaseCount[selectedDefenseIndex]);
     placingDefense = false;
     selectedDefenseIndex = -1;
   }
@@ -231,8 +232,8 @@ void drawShop(){
       noStroke();
     }
   }
-   for(int i=5;i<10;i++){
-    float x=250+75*i;
+   for(int i=5;i<10 && i < defenses.length;i++){
+    float x=250+75*(i-5);
     float y=320;
     pushMatrix();
     translate(x+25,y+25);
