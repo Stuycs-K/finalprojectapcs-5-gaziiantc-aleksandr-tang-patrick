@@ -230,6 +230,7 @@ void drawShop(){
       rect(x,y,50,50);
       noStroke();
     }
+  }
    for(int i=5;i<10;i++){
     float x=250+75*i;
     float y=320;
