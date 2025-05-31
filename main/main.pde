@@ -4,13 +4,12 @@ List<Chunk> map;
 ArrayList<AObject> objects;
 
 int selectedDefenseIndex=-1;
-ADefense[] defenses={new WallWooden(0,0),new WallStone(0,0),new Void(0,0),new Shield(0,0),new BlackHole(0,0),new Adsense(0,0)};
-int[] baseCost = {50,75,50,175,250,400};
-int purchaseCount[] = new int[6]; 
+ADefense[] defenses={new WallWooden(0,0),new WallStone(0,0),new SheetMetal(0,0),new Void(0,0),new Shield(0,0),new BlackHole(0,0),new Adsense(0,0)};
+int[] baseCost = {50,75,125,50,175,250,400};
+int purchaseCount[] = new int[baseCost.length]; 
 int[] cost = baseCost.clone();
-String[] defenseNames={"Wooden","Stone","Void","Shield","Black Hole","Adsense"};
+String[] defenseNames={"Wooden","Stone","Metal","Void","Shield","Black Hole","Adsense"};
 boolean shop=false;
-boolean placingBlock=false;
 boolean placingDefense=false;
 ADefense selectedDefense=null;
 WallWooden test3;
@@ -18,8 +17,6 @@ Void test4;
 Shield test5;
 BlackHole test6;
 boolean voidplaced=false;
-Block selectedBlock=null;
-List<Block> placedBlocks=new ArrayList<Block>();
 double cash=100.0;
 double cashflow=.1;
 int cashTime=30000;
@@ -178,24 +175,27 @@ void mousePressed(){
         return;
       }
     }
-    float x=250+75*2;
-    float y=320;
-    if(mouseX>x&&mouseX<x+50&&mouseY>y&&mouseY<y+50&&cash>=cost[5]){
-      selectedDefenseIndex=5;
-      placingDefense=true;
-      shop=false;
-      return;
+    for(int i=5;i<10;i++){
+      float x=250+75*i;
+      float y=320;
+      if(mouseX>x&&mouseX<x+50&&mouseY>y&&mouseY<y+50&&cash>=cost[i]){
+        selectedDefenseIndex=i;
+        placingDefense=true;
+        shop=false;
+        return;
+      }
     }
   }else if(placingDefense){
     switch(selectedDefenseIndex){
       case 0: objects.add(new WallWooden(mouseX,mouseY)); break;
       case 1: objects.add(new WallStone(mouseX,mouseY)); break;
       case 2: objects.add(new Void(mouseX,mouseY)); break;
-      case 3: objects.add(new Shield(mouseX,mouseY)); break;
-      case 4: objects.add(new BlackHole(mouseX,mouseY)); break;
-      case 5: 
+      case 3: objects.add(new SheetMetal(mouseX,mouseY));
+      case 4: objects.add(new Shield(mouseX,mouseY)); break;
+      case 5: objects.add(new BlackHole(mouseX,mouseY)); break;
+      case 6: 
         objects.add(new Adsense(mouseX,mouseY));
-        cashflow *= 2; // Double cashflow when placing Adsense
+        cashflow *= 2;
         break;
     }
     purchaseCount[selectedDefenseIndex]++;
@@ -230,20 +230,21 @@ void drawShop(){
       rect(x,y,50,50);
       noStroke();
     }
-    x=250+75*2;     
-    y=320;
+   for(int i=5;i<10;i++){
+    float x=250+75*i;
+    float y=320;
     pushMatrix();
     translate(x+25,y+25);
     scale(0.4);
-    defenses[5].draw();
+    defenses[i].draw();
     popMatrix();
     textSize(14);
-    text(defenseNames[5],x-15,y+80);
-    text("$"+cost[5],x-5,y+95);
+    text(defenseNames[i],x-15,y+80);
+    text("$"+cost[i],x-5,y+95);
     if(cash<cost[i]) fill(255,0,0);
-    text("cost: "+cost[5],x-15,y+110);
+    text("cost: "+cost[i],x-15,y+110);
     fill(0);
-    if(selectedDefenseIndex==5){
+    if(selectedDefenseIndex==i){
       noFill();
       stroke(255,0,0);
       rect(x,y,50,50);
