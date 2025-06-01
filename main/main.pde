@@ -39,7 +39,7 @@ void setup(){
   test2.mass = 10;
   test2.sizeX -= 5;
   test2.sizeY -= 5;
-  test.sizeY += 25;
+  test.sizeX += 25;
   test2.x += 79;
   test2.y += 50;
   test5=new Shield(500,500);
