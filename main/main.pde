@@ -231,9 +231,9 @@ void drawShop(){
       noStroke();
     }
   }
-   for(int i=5;i<10;i++){
-    float x=250+75*i;
-    float y=320;
+   for(int i=5;i<defenses.length;i++){
+    float x=250+75*(i-5);
+    float y=330;
     pushMatrix();
     translate(x+25,y+25);
     scale(0.4);
