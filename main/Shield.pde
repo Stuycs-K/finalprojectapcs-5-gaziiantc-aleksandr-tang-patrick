@@ -12,12 +12,18 @@ class Shield extends ADefense {
   }
   @Override
   public void draw(){
-    fill(red(this.clr),green(this.clr),blue(this.clr),127);
     pushMatrix();
     translate((float)this.x, (float)this.y);
+    beginShape();
+    tint(255, 127);
+    texture(assets.get("shield.jpg"));
+    textureMode(NORMAL);
+    vertex(-0.5 * this.sizeX, -0.5 * this.sizeY, 0, 0);
+    vertex(0.5 * this.sizeX, -0.5 * this.sizeY, 1, 0);
+    vertex(0.5 * this.sizeX, 0.5 * this.sizeY, 1, 1);
+    vertex(-0.5 * this.sizeX, 0.5 * this.sizeY, 0, 1);
     rotate((float)this.angle*-1-HALF_PI);
-    rectMode(CENTER);
-    rect(0, 0, (float)this.sizeX, (float)this.sizeY);
+    endShape();
     popMatrix();
   }
   @Override

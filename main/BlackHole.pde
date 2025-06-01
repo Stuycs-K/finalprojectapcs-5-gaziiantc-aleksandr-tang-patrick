@@ -17,7 +17,7 @@ class BlackHole extends ADefense {
     translate((float)this.x, (float)this.y);
     rotate((float)this.angle*-1-HALF_PI);
     rectMode(CENTER);
-    rect(0, 0, (float)this.sizeX, (float)this.sizeY);
+    circle((float)this.x, (float)this.y, (float)this.sizeY);
     popMatrix();
   }
   @Override
