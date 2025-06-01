@@ -20,6 +20,8 @@ boolean voidplaced=false;
 double cash=100.0;
 double cashflow=.1;
 int cashTime=30000;
+public AssetPool assets; //using a class in case i want to add shaders for whatever reason
+
 
 void setup(){
   objects = new ArrayList<>();
@@ -32,6 +34,17 @@ void setup(){
       rect(x, y, Chunk.size, Chunk.size);
     }
   }
+  
+  assets = new AssetPool();
+  assets.add("testclass.png");
+  assets.add("shield.jpg");
+  assets.add("sheetmetal.jpg");
+  assets.add("woodwall.jpg");
+  assets.add("stonewall.jpg");
+  assets.add("laser.png");
+  assets.add("void.png");
+  assets.add("adsense.jpeg");
+  
   noStroke();
   TestClass test = new TestClass();
   test.applyForce(100, 100);
@@ -39,7 +52,7 @@ void setup(){
   test2.mass = 10;
   test2.sizeX -= 5;
   test2.sizeY -= 5;
-  test.sizeY += 25;
+  test.sizeX += 25;
   test2.x += 79;
   test2.y += 50;
   test5=new Shield(500,500);
@@ -189,8 +202,8 @@ void mousePressed(){
     switch(selectedDefenseIndex){
       case 0: objects.add(new WallWooden(mouseX,mouseY)); break;
       case 1: objects.add(new WallStone(mouseX,mouseY)); break;
-      case 2: objects.add(new Void(mouseX,mouseY)); break;
-      case 3: objects.add(new SheetMetal(mouseX,mouseY));
+      case 2: objects.add(new SheetMetal(mouseX,mouseY)); break;
+      case 3: objects.add(new Void(mouseX,mouseY));
       case 4: objects.add(new Shield(mouseX,mouseY)); break;
       case 5: objects.add(new BlackHole(mouseX,mouseY)); break;
       case 6: 
@@ -198,9 +211,10 @@ void mousePressed(){
         cashflow *= 2;
         break;
     }
+    print(objects.get(objects.size()-1));
     purchaseCount[selectedDefenseIndex]++;
-    cost[selectedDefenseIndex] = baseCost[selectedDefenseIndex] + (25 * purchaseCount[selectedDefenseIndex]);
     cash -= cost[selectedDefenseIndex];
+    cost[selectedDefenseIndex] = baseCost[selectedDefenseIndex] + (25 * purchaseCount[selectedDefenseIndex]);
     placingDefense = false;
     selectedDefenseIndex = -1;
   }
@@ -231,9 +245,15 @@ void drawShop(){
       noStroke();
     }
   }
+<<<<<<< HEAD
    for(int i=5;i<defenses.length;i++){
     float x=250+75*(i-5);
     float y=330;
+=======
+   for(int i=5;i<10 && i < defenses.length;i++){
+    float x=250+75*(i-5);
+    float y=320;
+>>>>>>> 10138b4dda4cd9d167e6849a7be3689ab75233ce
     pushMatrix();
     translate(x+25,y+25);
     scale(0.4);

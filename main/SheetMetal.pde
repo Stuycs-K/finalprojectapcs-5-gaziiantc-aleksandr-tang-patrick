@@ -11,12 +11,18 @@ class SheetMetal extends ADefense {
   }
   @Override
   public void draw(){
-    fill(this.clr);
     pushMatrix();
     translate((float)this.x, (float)this.y);
+    beginShape();
+    tint(255, 255);
+    texture(assets.get("sheetmetal.jpg"));
+    textureMode(NORMAL);
+    vertex(-0.5 * this.sizeX, -0.5 * this.sizeY, 0, 0);
+    vertex(0.5 * this.sizeX, -0.5 * this.sizeY, 1, 0);
+    vertex(0.5 * this.sizeX, 0.5 * this.sizeY, 1, 1);
+    vertex(-0.5 * this.sizeX, 0.5 * this.sizeY, 0, 1);
     rotate((float)this.angle*-1-HALF_PI);
-    rectMode(CENTER);
-    rect(0, 0, (float)this.sizeX, (float)this.sizeY);
+    endShape();
     popMatrix();
   }
   @Override
