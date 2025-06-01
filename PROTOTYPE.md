@@ -49,7 +49,7 @@ The center will contain an object that the player will have to build defenses fo
     
 # Intended pacing:
 
-How you are breaking down the project and who is responsible for which parts.
+one of us works on mechanics and the other works on the game
 
-A timeline with expected completion dates of parts of the project. (CHANGE THIS!!!!!)
+the person working on mechanics should probably finish early (<1 week) so after that that person will switch to working on the game as well.
 
