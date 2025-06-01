@@ -1,8 +1,7 @@
 class TestClass extends AObject{
   //WOULDNT IT BE AWESOME IF THIS VARIABLE THAT WILL BE THE EXACT SAME IN EVERY ITERATION OF THIS OBJECT COULD BE STATIC INSTEAD OF GETTING COPIED 9 KAJILLION TIMES WOULD THAT NOT JUST BE GREAT
-  PImage img = loadImage("assets/testtexture.png"); 
 	public TestClass(){
-		super(25, 25, 125, 125, 25);
+		super(25, 25, 25, 25, 25);
 		this.angle = Math.PI;
 	}
 
@@ -17,13 +16,14 @@ class TestClass extends AObject{
     pushMatrix();
     translate((float)this.x, (float)this.y);
     beginShape();
-    texture(img);
+    tint(255, 255);
+    texture(assets.get("testclass.png"));
     textureMode(NORMAL);
     vertex(-0.5 * this.sizeX, -0.5 * this.sizeY, 0, 0);
     vertex(0.5 * this.sizeX, -0.5 * this.sizeY, 1, 0);
     vertex(0.5 * this.sizeX, 0.5 * this.sizeY, 1, 1);
     vertex(-0.5 * this.sizeX, 0.5 * this.sizeY, 0, 1);
-    rotate((float)this.angle*-1-HALF_PI);
+    rotate((float)this.angle*-1);
     endShape();
 
     //rectMode(CENTER); 

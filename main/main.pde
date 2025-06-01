@@ -20,6 +20,8 @@ boolean voidplaced=false;
 double cash=100.0;
 double cashflow=.1;
 int cashTime=30000;
+public AssetPool assets; //using a class in case i want to add shaders for whatever reason
+
 
 void setup(){
   objects = new ArrayList<>();
@@ -32,6 +34,12 @@ void setup(){
       rect(x, y, Chunk.size, Chunk.size);
     }
   }
+  
+  assets = new AssetPool();
+  assets.add("testclass.png");
+  assets.add("shield.jpg");
+  
+  
   noStroke();
   TestClass test = new TestClass();
   test.applyForce(100, 100);
