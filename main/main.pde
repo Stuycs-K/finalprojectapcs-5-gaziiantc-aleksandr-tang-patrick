@@ -38,7 +38,12 @@ void setup(){
   assets = new AssetPool();
   assets.add("testclass.png");
   assets.add("shield.jpg");
-  
+  assets.add("sheetmetal.jpg");
+  assets.add("woodwall.jpg");
+  assets.add("stonewall.jpg");
+  assets.add("laser.png");
+  assets.add("void.png");
+  assets.add("adsense.jpeg");
   
   noStroke();
   TestClass test = new TestClass();

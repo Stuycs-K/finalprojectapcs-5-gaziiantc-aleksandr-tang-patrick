@@ -23,7 +23,7 @@ class TestClass extends AObject{
     vertex(0.5 * this.sizeX, -0.5 * this.sizeY, 1, 0);
     vertex(0.5 * this.sizeX, 0.5 * this.sizeY, 1, 1);
     vertex(-0.5 * this.sizeX, 0.5 * this.sizeY, 0, 1);
-    rotate((float)this.angle*-1);
+    rotate((float)this.angle*-1-HALF_PI);
     endShape();
 
     //rectMode(CENTER); 
