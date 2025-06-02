@@ -12,6 +12,7 @@ abstract class ADefense extends AObject {
 	public void onHit(AObject obj){
 		//do stuff here ig
 		//not abstract in case the user wants to leave this blank
+    score+=obj.mass * Math.sqrt(obj.dx*obj.dx + obj.dy*obj.dy);
 	}
 
 
