@@ -39,13 +39,16 @@ class Laser extends AObject {
 			obj.destroy();
 		}
 
-		obj.applyForce(this.dx, this.dy);
+		obj.applyForce(this.dx * this.mass, this.dy * this.mass);
+    //this.applyForce(-1 * this.dx, -1 * this.dy);
 		this.dx *= 0.5; this.dy *= 0.5;
 		double temp = this.dy;
 		this.dy = this.dx;
 		this.dx = temp * -1;
-
+   
 		this.angle = Math.atan(this.dx / this.dy);
-
+    
+    
+    
 	}
 }
