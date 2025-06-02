@@ -2,6 +2,7 @@ class WallWooden extends ADefense {
 	public static final int maxHP = 5000;
 	public WallWooden(int x, int y){	
 		super(maxHP, x, y, 60, 20, 1000);
+    this.attributes.add(Attribute.FLAMMABLE);
 	}
 	@Override
 	public void doCollisionStuff(AObject obj){	

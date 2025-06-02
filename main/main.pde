@@ -17,9 +17,10 @@ Void test4;
 Shield test5;
 BlackHole test6;
 boolean voidplaced=false;
-double cash=100.0;
+double cash=99999.0;
 double cashflow=.1;
 int cashTime=30000;
+double buildingAngle = -HALF_PI;
 public AssetPool assets; //using a class in case i want to add shaders for whatever reason
 
 
@@ -98,7 +99,7 @@ void clearMap(){
 void draw(){
   
   fill(255);
-  if(frameCount > 200 && frameCount%20 == 0){
+  if(frameCount > 200 && frameCount%5 == 0){
     objects.add(new Laser());
   }
   rect(width/2,height/2,width,height);
@@ -143,18 +144,18 @@ void draw(){
   textSize(25);
   text(mouseX,500,10);
   text(mouseY,500,20);
-  int IHATETHISBLOODYLANGUAGESOMUCHOHMYGOD = 0;
-  //FOURTH TIME REWRITIN G THIS FUNCTUON BYTN OWgyuggu
+  int e = 0;
   for(int i=0; i<objects.size(); i++){
-     IHATETHISBLOODYLANGUAGESOMUCHOHMYGOD+=objects.get(i).mass * (Math.pow(objects.get(i).dx, 2) + Math.pow(objects.get(i).dy, 2));
+     e+=objects.get(i).mass * (Math.pow(objects.get(i).dx, 2) + Math.pow(objects.get(i).dy, 2));
   }
-  text("Total energy in system: " + IHATETHISBLOODYLANGUAGESOMUCHOHMYGOD, 100, 10);
+  text("Total energy in system: " + e, 100, 10);
   if(shop){
     drawShop();
   }
   if(placingDefense&&selectedDefenseIndex>=0){
     pushMatrix();
     translate(mouseX,mouseY);
+    defenses[selectedDefenseIndex].angle = buildingAngle;
     defenses[selectedDefenseIndex].draw();
     popMatrix();
   }
@@ -186,7 +187,12 @@ void keyPressed(){
   if(keyCode=='l'||keyCode=='L'){
      objects.add(new Laser());
   }
-  
+  if(keyCode=='r'||keyCode=='R'){
+     buildingAngle += HALF_PI;
+  }
+  if(keyCode=='t'||keyCode=='T'){
+     buildingAngle -= HALF_PI; 
+  }
 }
 
 void mousePressed(){
@@ -202,7 +208,7 @@ void mousePressed(){
       }
     }
     for(int i=5;i<10;i++){
-      float x=250+75*i;
+      float x=250+75*(i-5);
       float y=320;
       if(mouseX>x&&mouseX<x+50&&mouseY>y&&mouseY<y+50&&cash>=cost[i]){
         selectedDefenseIndex=i;
@@ -212,23 +218,28 @@ void mousePressed(){
       }
     }
   }else if(placingDefense){
+    AObject placing = null;
     switch(selectedDefenseIndex){
-      case 0: objects.add(new WallWooden(mouseX,mouseY)); break;
-      case 1: objects.add(new WallStone(mouseX,mouseY)); break;
-      case 2: objects.add(new SheetMetal(mouseX,mouseY)); break;
-      case 3: objects.add(new Void(mouseX,mouseY));
-      case 4: objects.add(new Shield(mouseX,mouseY)); break;
-      case 5: objects.add(new BlackHole(mouseX,mouseY)); break;
+      case 0: placing = (new WallWooden(mouseX,mouseY)); break;
+      case 1: placing = (new WallStone(mouseX,mouseY)); break;
+      case 2: placing = (new SheetMetal(mouseX,mouseY)); break;
+      case 3: placing = (new Void(mouseX,mouseY));
+      case 4: placing = (new Shield(mouseX,mouseY)); break;
+      case 5: placing = (new BlackHole(mouseX,mouseY)); break;
       case 6: 
-        objects.add(new Adsense(mouseX,mouseY));
+        placing = (new Adsense(mouseX,mouseY));
         cashflow *= 2;
         break;
     }
-    print(objects.get(objects.size()-1));
-    purchaseCount[selectedDefenseIndex]++;
-    cash -= cost[selectedDefenseIndex];
-    cost[selectedDefenseIndex] = baseCost[selectedDefenseIndex] + (25 * purchaseCount[selectedDefenseIndex]);
-    placingDefense = false;
+    if(placing != null){
+      placing.angle = buildingAngle;
+      objects.add(placing);
+      //print(objects.get(objects.size()-1));
+      purchaseCount[selectedDefenseIndex]++;
+      cash -= cost[selectedDefenseIndex];
+      //no. cost[selectedDefenseIndex] = baseCost[selectedDefenseIndex] + (25 * purchaseCount[selectedDefenseIndex]);
+      placingDefense = false;
+    }
     selectedDefenseIndex = -1;
   }
 }
