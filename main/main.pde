@@ -104,6 +104,10 @@ void draw(){
   }
   rect(width/2,height/2,width,height);
   
+  
+  
+  
+  
   clearMap();
   
   for(int i=0; i<objects.size(); i++){	
@@ -123,8 +127,12 @@ void draw(){
   for(int i=0; i<objects.size(); i++){  
     objects.get(i).tick();
   }
-  
-  
+  if(keys['r']){
+    buildingAngle += (0.075);
+  }
+  if(keys['t']){
+    buildingAngle -= (0.075);
+  }
   
   if(millis()<test5.duration){
     test5.draw();
@@ -171,7 +179,26 @@ void mouseDragged(){
    objects.get(1).applyForce((mouseX-pmouseX) / 2, (mouseY-pmouseY) / 2); 
 }
 
+boolean[] keys = new boolean[200]; //oversized because i dont trust processing
+boolean shiftisspecial;
+void keyReleased(){
+  if(key < keys.length){  
+    keys[key] = false;
+  }else{
+    if(keyCode==SHIFT){
+      shiftisspecial = false;  
+    }
+  }
+} 
+
 void keyPressed(){
+  if(key < keys.length){
+    keys[key] = true;
+  }else{
+    if(keyCode==SHIFT){
+      shiftisspecial = true;  
+    }
+  }
   if(keyCode=='E'||keyCode=='e'){
     shop=!shop;
     if(!shop&&placingDefense){
@@ -187,12 +214,12 @@ void keyPressed(){
   if(keyCode=='l'||keyCode=='L'){
      objects.add(new Laser());
   }
-  if(keyCode=='r'||keyCode=='R'){
+  /*if(keyCode=='r'||keyCode=='R'){
      buildingAngle += HALF_PI;
   }
   if(keyCode=='t'||keyCode=='T'){
      buildingAngle -= HALF_PI; 
-  }
+  }*/
 }
 
 void mousePressed(){

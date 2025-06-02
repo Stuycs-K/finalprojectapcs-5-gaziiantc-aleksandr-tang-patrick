@@ -12,14 +12,15 @@ class MainBase extends ADefense {
     obj.x += obj.dx; obj.y += obj.dy;
   }
 	public void onHit(AObject obj){	
-    
-		this.hp -= (Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass;
-    print("hit " + this.hp);
-		if(this.hp > 0){
-			//it gets weaker as it takes more damage n stuff
-			this.mass = 2000 * (double)this.hp/maxHP + 500; 
-			this.clr = color((int)((maxHP-hp) * (200.0d/maxHP)), (int)((maxHP-hp) * (200.0d/maxHP)), (int)((maxHP-hp) * (200.0d/maxHP)));
-		}
+    if(!(obj instanceof ADefense)){
+  		this.hp -= (Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass;
+      print("hit " + this.hp);
+  		if(this.hp > 0){
+  			//it gets weaker as it takes more damage n stuff
+  			this.mass = 2000 * (double)this.hp/maxHP + 500; 
+  			this.clr = color((int)((maxHP-hp) * (200.0d/maxHP)), (int)((maxHP-hp) * (200.0d/maxHP)), (int)((maxHP-hp) * (200.0d/maxHP)));
+  		}
+    }
     
 
 

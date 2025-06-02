@@ -8,7 +8,7 @@ class WallWooden extends ADefense {
 	public void doCollisionStuff(AObject obj){	
 		this.applyForce(obj.dx * obj.mass, obj.dy * obj.mass);
 		this.dx *= 0.7; this.dy *= 0.7;
-		obj.dx *= -1; obj.dy *= -1;
+		obj.dx *= -0.7; obj.dy *= -0.7;
 		obj.x += obj.dx; obj.y += obj.dy;
 	}
   @Override
