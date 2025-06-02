@@ -236,7 +236,7 @@ void keyPressed(){
   if(keyCode=='t'||keyCode=='T'){
      buildingAngle -= HALF_PI; 
   }*/
-  }
+  
   if(keyCode=='s'||keyCode=='S'){
     start=true;
   }
