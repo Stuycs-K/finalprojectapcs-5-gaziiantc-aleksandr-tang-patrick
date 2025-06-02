@@ -31,4 +31,12 @@ Made the ADefense abstract class
 ### 2025-05-29
 
 changed git.config username
-Attribute class, WallWooden class, MainBase class, 
+Attribute class, WallWooden class, MainBase class
+
+### 2025-05-31 
+
+Made everything have textures and fixed the shop
+
+### 2025-06-02
+
+Made the MVP, did some cleaning in the code, and made building better (also fixed the shop (again))
