@@ -98,20 +98,28 @@ void clearMap(){
 void draw(){
   
   fill(255);
+  if(frameCount > 200 && frameCount%20 == 0){
+    objects.add(new Laser());
+  }
   rect(width/2,height/2,width,height);
   if(key=='d'){
      debugDraw(); //this broke gg
   }
   clearMap();
   for(int i=0; i<objects.size(); i++){	
+    if(objects.get(i).x > 1000+width || objects.get(i).x < -1000 || objects.get(i).y > 1000+height || objects.get(i).y < -1000){
+       objects.remove(i);
+       i--;
+    }
 	  objects.get(i).setHitbox(true);
   }
-  for(int i=0; i<objects.size(); i++){	
-	objects.get(i).tick();
+  for(int i=0; i<objects.size(); i++){  
+    objects.get(i).draw();
   }
   for(int i=0; i<objects.size(); i++){	
-	objects.get(i).draw();
+	  objects.get(i).tick();
   }
+  
   if(millis()<test5.duration){
     test5.draw();
     test5.tick();

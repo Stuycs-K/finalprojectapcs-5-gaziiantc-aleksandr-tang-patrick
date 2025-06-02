@@ -1,4 +1,5 @@
 class Laser extends AObject {	
+  //this is actually a plasma thrower but im too lazy to rename every mention of this
 	public Laser(){	
 		super(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, 25, 10, 10);
 		this.dx = (width/2 - this.x) / 60;
@@ -10,6 +11,9 @@ class Laser extends AObject {
 	@Override 
 	public void tick(){	
 		this.dx *= 0.999; this.dy *= 0.999; //air resistance (real)
+    if(Math.abs(this.dx) < 0.5 && Math.abs(this.dy) < 0.5){  
+      this.destroy();
+    }
 		this.doMovementTick();
 	}
 
@@ -18,7 +22,7 @@ class Laser extends AObject {
 		pushMatrix();
     translate((float)this.x, (float)this.y);
     beginShape();
-    tint(255, 255);
+    tint(255, (float)((this.dx * this.dx + this.dy * this.dy) * 40) + 20);
     texture(assets.get("laser.png"));
     textureMode(NORMAL);
     vertex(-0.5 * this.sizeX, -0.5 * this.sizeY, 0, 0);
@@ -38,9 +42,7 @@ class Laser extends AObject {
 		this.dx *= 0.5; this.dy *= 0.5;
 		obj.dx += this.dx; obj.dy += this.dy;
 
-		if(Math.abs(this.dx) < 0.5 && Math.abs(this.dy) < 0.5){	
-			this.destroy();
-		}
+		
 		
 		double temp = this.dy;
 		this.dy = this.dx;
