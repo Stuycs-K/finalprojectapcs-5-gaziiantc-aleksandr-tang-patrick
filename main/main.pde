@@ -102,10 +102,9 @@ void draw(){
     objects.add(new Laser());
   }
   rect(width/2,height/2,width,height);
-  if(key=='d'){
-     debugDraw(); //this broke gg
-  }
+  
   clearMap();
+  
   for(int i=0; i<objects.size(); i++){	
     if(objects.get(i).x > 1000+width || objects.get(i).x < -1000 || objects.get(i).y > 1000+height || objects.get(i).y < -1000){
        objects.remove(i);
@@ -113,12 +112,18 @@ void draw(){
     }
 	  objects.get(i).setHitbox(true);
   }
+  if(key=='d'){
+     debugDraw(); //this broke gg
+  }
   for(int i=0; i<objects.size(); i++){  
     objects.get(i).draw();
   }
-  for(int i=0; i<objects.size(); i++){	
-	  objects.get(i).tick();
+  
+  for(int i=0; i<objects.size(); i++){  
+    objects.get(i).tick();
   }
+  
+  
   
   if(millis()<test5.duration){
     test5.draw();
