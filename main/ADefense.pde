@@ -3,7 +3,7 @@ abstract class ADefense extends AObject {
 	public int hp;
 	public ADefense(int hp, double x, double y, int sizex, int sizey, double mass){
 		super(x, y, sizex, sizey, mass);
-		attribs = new ArrayList<>();
+		attributes = new ArrayList<>();
 		this.hp = hp;
 	}
 

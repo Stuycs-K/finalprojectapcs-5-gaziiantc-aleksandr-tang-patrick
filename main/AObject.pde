@@ -21,7 +21,7 @@ abstract class AObject {
 
   public static final double FRICTION_CONST = 4;
 
-  public ArrayList<Attribute> attribs; 
+  public ArrayList<Attribute> attributes; 
 
 
   public AObject(double x, double y, int sizex, int sizey, double mass) {
@@ -37,7 +37,7 @@ abstract class AObject {
     this.ddy = 0;
     this.clr = color((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255));
     iframes = 0;
-    this.attribs = new ArrayList<>();
+    this.attributes = new ArrayList<>();
   }
 
 
@@ -47,11 +47,11 @@ abstract class AObject {
 
 
   public void addAttrib(Attribute attrib){	
-	  attribs.add(attrib);
+	  attributes.add(attrib);
   }
 
   public boolean containsAttrib(Attribute attrib){	
-	  return attribs.contains(attrib);
+	  return attributes.contains(attrib);
   }
   int getLoc(int x, int y) {
     return x/Chunk.size + ((y/Chunk.size) * (width/Chunk.size));
