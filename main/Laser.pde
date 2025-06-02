@@ -39,11 +39,8 @@ class Laser extends AObject {
 			obj.destroy();
 		}
 
-		this.dx *= 0.5; this.dy *= 0.5;
 		obj.applyForce(this.dx, this.dy);
-
-		
-		
+		this.dx *= 0.5; this.dy *= 0.5;
 		double temp = this.dy;
 		this.dy = this.dx;
 		this.dx = temp * -1;
