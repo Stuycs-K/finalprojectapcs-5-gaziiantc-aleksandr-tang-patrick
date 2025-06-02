@@ -21,6 +21,10 @@ double cash=99999.0;
 double cashflow=.1;
 int cashTime=30000;
 double buildingAngle = -HALF_PI;
+boolean start=false;
+static int score=0;
+int level=1;
+int nextLevel=50;
 public AssetPool assets; //using a class in case i want to add shaders for whatever reason
 
 
@@ -69,6 +73,7 @@ void setup(){
   objects.add(test);
   objects.add(test2);
   objects.add(test3);
+  
 }
 
 
@@ -97,10 +102,12 @@ void clearMap(){
 }
 
 void draw(){
-  
+
   fill(255);
-  if(frameCount > 200 && frameCount%5 == 0){
-    objects.add(new Laser());
+  if(start){
+    if(frameCount > 200 && frameCount%5 == 0){
+      objects.add(new Laser());
+    }
   }
   rect(width/2,height/2,width,height);
   
@@ -142,8 +149,6 @@ void draw(){
   objects.get(2).angle+=objects.get(2).dx/25;
   fill(0);
   textSize(25);
-  text(mouseX,500,10);
-  text(mouseY,500,20);
   int e = 0;
   for(int i=0; i<objects.size(); i++){
      e+=objects.get(i).mass * (Math.pow(objects.get(i).dx, 2) + Math.pow(objects.get(i).dy, 2));
@@ -160,7 +165,18 @@ void draw(){
     popMatrix();
   }
   cash+=cashflow;
-  text("Cash: "+(double)(int)(cash*10000)/10000,100,100);
+  text("Cash: "+(double)(int)(cash*10000)/10000,10,70);
+  if(score>=nextLevel){
+    level++;
+    start=false;
+    nextLevel*=3;
+  }
+    if(!start){
+    text("Press S to start",10,110);
+  }
+    text("Score: "+score,10,50);
+    text("Level: "+level,10,90);
+
 
 }
 
@@ -193,6 +209,9 @@ void keyPressed(){
   if(keyCode=='t'||keyCode=='T'){
      buildingAngle -= HALF_PI; 
   }
+  if(keyCode=='s'||keyCode=='S'){
+    start=true;
+  }
 }
 
 void mousePressed(){
@@ -223,7 +242,7 @@ void mousePressed(){
       case 0: placing = (new WallWooden(mouseX,mouseY)); break;
       case 1: placing = (new WallStone(mouseX,mouseY)); break;
       case 2: placing = (new SheetMetal(mouseX,mouseY)); break;
-      case 3: placing = (new Void(mouseX,mouseY));
+      case 3: placing = (new Void(mouseX,mouseY)); break;
       case 4: placing = (new Shield(mouseX,mouseY)); break;
       case 5: placing = (new BlackHole(mouseX,mouseY)); break;
       case 6: 
