@@ -3,6 +3,9 @@ class SheetMetal extends ADefense {
   public SheetMetal(int x, int y){  
     super(maxHP, x, y, 85, 20, 3000);
   }
+  public SheetMetal(int x, int y,int hp){  
+    super(hp, x, y, 85, 20, 3000);
+  }
   @Override
   public void doCollisionStuff(AObject obj){  
     this.applyForce(obj.dx * obj.mass, obj.dy * obj.mass);
@@ -27,6 +30,15 @@ class SheetMetal extends ADefense {
   }
   @Override
   public void tick(){  
+    if(hp<=0){
+      objects.remove(this);
+      return;
+    }
     this.doMovementTick();
+  }
+    public void onHit(AObject obj){  
+    if(!(obj instanceof ADefense)){
+      this.hp -= 1000*((Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass);
+    }
   }
 }

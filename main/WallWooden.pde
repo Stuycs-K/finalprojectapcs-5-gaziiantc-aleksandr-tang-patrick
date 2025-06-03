@@ -28,7 +28,16 @@ class WallWooden extends ADefense {
     popMatrix();
   }
 	@Override
-	public void tick(){	
-		this.doMovementTick();
-	}
+  public void tick(){  
+    if(hp<=0){
+      objects.remove(this);
+      return;
+    }
+    this.doMovementTick();
+  }
+    public void onHit(AObject obj){  
+    if(!(obj instanceof ADefense)){
+      this.hp -= 1000*((Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass);
+    }
+  }
 }

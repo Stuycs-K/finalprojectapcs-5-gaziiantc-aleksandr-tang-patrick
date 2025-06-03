@@ -24,5 +24,6 @@ abstract class ADefense extends AObject {
      super.collision(obj);
      onHit(obj);
   }
+
 	
 }

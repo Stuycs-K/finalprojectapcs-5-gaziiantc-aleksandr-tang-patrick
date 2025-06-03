@@ -283,7 +283,7 @@ void keyPressed(){
     start=true;
   }
   if(key == ' '){
-     frameRate(2); 
+    // frameRate(2); 
   }
 }
 
@@ -445,6 +445,7 @@ void applyUpgrade(int defenseIndex) {
     upgradeLevels[defenseIndex]++;
     switch(defenseIndex) {
         case 0:
+            
             break;
             
         case 1:
