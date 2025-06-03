@@ -7,6 +7,7 @@ class Laser extends AObject {
 		this.dy = (where.y - this.y) / 60;
 		this.angle = Math.atan(this.dx / this.dy);
 	}
+  
 
 
 	@Override 

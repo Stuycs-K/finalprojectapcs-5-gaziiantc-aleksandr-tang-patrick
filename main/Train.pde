@@ -1,9 +1,9 @@
 class Train extends AObject{
-  public Train(){
-    super(-25, -25, 250, 75, 2500);
-    
-    this.applyForce((width/2 - this.x) * 100, (height/2-this.y) * 100);
-    this.angle = Math.atan((width/2-this.x) / (height/2-this.y));
+  public Train(double x, double y, AObject where){
+    super(x, y, 350, 125, 1000);
+    this.dx = (where.x - this.x) / 30;
+    this.dy = (where.y - this.y) / 30;
+    this.angle = Math.atan(this.dx / this.dy);
     this.attributes.add(Attribute.HEAVY);
   }
 
@@ -42,7 +42,12 @@ class Train extends AObject{
     //this.x -= this.dx;
     //this.y -= this.dy;
     obj.applyForce(this.dx, this.dy);
-    obj.dx *= -1; obj.dy *= -1;
+    if(obj.mass > 100){
+      this.dx *= -1; this.dy *= -1;
+      this.x += this.dx; this.y += this.dy;
+      this.dx *= 0.25; this.dy *= 0.25;
+      
+    }
   }
   
   @Override
