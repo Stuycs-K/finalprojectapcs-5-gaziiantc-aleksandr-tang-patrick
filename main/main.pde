@@ -141,14 +141,6 @@ void draw(){
     buildingAngle -= (0.075);
   }
   
-  if(millis()<test5.duration){
-    test5.draw();
-    test5.tick();
-  }
-    if(millis()<test6.duration){
-    test6.draw();
-    test6.tick();
-  }
   if(millis()>cashTime){
     cashflow+=0.7;
     cashTime*=3;
@@ -265,14 +257,20 @@ void mousePressed(){
       }
     }
   }else if(placingDefense){
-    AObject placing = null;
+    ADefense placing = null;
     switch(selectedDefenseIndex){
       case 0: placing = (new WallWooden(mouseX,mouseY)); break;
       case 1: placing = (new WallStone(mouseX,mouseY)); break;
       case 2: placing = (new SheetMetal(mouseX,mouseY)); break;
       case 3: placing = (new Void(mouseX,mouseY)); break;
-      case 4: placing = (new Shield(mouseX,mouseY)); break;
-      case 5: placing = (new BlackHole(mouseX,mouseY)); break;
+      case 4: 
+        placing = (new Shield(mouseX,mouseY)); 
+        ((ADefense)placing).spawnTime = millis();
+        break;
+      case 5: 
+        placing = (new BlackHole(mouseX,mouseY));
+        ((ADefense)placing).spawnTime = millis();
+        break;
       case 6: 
         placing = (new Adsense(mouseX,mouseY));
         cashflow *= 2;
