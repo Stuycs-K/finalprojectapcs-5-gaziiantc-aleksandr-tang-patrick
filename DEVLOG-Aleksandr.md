@@ -40,3 +40,7 @@ Made everything have textures and fixed the shop
 ### 2025-06-02
 
 Made the MVP, did some cleaning in the code, and made building better (also fixed the shop (again))
+
+### 2025-06-03
+
+Put the engine we made to good use by making the map 4 times as big
