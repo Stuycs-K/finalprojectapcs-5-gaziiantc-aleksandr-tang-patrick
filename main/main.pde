@@ -214,6 +214,9 @@ void keyPressed(){
   if(keyCode=='l'||keyCode=='L'){
      objects.add(new Laser());
   }
+  if(key==' '){
+      objects.add(new Train()); 
+   }
   /*if(keyCode=='r'||keyCode=='R'){
      buildingAngle += HALF_PI;
   }

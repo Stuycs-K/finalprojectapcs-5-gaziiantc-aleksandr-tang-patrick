@@ -35,7 +35,7 @@ class Laser extends AObject {
 	}
 	
 	public void doCollisionStuff(AObject obj){	
-		if(obj.containsAttrib(Attribute.FLAMMABLE)){	
+		if(obj.containsAttribute(Attribute.FLAMMABLE)){	
 			obj.destroy();
 		}
 

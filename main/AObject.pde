@@ -50,7 +50,7 @@ abstract class AObject {
 	  attributes.add(attrib);
   }
 
-  public boolean containsAttrib(Attribute attrib){	
+  public boolean containsAttribute(Attribute attrib){	
 	  return attributes.contains(attrib);
   }
   int getLoc(int x, int y) {

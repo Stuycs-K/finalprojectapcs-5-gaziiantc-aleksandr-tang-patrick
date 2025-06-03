@@ -6,10 +6,11 @@ class MainBase extends ADefense {
 	}
   @Override
   public void doCollisionStuff(AObject obj){
-    this.applyForce(obj.dx * obj.mass, obj.dy * obj.mass);
-    this.dx *= 0.5; this.dy *= 0.5;
-    obj.dx *= -1; obj.dy *= -1;
-    obj.x += obj.dx; obj.y += obj.dy;
+    this.applyForce(obj.dx * obj.mass * 0.5, obj.dy * obj.mass * 0.5);
+    if(!obj.containsAttribute(Attribute.HEAVY)){
+      obj.dx *= -1; obj.dy *= -1;
+      obj.x += obj.dx; obj.y += obj.dy;
+    }
   }
 	public void onHit(AObject obj){	
     if(!(obj instanceof ADefense)){
