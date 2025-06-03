@@ -26,6 +26,16 @@ static int score=0;
 int level=1;
 int nextLevel=50;
 public AssetPool assets; //using a class in case i want to add shaders for whatever reason
+boolean upgradeScreen = false;
+int[] upgradeLevels = new int[defenses.length];
+int[] upgradeCosts = {50, 100, 200, 500, 1000}; 
+String[][] upgradeDescriptions = {{"+50% Health", "+100% Health", "+50% Size"},
+    {"+50% Health", "+100% Health", "+50% Size"},
+    {"+50% Health", "+100% Health", "+50% Size"},
+    {"+50% Radius", "+100% Radius", "-50% Cost"},
+    {"+50% Duration", "+100% Duration", "+50% Size"},
+    {"+50% Radius", "+100% Radius", "+50% Duration"},
+    {"+50% Cash Flow", "+100% Cash Flow", "+25% Score"}};
 
 
 void setup(){
@@ -166,18 +176,21 @@ void draw(){
   }
   cash+=cashflow;
   text("Cash: "+(double)(int)(cash*10000)/10000,10,70);
-  if(score>=nextLevel){
+  if(score>=nextLevel&& !upgradeScreen){
     level++;
     start=false;
+    upgradeScreen=true;
     nextLevel*=3;
+  }
+  if(upgradeScreen){
+    drawUpgradeScreen();
+    return;
   }
     if(!start){
     text("Press S to start",10,110);
   }
     text("Score: "+score,10,50);
     text("Level: "+level,10,90);
-
-
 }
 
 void mouseDragged(){
@@ -287,6 +300,23 @@ void mousePressed(){
     }
     selectedDefenseIndex = -1;
   }
+     
+  if (upgradeScreen) {
+    for (int i = 0; i < defenses.length; i++) {
+      if (upgradeLevels[i] >= 5) continue;   
+       float x = width/2 - 200 + (i%4)*130;
+       float y = height/2 - 100 + floor(i/4)*150;
+       if (mouseX > x-50 && mouseX < x+50 && mouseY > y-30 && mouseY < y+50) {
+         if (cash >= upgradeCosts[upgradeLevels[i]]) {
+           cash -= upgradeCosts[upgradeLevels[i]];
+           applyUpgrade(i);
+           upgradeScreen = false;
+           break;
+         }
+        }
+       }
+      return;
+    }
 }
 void drawShop(){
   fill(235,213,179);
@@ -337,4 +367,51 @@ void drawShop(){
   }
   textSize(24);
   text("Shop",350,175);
+}
+void drawUpgradeScreen() {
+    fill(200, 230, 200);
+    rect(width/2, height/2, 500, 500);
+    fill(0);
+    textSize(32);
+    text("Level Up!", width/2, height/2 - 200);
+    textSize(16);
+    text("Choose one upgrade", width/2, height/2 - 160);
+    for (int i = 0; i < defenses.length; i++) {
+        if (upgradeLevels[i] >= 5) continue;
+        float x = width/2 - 200 + (i%4)*130;
+        float y = height/2 - 100 + floor(i/4)*150;
+        pushMatrix();
+        translate(x+50, y+30);
+        scale(0.3);
+        defenses[i].draw();
+        popMatrix();
+        text(defenseNames[i], x, y);
+        text(upgradeDescriptions[i][upgradeLevels[i]], x, y+20);
+        text("$"+upgradeCosts[upgradeLevels[i]], x, y+40);
+        if (mouseX > x-50 && mouseX < x+50 && mouseY > y-30 && mouseY < y+50) {
+            noFill();
+            stroke(0, 255, 0);
+            rect(x, y, 100, 80);
+            noStroke();
+        }
+    }
+}
+void applyUpgrade(int defenseIndex) {
+    upgradeLevels[defenseIndex]++;
+    switch(defenseIndex) {
+        case 0:
+            break;
+            
+        case 1:
+            break;
+            
+        case 5:
+            break;
+            
+        case 4:
+            break;
+            
+        case 6:
+            break;
+    }
 }
