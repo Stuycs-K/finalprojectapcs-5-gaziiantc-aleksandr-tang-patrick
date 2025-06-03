@@ -21,7 +21,21 @@ double cash=99999.0;
 double cashflow=.1;
 int cashTime=30000;
 double buildingAngle = -HALF_PI;
+boolean start=false;
+static int score=0;
+int level=1;
+int nextLevel=50;
 public AssetPool assets; //using a class in case i want to add shaders for whatever reason
+boolean upgradeScreen = false;
+int[] upgradeLevels = new int[defenses.length];
+int[] upgradeCosts = {50, 100, 200, 500, 1000}; 
+String[][] upgradeDescriptions = {{"+50% Health", "+100% Health", "+50% Size"},
+    {"+50% Health", "+100% Health", "+50% Size"},
+    {"+50% Health", "+100% Health", "+50% Size"},
+    {"+50% Radius", "+100% Radius", "-50% Cost"},
+    {"+50% Duration", "+100% Duration", "+50% Size"},
+    {"+50% Radius", "+100% Radius", "+50% Duration"},
+    {"+50% Cash Flow", "+100% Cash Flow", "+25% Score"}};
 
 
 void setup(){
@@ -69,6 +83,7 @@ void setup(){
   objects.add(test);
   objects.add(test2);
   objects.add(test3);
+  
 }
 
 
@@ -97,10 +112,12 @@ void clearMap(){
 }
 
 void draw(){
-  
+
   fill(255);
-  if(frameCount > 200 && frameCount%5 == 0){
-    objects.add(new Laser());
+  if(start){
+    if(frameCount > 200 && frameCount%5 == 0){
+      objects.add(new Laser());
+    }
   }
   rect(width/2,height/2,width,height);
   
@@ -134,14 +151,6 @@ void draw(){
     buildingAngle -= (0.075);
   }
   
-  if(millis()<test5.duration){
-    test5.draw();
-    test5.tick();
-  }
-    if(millis()<test6.duration){
-    test6.draw();
-    test6.tick();
-  }
   if(millis()>cashTime){
     cashflow+=0.7;
     cashTime*=3;
@@ -150,8 +159,6 @@ void draw(){
   objects.get(2).angle+=objects.get(2).dx/25;
   fill(0);
   textSize(25);
-  text(mouseX,500,10);
-  text(mouseY,500,20);
   int e = 0;
   for(int i=0; i<objects.size(); i++){
      e+=objects.get(i).mass * (Math.pow(objects.get(i).dx, 2) + Math.pow(objects.get(i).dy, 2));
@@ -168,8 +175,22 @@ void draw(){
     popMatrix();
   }
   cash+=cashflow;
-  text("Cash: "+(double)(int)(cash*10000)/10000,100,100);
-
+  text("Cash: "+(double)(int)(cash*10000)/10000,10,70);
+  if(score>=nextLevel&& !upgradeScreen){
+    level++;
+    start=false;
+    upgradeScreen=true;
+    nextLevel*=3;
+  }
+  if(upgradeScreen){
+    drawUpgradeScreen();
+    return;
+  }
+    if(!start){
+    text("Press S to start",10,110);
+  }
+    text("Score: "+score,10,50);
+    text("Level: "+level,10,90);
 }
 
 void mouseDragged(){
@@ -223,6 +244,10 @@ void keyPressed(){
   if(keyCode=='t'||keyCode=='T'){
      buildingAngle -= HALF_PI; 
   }*/
+  
+  if(keyCode=='s'||keyCode=='S'){
+    start=true;
+  }
 }
 
 void mousePressed(){
@@ -248,14 +273,20 @@ void mousePressed(){
       }
     }
   }else if(placingDefense){
-    AObject placing = null;
+    ADefense placing = null;
     switch(selectedDefenseIndex){
       case 0: placing = (new WallWooden(mouseX,mouseY)); break;
       case 1: placing = (new WallStone(mouseX,mouseY)); break;
       case 2: placing = (new SheetMetal(mouseX,mouseY)); break;
-      case 3: placing = (new Void(mouseX,mouseY));
-      case 4: placing = (new Shield(mouseX,mouseY)); break;
-      case 5: placing = (new BlackHole(mouseX,mouseY)); break;
+      case 3: placing = (new Void(mouseX,mouseY)); break;
+      case 4: 
+        placing = (new Shield(mouseX,mouseY)); 
+        ((ADefense)placing).spawnTime = millis();
+        break;
+      case 5: 
+        placing = (new BlackHole(mouseX,mouseY));
+        ((ADefense)placing).spawnTime = millis();
+        break;
       case 6: 
         placing = (new Adsense(mouseX,mouseY));
         cashflow *= 2;
@@ -272,6 +303,23 @@ void mousePressed(){
     }
     selectedDefenseIndex = -1;
   }
+     
+  if (upgradeScreen) {
+    for (int i = 0; i < defenses.length; i++) {
+      if (upgradeLevels[i] >= 5) continue;   
+       float x = width/2 - 200 + (i%4)*130;
+       float y = height/2 - 100 + floor(i/4)*150;
+       if (mouseX > x-50 && mouseX < x+50 && mouseY > y-30 && mouseY < y+50) {
+         if (cash >= upgradeCosts[upgradeLevels[i]]) {
+           cash -= upgradeCosts[upgradeLevels[i]];
+           applyUpgrade(i);
+           upgradeScreen = false;
+           break;
+         }
+        }
+       }
+      return;
+    }
 }
 void drawShop(){
   fill(235,213,179);
@@ -322,4 +370,51 @@ void drawShop(){
   }
   textSize(24);
   text("Shop",350,175);
+}
+void drawUpgradeScreen() {
+    fill(200, 230, 200);
+    rect(width/2, height/2, 500, 500);
+    fill(0);
+    textSize(32);
+    text("Level Up!", width/2, height/2 - 200);
+    textSize(16);
+    text("Choose one upgrade", width/2, height/2 - 160);
+    for (int i = 0; i < defenses.length; i++) {
+        if (upgradeLevels[i] >= 5) continue;
+        float x = width/2 - 200 + (i%4)*130;
+        float y = height/2 - 100 + floor(i/4)*150;
+        pushMatrix();
+        translate(x+50, y+30);
+        scale(0.3);
+        defenses[i].draw();
+        popMatrix();
+        text(defenseNames[i], x, y);
+        text(upgradeDescriptions[i][upgradeLevels[i]], x, y+20);
+        text("$"+upgradeCosts[upgradeLevels[i]], x, y+40);
+        if (mouseX > x-50 && mouseX < x+50 && mouseY > y-30 && mouseY < y+50) {
+            noFill();
+            stroke(0, 255, 0);
+            rect(x, y, 100, 80);
+            noStroke();
+        }
+    }
+}
+void applyUpgrade(int defenseIndex) {
+    upgradeLevels[defenseIndex]++;
+    switch(defenseIndex) {
+        case 0:
+            break;
+            
+        case 1:
+            break;
+            
+        case 5:
+            break;
+            
+        case 4:
+            break;
+            
+        case 6:
+            break;
+    }
 }

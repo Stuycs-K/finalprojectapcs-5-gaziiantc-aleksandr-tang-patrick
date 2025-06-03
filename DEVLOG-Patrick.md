@@ -22,3 +22,12 @@ Added void, blackhole, stone wall, and shield classes
 
 ### 2024-05-30 
 Changed the shop code layout and displayed defenses in shop
+
+### 2024-05-31 
+Created cashflow system to buy defenses
+
+### 2024-06-01 
+Added adsense class and progressively increasing cashflow
+
+### 2024-06-02
+Added scoring/leveling system and changed functionality for shield and blackhole
