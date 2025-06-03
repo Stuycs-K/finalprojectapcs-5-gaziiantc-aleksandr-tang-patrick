@@ -132,7 +132,9 @@ void draw(){
        objects.remove(i);
        i--;
     }
-	  objects.get(i).setHitbox(true);
+    if(i>=0){
+	    objects.get(i).setHitbox(true);
+    }
   }
   if(key=='d'){
      debugDraw(); //this broke gg
@@ -280,12 +282,12 @@ void mousePressed(){
       case 2: placing = (new SheetMetal(mouseX,mouseY)); break;
       case 3: placing = (new Void(mouseX,mouseY)); break;
       case 4: 
-        placing = (new Shield(mouseX,mouseY)); 
+        placing = (new Shield(mouseX,mouseY, millis())); 
         ((ADefense)placing).spawnTime = millis();
         break;
       case 5: 
-        placing = (new BlackHole(mouseX,mouseY));
-        ((ADefense)placing).spawnTime = millis();
+        placing = (new BlackHole(mouseX,mouseY, millis()));
+        ((ADefense)placing).spawnTime = millis(); 
         break;
       case 6: 
         placing = (new Adsense(mouseX,mouseY));
