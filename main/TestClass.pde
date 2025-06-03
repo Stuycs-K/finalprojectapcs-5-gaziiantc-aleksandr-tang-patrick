@@ -45,17 +45,17 @@ class TestClass extends AObject{
   
   @Override
   public void doBoundsStuff(){ 
-     if(this.x > width - (this.sizeX/2 * Math.cos(this.angle))){
+     if(this.x > bounds[2] - (this.sizeX/2 * Math.cos(this.angle))){
         this.x -= this.sizeX/2; 
          dx = -0.9 * dx;
-     }else if(this.x < (this.sizeX/2 * Math.cos(this.angle))){
+     }else if(this.x < bounds[0] + (this.sizeX/2 * Math.cos(this.angle))){
         this.x += this.sizeX/2; 
         dx = -0.9 * dx;
      }
-     if(this.y > height - (this.sizeY/2 * Math.sin(this.angle))){
+     if(this.y > bounds[3] - (this.sizeY/2 * Math.sin(this.angle))){
         this.y -= this.sizeY/2; 
          dy = -0.9 * dy;
-     }else if(this.y < (this.sizeY/2 * Math.sin(this.angle)-5)){
+     }else if(this.y < bounds[1] + (this.sizeY/2 * Math.sin(this.angle)-5)){
         this.y += this.sizeY/2; 
         dy = -0.9 * dy;
      }

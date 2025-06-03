@@ -1,10 +1,15 @@
 import java.util.*;
 
+
+static final int sHeight = 700;
+static final int sWidth = 700;
+
+
 List<Chunk> map;
 ArrayList<AObject> objects;
 
 int selectedDefenseIndex=-1;
-ADefense[] defenses={new WallWooden(0,0),new WallStone(0,0),new SheetMetal(0,0),new Void(0,0),new Shield(0,0),new BlackHole(0,0),new Adsense(0,0)};
+ADefense[] defenses={new WallWooden(0,0),new WallStone(0,0),new SheetMetal(0,0),new Void(0,0),new Shield(0,0, Integer.MAX_VALUE),new BlackHole(0,0, Integer.MAX_VALUE),new Adsense(0,0)};
 int[] baseCost = {50,75,125,50,175,250,400};
 int purchaseCount[] = new int[baseCost.length]; 
 int[] cost = baseCost.clone();
@@ -24,6 +29,7 @@ double buildingAngle = -HALF_PI;
 boolean start=false;
 static int score=0;
 int level=1;
+MainBase plr;
 int nextLevel=50;
 public AssetPool assets; //using a class in case i want to add shaders for whatever reason
 boolean upgradeScreen = false;
@@ -37,14 +43,16 @@ String[][] upgradeDescriptions = {{"+50% Health", "+100% Health", "+50% Size"},
     {"+50% Radius", "+100% Radius", "+50% Duration"},
     {"+50% Cash Flow", "+100% Cash Flow", "+25% Score"}};
 
+public int plrX = (int)(0.5 * sWidth); public int plrY = (int)(0.5 * sHeight);
+public int[] bounds = new int[]{0-sWidth*2, 0-sHeight*2, sWidth * 2, sHeight * 2}; //left x y, right x y
 
 void setup(){
   objects = new ArrayList<>();
   size(700, 700, P2D);
   map = new ArrayList<>();
   fill(255);
-  for(int x=0; x<width; x+=Chunk.size){
-    for(int y=0; y<height; y+=Chunk.size){
+  for(int x=bounds[0]; x<bounds[2]; x+=Chunk.size){
+    for(int y=bounds[1]; y<bounds[3]; y+=Chunk.size){
       map.add(new Chunk(x, y));
       rect(x, y, Chunk.size, Chunk.size);
     }
@@ -62,23 +70,23 @@ void setup(){
   
   noStroke();
   TestClass test = new TestClass();
-  test.applyForce(100, 100);
+  //test.applyForce(100, 100);
   TestClass test2 = new TestClass();
   test2.mass = 10;
   test2.sizeX -= 5;
   test2.sizeY -= 5;
   test.sizeX += 25;
-  test2.x += 79;
-  test2.y += 50;
-  test5=new Shield(500,500);
-  test6=new BlackHole(100,500);
+  test.x = 0;
+  test.y = 0;
+  test5=new Shield(500,500, millis());
+  test6=new BlackHole(100,500, millis());
   
   test.x += 150;
   test2.x += 150;
   
   WallWooden test3 = new WallWooden(width/2-100, height/2);
   
-  MainBase plr = new MainBase(width / 2, height / 2);
+  plr = new MainBase(0, 0);
   objects.add(plr);
   objects.add(test);
   objects.add(test2);
@@ -112,18 +120,39 @@ void clearMap(){
 }
 
 void draw(){
-
+  
+  if(keys['s']){
+     if(plrY > bounds[1] + sWidth){
+       plrY -= 5;  
+     }
+  }
+  if(keys['d']){
+     if(plrY > bounds[0] + sHeight){
+       plrX -= 5;  
+     }
+  }
+  if(keys['w']){
+     if(plrY < bounds[3] - sWidth){ 
+       plrY += 5;  
+     }
+  }
+  if(keys['a']){
+     if(plrY < bounds[2] - sHeight){
+       plrX += 5;  
+     }
+  }
+  
+  translate(plrX, plrY);
   fill(255);
   if(start){
     if(frameCount > 200 && frameCount%5 == 0){
-      objects.add(new Laser());
+      objects.add(new Laser(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr));
     }
   }
-  rect(width/2,height/2,width,height);
-  
-  
-  
-  
+  rect(bounds[0],bounds[1], 2 * (bounds[2]-bounds[0]), 2 * (bounds[3]-bounds[1]));
+  //print(bounds[2] + " - " + bounds[0] + " = ");
+  //println(bounds[2]-bounds[0]); //1800-(-1000), should be 2800
+  //println(objects.get(0).getLoc(bounds[0]+1, bounds[1]+1));
   
   clearMap();
   
@@ -136,9 +165,7 @@ void draw(){
 	    objects.get(i).setHitbox(true);
     }
   }
-  if(key=='d'){
-     debugDraw(); //this broke gg
-  }
+  
   for(int i=0; i<objects.size(); i++){  
     objects.get(i).draw();
   }
@@ -146,6 +173,11 @@ void draw(){
   for(int i=0; i<objects.size(); i++){  
     objects.get(i).tick();
   }
+  
+  
+  
+  
+  
   if(keys['r']){
     buildingAngle += (0.075);
   }
@@ -171,13 +203,13 @@ void draw(){
   }
   if(placingDefense&&selectedDefenseIndex>=0){
     pushMatrix();
-    translate(mouseX,mouseY);
+    translate(mouseX-plrX,mouseY-plrY);
     defenses[selectedDefenseIndex].angle = buildingAngle;
     defenses[selectedDefenseIndex].draw();
     popMatrix();
   }
   cash+=cashflow;
-  text("Cash: "+(double)(int)(cash*10000)/10000,10,70);
+  text("Cash: "+(double)(int)(cash*10000)/10000,10 - plrX, 70 - plrY);
   if(score>=nextLevel&& !upgradeScreen){
     level++;
     start=false;
@@ -189,10 +221,13 @@ void draw(){
     return;
   }
     if(!start){
-    text("Press S to start",10,110);
+    text("Press space to start", 10 - plrX, 110 - plrY);
   }
-    text("Score: "+score,10,50);
-    text("Level: "+level,10,90);
+    text("Score: "+score, 10 - plrX, 50 - plrY);
+    text("Level: "+level, 10 - plrX, 90 - plrY);
+    if(key=='['){
+     debugDraw(); 
+  }
 }
 
 void mouseDragged(){
@@ -234,10 +269,7 @@ void keyPressed(){
     voidplaced=true;
     objects.add(test4);
   }
-  if(keyCode=='l'||keyCode=='L'){
-     objects.add(new Laser());
-  }
-  if(key==' '){
+  if(key=='o'){
       objects.add(new Train()); 
    }
   /*if(keyCode=='r'||keyCode=='R'){
@@ -247,7 +279,7 @@ void keyPressed(){
      buildingAngle -= HALF_PI; 
   }*/
   
-  if(keyCode=='s'||keyCode=='S'){
+  if(keyCode==' '||keyCode==' ' || key==' '){
     start=true;
   }
 }
@@ -255,19 +287,26 @@ void keyPressed(){
 void mousePressed(){
   if(shop){
     for(int i=0;i<5;i++){
-      float x=250+75*i;
-      float y=220;
-      if(mouseX>x&&mouseX<x+50&&mouseY>y&&mouseY<y+50&&cash>=cost[i]){
+      float x=250+75*i-plrX;
+      float y=220-plrY;
+      //rect(x, y, 50, 50);
+      //print(mouseX+plrX>x);
+      //print(mouseX-plrX<x+50);
+      //print(mouseY+plrY>y);
+      //print(mouseY-plrY<y+50);
+      //println();
+      if(mouseX+plrX>x&&mouseX-plrX<x+50&&mouseY+plrY>y&&mouseY-plrY<y+50&&cash>=cost[i]){
         selectedDefenseIndex=i;
         placingDefense=true;
         shop=false;
         return;
       }
     }
-    for(int i=5;i<10;i++){
-      float x=250+75*(i-5);
-      float y=320;
-      if(mouseX>x&&mouseX<x+50&&mouseY>y&&mouseY<y+50&&cash>=cost[i]){
+    for(int i=5;i<7;i++){ 
+      float x=250+75*(i-5)-plrX;
+      float y=320-plrY;
+      //rect(x-plrX, y-plrY, 50, 50);
+      if(mouseX+plrX>x&&mouseX-plrX<x+50&&mouseY+plrY>y&&mouseY-plrY<y+50&&cash>=cost[i]){
         selectedDefenseIndex=i;
         placingDefense=true;
         shop=false;
@@ -277,20 +316,18 @@ void mousePressed(){
   }else if(placingDefense){
     ADefense placing = null;
     switch(selectedDefenseIndex){
-      case 0: placing = (new WallWooden(mouseX,mouseY)); break;
-      case 1: placing = (new WallStone(mouseX,mouseY)); break;
-      case 2: placing = (new SheetMetal(mouseX,mouseY)); break;
-      case 3: placing = (new Void(mouseX,mouseY)); break;
+      case 0: placing = (new WallWooden(mouseX-plrX,mouseY-plrY)); break;
+      case 1: placing = (new WallStone(mouseX-plrX,mouseY-plrY)); break;
+      case 2: placing = (new SheetMetal(mouseX-plrX,mouseY-plrY)); break;
+      case 3: placing = (new Void(mouseX-plrX,mouseY-plrY)); break;
       case 4: 
-        placing = (new Shield(mouseX,mouseY, millis())); 
-        ((ADefense)placing).spawnTime = millis();
+        placing = (new Shield(mouseX-plrX,mouseY-plrY, millis())); 
         break;
       case 5: 
-        placing = (new BlackHole(mouseX,mouseY, millis()));
-        ((ADefense)placing).spawnTime = millis(); 
+        placing = (new BlackHole(mouseX-plrX,mouseY-plrY, millis()));
         break;
       case 6: 
-        placing = (new Adsense(mouseX,mouseY));
+        placing = (new Adsense(mouseX-plrX,mouseY-plrY));
         cashflow *= 2;
         break;
     }
@@ -309,9 +346,9 @@ void mousePressed(){
   if (upgradeScreen) {
     for (int i = 0; i < defenses.length; i++) {
       if (upgradeLevels[i] >= 5) continue;   
-       float x = width/2 - 200 + (i%4)*130;
-       float y = height/2 - 100 + floor(i/4)*150;
-       if (mouseX > x-50 && mouseX < x+50 && mouseY > y-30 && mouseY < y+50) {
+       float x = width/2 - 200 + (i%4)*130-plrX;
+       float y = height/2 - 100 + floor(i/4)*150-plrY;
+       if (mouseX+plrX>x&&mouseX-plrX<x+50&&mouseY+plrY>y&&mouseY-plrY<y+50) {
          if (cash >= upgradeCosts[upgradeLevels[i]]) {
            cash -= upgradeCosts[upgradeLevels[i]];
            applyUpgrade(i);
@@ -325,12 +362,12 @@ void mousePressed(){
 }
 void drawShop(){
   fill(235,213,179);
-  rect(400,400,400,500);
+  rect(400-plrX,400-plrY,400,500);
   fill(0);
   textSize(24);
   for(int i=0;i<5;i++){
-    float x=250+75*i;
-    float y=220;
+    float x=250+75*i-plrX;
+    float y=220-plrY;
     pushMatrix();
     translate(x+25,y+25);
     scale(0.4);
@@ -350,8 +387,8 @@ void drawShop(){
     }
   }
    for(int i=5;i<10 && i < defenses.length;i++){
-    float x=250+75*(i-5);
-    float y=320;
+    float x=250+75*(i-5)-plrX;
+    float y=320-plrY;
     pushMatrix();
     translate(x+25,y+25);
     scale(0.4);
@@ -371,20 +408,20 @@ void drawShop(){
     }
   }
   textSize(24);
-  text("Shop",350,175);
+  text("Shop",350-plrX,175-plrY);
 }
 void drawUpgradeScreen() {
     fill(200, 230, 200);
-    rect(width/2, height/2, 500, 500);
+    rect(width/2-plrX, height/2-plrY, 500, 500);
     fill(0);
     textSize(32);
-    text("Level Up!", width/2, height/2 - 200);
+    text("Level Up!", width/2-plrX, height/2 - 200-plrY);
     textSize(16);
-    text("Choose one upgrade", width/2, height/2 - 160);
+    text("Choose one upgrade", width/2-plrX, height/2 - 160-plrY);
     for (int i = 0; i < defenses.length; i++) {
         if (upgradeLevels[i] >= 5) continue;
-        float x = width/2 - 200 + (i%4)*130;
-        float y = height/2 - 100 + floor(i/4)*150;
+        float x = width/2 - 200 + (i%4)*130-plrX;
+        float y = height/2 - 100 + floor(i/4)*150-plrY;
         pushMatrix();
         translate(x+50, y+30);
         scale(0.3);
@@ -393,7 +430,7 @@ void drawUpgradeScreen() {
         text(defenseNames[i], x, y);
         text(upgradeDescriptions[i][upgradeLevels[i]], x, y+20);
         text("$"+upgradeCosts[upgradeLevels[i]], x, y+40);
-        if (mouseX > x-50 && mouseX < x+50 && mouseY > y-30 && mouseY < y+50) {
+        if (mouseX+plrX>x&&mouseX-plrX<x+50&&mouseY+plrY>y&&mouseY-plrY<y+50) {
             noFill();
             stroke(0, 255, 0);
             rect(x, y, 100, 80);

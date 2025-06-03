@@ -54,17 +54,17 @@ abstract class AObject {
 	  return attributes.contains(attrib);
   }
   int getLoc(int x, int y) {
-    return x/Chunk.size + ((y/Chunk.size) * (width/Chunk.size));
+    return (x-bounds[0])/Chunk.size + (((y-bounds[1])/Chunk.size) * ((bounds[2]-bounds[0])/Chunk.size));
   }
 
   boolean isOnBorder(double x, double y) {
-    if((x >= width - 10) || (x <= 10)){
+    if((x >= (bounds[2] - 10)) || (x <= (bounds[0] + 10))){
       FLAGx++;
-      if((y >= height-10) || (y <= 10)) FLAGy++;
+      if((y >= bounds[3] -10) || (y <= bounds[1] + 10)) FLAGy++;
       return true;
-    }else if((y >= height-10) || (y <= 10)){
+    }else if((y >= bounds[3]-10) || (y <= bounds[1] + 10)){
       FLAGy++;
-      if((x >= width-10) || (x <= 10)) FLAGx++;
+      if((x >= bounds[2] - 10) || (x <= bounds[0] + 10)) FLAGx++;
       return true;
     }
     return false;

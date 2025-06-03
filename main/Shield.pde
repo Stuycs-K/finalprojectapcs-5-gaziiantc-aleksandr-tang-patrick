@@ -1,6 +1,6 @@
 class Shield extends ADefense {  
   public static final int maxHP = 15000;
-  static int duration = 10000;
+  static final int duration = 10000;
   public int spawnTime;
   public Shield(int x, int y, int spawnTime){  
     super(maxHP, x, y, 100,100, 3000);
