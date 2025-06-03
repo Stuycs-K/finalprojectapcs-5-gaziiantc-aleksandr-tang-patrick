@@ -1,12 +1,11 @@
 abstract class ADefense extends AObject {
 	
 	public int hp;
-  public int duration;
   public long spawnTime;
 	public ADefense(int hp, double x, double y, int sizex, int sizey, double mass){
 		super(x, y, sizex, sizey, mass);
 		attributes = new ArrayList<>();
-    this.spawnTime=millis();
+    //this.spawnTime=millis(); there is 0 reason to have every single object track this.
 		this.hp = hp;
 	}
 
@@ -24,9 +23,6 @@ abstract class ADefense extends AObject {
   public void collision(AObject obj){
      super.collision(obj);
      onHit(obj);
-  }
-  public boolean isActive() {
-    return millis()-spawnTime<duration;
   }
 	
 }

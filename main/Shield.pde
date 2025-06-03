@@ -1,9 +1,10 @@
 class Shield extends ADefense {  
   public static final int maxHP = 15000;
-  public Shield(int x, int y){  
+  static final int duration = 10000;
+  public int spawnTime;
+  public Shield(int x, int y, int spawnTime){  
     super(maxHP, x, y, 100,100, 3000);
-    this.duration = 10000; 
-
+    this.spawnTime = spawnTime;
   }
   @Override
   public void doCollisionStuff(AObject obj){  
@@ -13,7 +14,7 @@ class Shield extends ADefense {
   }
   @Override
   public void draw(){
-     if (isActive()) {
+     if (millis()-spawnTime > duration) {
       pushMatrix();
       translate((float)this.x, (float)this.y);
       beginShape();
@@ -31,7 +32,7 @@ class Shield extends ADefense {
   }
   @Override
   public void tick(){  
-    if (!isActive()) {
+    if(millis()-spawnTime < duration) {
        objects.remove(this);
        return;
     }

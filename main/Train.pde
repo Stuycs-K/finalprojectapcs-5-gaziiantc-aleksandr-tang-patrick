@@ -1,14 +1,17 @@
-class TestClass extends AObject{
-  //WOULDNT IT BE AWESOME IF THIS VARIABLE THAT WILL BE THE EXACT SAME IN EVERY ITERATION OF THIS OBJECT COULD BE STATIC INSTEAD OF GETTING COPIED 9 KAJILLION TIMES WOULD THAT NOT JUST BE GREAT
-	public TestClass(){
-		super(25, 25, 25, 25, 25);
-		this.angle = Math.PI;
-	}
+class Train extends AObject{
+  public Train(){
+    super(-25, -25, 250, 75, 2500);
+    
+    this.applyForce((width/2 - this.x) * 100, (height/2-this.y) * 100);
+    this.angle = Math.atan((width/2-this.x) / (height/2-this.y));
+    this.attributes.add(Attribute.HEAVY);
+  }
 
-	@Override
-	public void tick(){
+  @Override
+  public void tick(){
     this.doMovementTick();
-	}
+    
+  }
 
   @Override
   public void draw(){
@@ -39,26 +42,11 @@ class TestClass extends AObject{
     //this.x -= this.dx;
     //this.y -= this.dy;
     obj.applyForce(this.dx, this.dy);
-    //obj.dx *= -1; obj.dy *= -1;
-    this.applyForce(this.dx * -1, this.dy * -1);
+    obj.dx *= -1; obj.dy *= -1;
   }
   
   @Override
   public void doBoundsStuff(){ 
-     if(this.x > bounds[2] - (this.sizeX/2 * Math.cos(this.angle))){
-        this.x -= this.sizeX/2; 
-         dx = -0.9 * dx;
-     }else if(this.x < bounds[0] + (this.sizeX/2 * Math.cos(this.angle))){
-        this.x += this.sizeX/2; 
-        dx = -0.9 * dx;
-     }
-     if(this.y > bounds[3] - (this.sizeY/2 * Math.sin(this.angle))){
-        this.y -= this.sizeY/2; 
-         dy = -0.9 * dy;
-     }else if(this.y < bounds[1] + (this.sizeY/2 * Math.sin(this.angle)-5)){
-        this.y += this.sizeY/2; 
-        dy = -0.9 * dy;
-     }
           
   }
 }

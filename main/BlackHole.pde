@@ -1,8 +1,9 @@
 class BlackHole extends ADefense {  
   public static final int maxHP = 15000;
-  public BlackHole(int x, int y){  
+  static final int duration = 5000;
+  public BlackHole(int x, int y, int spawnTime){  
     super(maxHP, x, y, 50,50, 3000);
-    this.duration = 5000; 
+    this.spawnTime = spawnTime;
   }
   @Override
   public void doCollisionStuff(AObject obj){  
@@ -12,19 +13,19 @@ class BlackHole extends ADefense {
   }
   @Override
   public void draw(){
-    if (isActive()) {
+    if (millis()-spawnTime < duration) {
       fill(0);
       pushMatrix();
       translate((float)this.x, (float)this.y);
       rotate((float)this.angle*-1-HALF_PI);
-      rectMode(CENTER);
+      //rectMode(CENTER);
       ellipse(0, 0, (float)this.sizeX, (float)this.sizeY);
       popMatrix();
     }
   }
   @Override
   public void tick(){  
-    if (!isActive()) {
+    if (millis()-spawnTime > duration) {
       objects.remove(this);
       return;
     }

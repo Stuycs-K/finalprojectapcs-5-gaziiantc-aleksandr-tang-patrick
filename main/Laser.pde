@@ -1,9 +1,10 @@
 class Laser extends AObject {	
   //this is actually a plasma thrower but im too lazy to rename every mention of this
-	public Laser(){	
-		super(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, 25, 10, 0.1);
-		this.dx = (width/2 - this.x) / 60;
-		this.dy = (height/2 - this.y) / 60;
+	public Laser(double x, double y, AObject where){	
+		//super(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, 25, 10, 0.1);
+    super(x, y, 25, 10, 0.1);
+    this.dx = (where.x - this.x) / 60;
+		this.dy = (where.y - this.y) / 60;
 		this.angle = Math.atan(this.dx / this.dy);
 	}
 
@@ -35,7 +36,7 @@ class Laser extends AObject {
 	}
 	
 	public void doCollisionStuff(AObject obj){	
-		if(obj.containsAttrib(Attribute.FLAMMABLE)){	
+		if(obj.containsAttribute(Attribute.FLAMMABLE)){	
 			obj.destroy();
 		}
 

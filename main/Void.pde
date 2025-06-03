@@ -24,9 +24,9 @@ class Void extends ADefense {
     this.doMovementTick();
   }
     public void onHit(AObject obj){
-      obj.x=10000000;
-      obj.y=10000000;
-            this.x=10000000;
-      this.y=10000000;
+      if(!(obj instanceof ADefense)){
+        obj.destroy();
+        this.destroy();
+      }
   }
 }
