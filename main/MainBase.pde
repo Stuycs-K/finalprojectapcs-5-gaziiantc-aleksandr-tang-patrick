@@ -56,7 +56,7 @@ class MainBase extends ADefense {
      if(this.y > bounds[3] - (this.sizeY/2 * Math.sin(this.angle))){
         this.y -= this.sizeY/2; 
          dy = -0.9 * dy;
-     }else if(this.y < bounds[1] + (this.sizeY/2 * Math.sin(this.angle)-5)){
+     }else if(this.y < bounds[1] + (this.sizeY/2 * Math.sin(this.angle)-5) + sHeight){
         this.y += this.sizeY/2; 
         dy = -0.9 * dy;
      }

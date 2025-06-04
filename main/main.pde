@@ -52,12 +52,15 @@ public ArrayDeque<Attack> levelTypes = new ArrayDeque();
 public ArrayDeque<Integer> levelNums = new ArrayDeque();
 Map<String, Attack> Strattmap = new HashMap<>();
 int framesPerAtk = 1;
-
+ArrayDeque<AObject> sel = new ArrayDeque(); //selected objects
+int nSel = 0; //how much are selected
+boolean pass = false;
 void loadLevel(String path){
     try{
       Scanner sc = new Scanner(new File(path));
-      levelTypes.add(Attack.PAUSE);
+      
       while(sc.hasNextLine()){
+        levelTypes.add(Attack.PAUSE);
         String[] arr = sc.nextLine().split("-");
         levelNums.add(Integer.parseInt(arr[1]));
         for(int i=2; i<arr.length; i+=2){
@@ -106,6 +109,8 @@ void setup(){
   Strattmap.put("Laser", Attack.LASER);
   Strattmap.put("Train", Attack.TRAIN);
   Strattmap.put("Frames", Attack.FRAMES);
+  Strattmap.put("Sel", Attack.SEL);
+  Strattmap.put("Freeze", Attack.FREEZE);
   noStroke();
   TestClass test = new TestClass();
   //test.applyForce(100, 100);
@@ -185,17 +190,39 @@ void draw(){
   translate(plrX, plrY);
   fill(255);
   if(levelTypes.size() > 0 && levelNums.size() > 0 && !(levelTypes.peek().equals(Attack.PAUSE))){
-    if(frameCount%framesPerAtk == 0){
+    if(frameCount%framesPerAtk == 0 || pass){
+      pass = false;
       int n = levelNums.remove();
       if(n > 0){
         levelNums.addFirst(n-1);
         Attack a = levelTypes.peek();
+        AObject obj = null;
         if(a.equals(Attack.LASER)){
-          objects.add(new Laser(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
+          obj = (new Laser(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
         }else if(a.equals(Attack.TRAIN)){
-          objects.add(new Train(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
+          obj = (new Train(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
         }else if(a.equals(Attack.FRAMES)){
            //do nothing lol 
+        }else if(a.equals(Attack.SEL)){
+           nSel = n;
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true;
+        }else if(a.equals(Attack.FREEZE)){
+           for(AObject o : sel){
+              o.dx = 0; o.dy = 0;
+           }
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true;
+        }
+        
+        if(nSel > 0 && obj!=null){
+           sel.addLast(obj);
+           nSel--;
+        }
+        if(obj!=null){
+          objects.add(obj);
         }
       }else{
         levelTypes.remove();
@@ -212,7 +239,7 @@ void draw(){
   clearMap();
   
   for(int i=0; i<objects.size(); i++){	
-    if(objects.get(i).x > 1000+width || objects.get(i).x < -1000 || objects.get(i).y > 1000+height || objects.get(i).y < -1000){
+    if(objects.get(i).x > 10000+width || objects.get(i).x < -10000 || objects.get(i).y > 10000+height || objects.get(i).y < -10000){
        objects.remove(i);
        i--;
     }
