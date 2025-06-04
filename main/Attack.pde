@@ -13,12 +13,17 @@ enum Attack{
 
    //Memory management
  
-   ALLOC, //Creates an array of size n ; TBH this is stupid and I should just use an arraylist instead but it's just cooler this way
+   ALLOC, //Creates an array of doubles of size n ; TBH this is stupid and I should just use an arraylist instead but it's just cooler this way
    SELINDEX, //Selects index n in the array
    WRITE, //Writes value n to the selected index in the array
    
-   WRITEVLASTOBJ, //writes the total velocity of the last selected object. n does not matter, but this operation gets skipped if n<0. Binds the used object to a pointer. 
+   ALLOCOBJ, //Creates an array of objects of size n ; same thing as the other alloc.
+   
+   BUFFERLASTOBJ, //buffers the last selected object to index n of the array as well as binds it to the "last object" pointer.
+   
+   WRITEVLASTOBJ, //writes the total velocity of the last selected object to index n of the array. Binds the used object to a pointer. 
    WRITEVSELOBJ, //writes the total velocity of the object that was appointed by the previous function. 
+   
    
    //Logic
    

@@ -124,6 +124,11 @@ void setup(){
   Strattmap.put("ALLOC", Attack.ALLOC);
   Strattmap.put("SELINDEX", Attack.SELINDEX);
   Strattmap.put("WRITE", Attack.WRITE);
+  
+  Strattmap.put("ALLOCOBJ", Attack.ALLOCOBJ);
+  
+  Strattmap.put("BUFFERLASTOBJ", Attack.BUFFERLASTOBJ);
+  
   Strattmap.put("WRITEVLASTOBJ", Attack.WRITEVLASTOBJ);
   Strattmap.put("WRITEVSELOBJ", Attack.WRITEVSELOBJ);
   
@@ -158,7 +163,7 @@ void setup(){
   objects.add(test3);
   
   
-  loadLevel("/home/students/even/2026/ptang60/APCS_Sem_2/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
+  loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
 }
 
 
