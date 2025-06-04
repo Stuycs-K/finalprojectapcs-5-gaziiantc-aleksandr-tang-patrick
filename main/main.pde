@@ -50,12 +50,16 @@ public int[] bounds = new int[]{0-sWidth*2, 0-sHeight*2, sWidth * 2, sHeight * 2
 
 
 public ArrayDeque<Attack> levelTypes = new ArrayDeque();
-public ArrayDeque<Integer> levelNums = new ArrayDeque();
+public ArrayDeque<Double> levelNums = new ArrayDeque();
 Map<String, Attack> Strattmap = new HashMap<>();
 int framesPerAtk = 1;
 ArrayDeque<AObject> sel = new ArrayDeque(); //selected objects
 int nSel = 0; //how much are selected
 boolean pass = false;
+double[] alloc;
+int selIndex;
+AObject selobj = null; 
+
 void loadLevel(String path){
     try{
       Scanner sc = new Scanner(new File(path));
@@ -63,13 +67,16 @@ void loadLevel(String path){
       while(sc.hasNextLine()){
         levelTypes.add(Attack.PAUSE);
         String[] arr = sc.nextLine().split("-");
-        levelNums.add(Integer.parseInt(arr[1]));
+        levelNums.add(Double.parseDouble(arr[1]));
         for(int i=2; i<arr.length; i+=2){
           //println(Strattmap.get(arr[i]));
           if(Strattmap.get(arr[i])==null){
             throw new IllegalArgumentException(arr[i]);
           }
-          levelNums.add(Integer.parseInt(arr[i+1]));
+          System.out.println(i + "/" + arr[i] + " " + Arrays.toString(arr));
+          System.out.println(levelTypes);
+          System.out.println(levelNums);
+          levelNums.add(Double.parseDouble(arr[i+1]));
           
           levelTypes.add(Strattmap.get(arr[i]));
           
@@ -78,7 +85,7 @@ void loadLevel(String path){
       
       sc.close();
     }catch(FileNotFoundException e){
-      println("File " + path + " not found");
+      throw new IllegalArgumentException("File " + path + " not found");
     }
     System.out.println(levelTypes);
     System.out.println(levelNums);
@@ -93,7 +100,7 @@ void setup(){
   for(int x=bounds[0]; x<bounds[2]; x+=Chunk.size){
     for(int y=bounds[1]; y<bounds[3]; y+=Chunk.size){
       map.add(new Chunk(x, y));
-      rect(x, y, Chunk.size, Chunk.size);
+      //rect(x, y, Chunk.size, Chunk.size);
     }
   }
   
@@ -107,11 +114,25 @@ void setup(){
   assets.add("void.png");
   assets.add("adsense.jpeg");
   //Strattmap = new HashMap<>();
-  Strattmap.put("Laser", Attack.LASER);
-  Strattmap.put("Train", Attack.TRAIN);
-  Strattmap.put("Frames", Attack.FRAMES);
-  Strattmap.put("Sel", Attack.SEL);
-  Strattmap.put("Freeze", Attack.FREEZE);
+  Strattmap.put("LASER", Attack.LASER);
+  Strattmap.put("TRAIN", Attack.TRAIN);
+  Strattmap.put("FRAMES", Attack.FRAMES);
+  Strattmap.put("SEL", Attack.SEL);
+  Strattmap.put("FREEZE", Attack.FREEZE);
+  Strattmap.put("MULSPEED", Attack.MULSPEED);
+  
+  Strattmap.put("ALLOC", Attack.ALLOC);
+  Strattmap.put("SELINDEX", Attack.SELINDEX);
+  Strattmap.put("WRITE", Attack.WRITE);
+  Strattmap.put("WRITEVLASTOBJ", Attack.WRITEVLASTOBJ);
+  Strattmap.put("WRITEVSELOBJ", Attack.WRITEVSELOBJ);
+  
+  
+  Strattmap.put("IFLESSTHAN", Attack.IFLESSTHAN);
+  Strattmap.put("ELSE", Attack.ELSE);
+  Strattmap.put("ENDIF", Attack.ENDIF);
+  
+  Strattmap.put("MUL_N_SPEED", Attack.MUL_N_SPEED);
   noStroke();
   TestClass test = new TestClass();
   //test.applyForce(100, 100);
@@ -137,7 +158,7 @@ void setup(){
   objects.add(test3);
   
   
-  loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl");
+  loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
 }
 
 
@@ -193,7 +214,7 @@ void draw(){
   if(levelTypes.size() > 0 && levelNums.size() > 0 && !(levelTypes.peek().equals(Attack.PAUSE))){
     if(frameCount%framesPerAtk == 0 || pass){
       pass = false;
-      int n = levelNums.remove();
+      double n = levelNums.remove();
       if(n > 0){
         levelNums.addFirst(n-1);
         Attack a = levelTypes.peek();
@@ -205,18 +226,109 @@ void draw(){
         }else if(a.equals(Attack.FRAMES)){
            //do nothing lol 
         }else if(a.equals(Attack.SEL)){
-           nSel = n;
+           nSel = (int)n;
            levelNums.remove();
            levelTypes.remove();
            pass = true;
         }else if(a.equals(Attack.FREEZE)){
            for(AObject o : sel){
+              if(n<=0){
+                break;
+              }
               o.dx = 0; o.dy = 0;
+              n--; 
+           }
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true;
+        }else if(a.equals(Attack.MULSPEED)){
+          for(AObject o : sel){
+            o.dx *= n; o.dy *= n; 
+          }
+          levelNums.remove();
+          levelTypes.remove();
+          pass = true;
+        }
+        
+        else if(a.equals(Attack.ALLOC)){
+          alloc=new double[(int)n];
+          levelNums.remove();
+          levelTypes.remove();
+          pass = true;
+        }else if(a.equals(Attack.SELINDEX)){
+           selIndex = (int)n;
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true;
+        }else if(a.equals(Attack.WRITE)){
+           alloc[selIndex] = n;
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true; 
+        }else if(a.equals(Attack.WRITEVLASTOBJ)){
+           AObject o = sel.getLast();
+           selobj = o;
+           alloc[selIndex] = Math.sqrt(o.dx * o.dx + o.dy * o.dy);
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true; 
+        }else if(a.equals(Attack.WRITEVSELOBJ)){
+           alloc[selIndex] = Math.sqrt(selobj.dx * selobj.dx + selobj.dy * selobj.dy);
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true; 
+        }
+        
+        else if(a.equals(Attack.IFLESSTHAN)){
+           System.out.println("reading if statement");
+           if(alloc[selIndex] < n){
+               println("more than");
+               while(levelTypes.remove() != Attack.ELSE){
+                   levelNums.removeFirst();  
+               }
+               levelNums.removeFirst();
+               println("result: " + levelTypes);
+               println(levelNums);
+               println("if statement over");
+               pass = true;
+           }else{
+               println("less than");
+               ArrayDeque<Attack> storeTypes = new ArrayDeque<>();
+               ArrayDeque<Double> storeNums = new ArrayDeque<>();
+               while(levelTypes.peek() != Attack.ELSE){
+                 storeTypes.add(levelTypes.removeFirst());
+                 storeNums.add(levelNums.removeFirst());  
+               }
+               storeTypes.removeFirst(); storeNums.removeFirst(); //remove if statements
+               println("Finished storing");
+               println(storeTypes);
+               println(storeNums);
+               while(levelTypes.remove() != Attack.ENDIF){
+                   levelNums.removeFirst();  
+               }
+               levelNums.removeFirst();
+               while(storeTypes.size() > 0){
+                  levelTypes.addFirst(storeTypes.removeLast()); 
+                  levelNums.addFirst(storeNums.removeLast());
+               }
+               println(levelTypes);
+               println(levelNums);
+           }
+        }
+        
+        else if(a.equals(Attack.MUL_N_SPEED)){
+           for(AObject o : sel){
+              if(n<=0){
+                break;
+              }
+              o.dx *= alloc[selIndex]; o.dy *= alloc[selIndex];
+              n--; 
            }
            levelNums.remove();
            levelTypes.remove();
            pass = true;
         }
+        
         
         if(nSel > 0 && obj!=null){
            sel.addLast(obj);
@@ -373,9 +485,9 @@ void keyPressed(){
   }*/
   
   if(keyCode==' '||keyCode==' ' || key==' '){
-    if(levelTypes.peek().equals(Attack.PAUSE)){
+    if(levelTypes.size() > 0 && levelTypes.peek().equals(Attack.PAUSE)){
       levelTypes.remove(); 
-      framesPerAtk = levelNums.remove();
+      framesPerAtk = levelNums.remove().intValue();
     }
   }
   if(keyCode == 'C'||keyCode == 'c' && shiftisspecial) {
