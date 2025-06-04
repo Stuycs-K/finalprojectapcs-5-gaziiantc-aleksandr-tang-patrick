@@ -31,3 +31,9 @@ Added adsense class and progressively increasing cashflow
 
 ### 2024-06-02
 Added scoring/leveling system and changed functionality for shield and blackhole
+
+### 2024-06-02
+Added hp and death for defenses
+
+### 2024-06-04
+Created better scoring system and added cheats
