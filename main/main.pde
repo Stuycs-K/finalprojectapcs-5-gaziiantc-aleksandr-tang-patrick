@@ -175,7 +175,17 @@ void draw(){
   }
   
   
-  
+  for(int i = 0; i < objects.size(); i++) {
+    AObject obj = objects.get(i);
+    if(obj instanceof ADefense) {
+      ADefense defense = (ADefense)obj;
+      if(defense.hp <= 0) {
+        score += defense.pointValue;
+        objects.remove(i);
+        i--;
+       }
+     }
+  }
   
   
   if(keys['r']){
@@ -214,7 +224,7 @@ void draw(){
     level++;
     start=false;
     upgradeScreen=true;
-    nextLevel*=3;
+    nextLevel*=100;
   }
   if(upgradeScreen){
     drawUpgradeScreen();

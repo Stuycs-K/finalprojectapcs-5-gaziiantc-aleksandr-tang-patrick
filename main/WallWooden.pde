@@ -1,7 +1,7 @@
 class WallWooden extends ADefense {	
 	public static final int maxHP = 5000;
 	public WallWooden(int x, int y){	
-		super(maxHP, x, y, 60, 20, 1000);
+		super(maxHP, x, y, 60, 20, 1000,50);
     this.attributes.add(Attribute.FLAMMABLE);
 	}
 	@Override
@@ -37,7 +37,9 @@ class WallWooden extends ADefense {
   }
     public void onHit(AObject obj){  
     if(!(obj instanceof ADefense)){
-      this.hp -= 1000*((Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass);
+       double damage = 1000 * ((Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass);
+       this.hp -= damage;
+       score += (int)(damage * 0.05);
     }
   }
 }

@@ -1,7 +1,7 @@
 class WallStone extends ADefense {  
   public static final int maxHP = 15000;
   public WallStone(int x, int y){  
-    super(maxHP, x, y, 75, 25, 3000);
+    super(maxHP, x, y, 75, 25, 3000,75);
   }
   @Override
   public void doCollisionStuff(AObject obj){  
@@ -35,7 +35,9 @@ class WallStone extends ADefense {
   }
     public void onHit(AObject obj){  
     if(!(obj instanceof ADefense)){
-      this.hp -= 1000*((Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass);
+       double damage = 1000 * ((Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass);
+       this.hp -= damage;
+       score += (int)(damage * 0.05);
     }
   }
 }

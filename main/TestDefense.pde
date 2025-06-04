@@ -1,6 +1,6 @@
 class TestDefense extends ADefense{
 	public TestDefense(){
-		super(25, 25, 25, 25, 25, 250);
+		super(25, 25, 25, 25, 25, 250,50);
 	}
 
 	@Override

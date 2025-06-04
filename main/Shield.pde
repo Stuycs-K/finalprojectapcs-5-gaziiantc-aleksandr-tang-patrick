@@ -3,7 +3,7 @@ class Shield extends ADefense {
   static final int duration = 10000;
   public int spawnTime;
   public Shield(int x, int y, int spawnTime){  
-    super(maxHP, x, y, 100,100, 3000);
+    super(maxHP, x, y, 100,100, 3000,50);
     this.spawnTime = spawnTime;
   }
   @Override
@@ -37,6 +37,12 @@ class Shield extends ADefense {
        return;
     }
     this.doMovementTick();
+  }
+      public void onHit(AObject obj){  
+    if(!(obj instanceof ADefense)){
+       double damage = 1000 * ((Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass);
+       score += (int)(damage * 0.05);
+    }
   }
 
 }

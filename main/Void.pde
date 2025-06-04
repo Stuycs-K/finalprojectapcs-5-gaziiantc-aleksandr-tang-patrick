@@ -1,7 +1,7 @@
 class Void extends ADefense {  
   public static final int maxHP = 15000;
   public Void(int x, int y){  
-    super(maxHP, x, y, 25, 25, 3000);
+    super(maxHP, x, y, 25, 25, 3000,300);
   }
   @Override
   public void draw(){
@@ -27,6 +27,8 @@ class Void extends ADefense {
       if(!(obj instanceof ADefense)){
         obj.destroy();
         this.destroy();
+        double damage = 1000 * ((Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass);
+        score += (int)(damage * 0.05);
       }
   }
 }
