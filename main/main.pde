@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 
 static final int sHeight = 700;
@@ -28,7 +29,7 @@ int cashTime=30000;
 double buildingAngle = -HALF_PI;
 boolean start=false;
 static int score=0;
-int level=1;
+
 MainBase plr;
 int nextLevel=50;
 public AssetPool assets; //using a class in case i want to add shaders for whatever reason
@@ -45,6 +46,43 @@ String[][] upgradeDescriptions = {{"+50% Health", "+100% Health", "+50% Size"},
 
 public int plrX = (int)(0.5 * sWidth); public int plrY = (int)(0.5 * sHeight);
 public int[] bounds = new int[]{0-sWidth*2, 0-sHeight*2, sWidth * 2, sHeight * 2}; //left x y, right x y
+
+
+public ArrayDeque<Attack> levelTypes = new ArrayDeque();
+public ArrayDeque<Integer> levelNums = new ArrayDeque();
+Map<String, Attack> Strattmap = new HashMap<>();
+int framesPerAtk = 1;
+ArrayDeque<AObject> sel = new ArrayDeque(); //selected objects
+int nSel = 0; //how much are selected
+boolean pass = false;
+void loadLevel(String path){
+    try{
+      Scanner sc = new Scanner(new File(path));
+      
+      while(sc.hasNextLine()){
+        levelTypes.add(Attack.PAUSE);
+        String[] arr = sc.nextLine().split("-");
+        levelNums.add(Integer.parseInt(arr[1]));
+        for(int i=2; i<arr.length; i+=2){
+          //println(Strattmap.get(arr[i]));
+          if(Strattmap.get(arr[i])==null){
+            throw new IllegalArgumentException(arr[i]);
+          }
+          levelNums.add(Integer.parseInt(arr[i+1]));
+          
+          levelTypes.add(Strattmap.get(arr[i]));
+          
+        }
+      }
+      
+      sc.close();
+    }catch(FileNotFoundException e){
+      println("File " + path + " not found");
+    }
+    System.out.println(levelTypes);
+    System.out.println(levelNums);
+}
+
 
 void setup(){
   objects = new ArrayList<>();
@@ -67,7 +105,12 @@ void setup(){
   assets.add("laser.png");
   assets.add("void.png");
   assets.add("adsense.jpeg");
-  
+  //Strattmap = new HashMap<>();
+  Strattmap.put("Laser", Attack.LASER);
+  Strattmap.put("Train", Attack.TRAIN);
+  Strattmap.put("Frames", Attack.FRAMES);
+  Strattmap.put("Sel", Attack.SEL);
+  Strattmap.put("Freeze", Attack.FREEZE);
   noStroke();
   TestClass test = new TestClass();
   //test.applyForce(100, 100);
@@ -92,6 +135,8 @@ void setup(){
   objects.add(test2);
   objects.add(test3);
   
+  
+  loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl");
 }
 
 
@@ -144,9 +189,46 @@ void draw(){
   
   translate(plrX, plrY);
   fill(255);
-  if(start){
-    if(frameCount > 200 && frameCount%5 == 0){
-      objects.add(new Laser(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr));
+  if(levelTypes.size() > 0 && levelNums.size() > 0 && !(levelTypes.peek().equals(Attack.PAUSE))){
+    if(frameCount%framesPerAtk == 0 || pass){
+      pass = false;
+      int n = levelNums.remove();
+      if(n > 0){
+        levelNums.addFirst(n-1);
+        Attack a = levelTypes.peek();
+        AObject obj = null;
+        if(a.equals(Attack.LASER)){
+          obj = (new Laser(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
+        }else if(a.equals(Attack.TRAIN)){
+          obj = (new Train(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
+        }else if(a.equals(Attack.FRAMES)){
+           //do nothing lol 
+        }else if(a.equals(Attack.SEL)){
+           nSel = n;
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true;
+        }else if(a.equals(Attack.FREEZE)){
+           for(AObject o : sel){
+              o.dx = 0; o.dy = 0;
+           }
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true;
+        }
+        
+        if(nSel > 0 && obj!=null){
+           sel.addLast(obj);
+           nSel--;
+        }
+        if(obj!=null){
+          objects.add(obj);
+        }
+      }else{
+        levelTypes.remove();
+      }
+      System.out.println(levelTypes);
+    System.out.println(levelNums);
     }
   }
   rect(bounds[0],bounds[1], 2 * (bounds[2]-bounds[0]), 2 * (bounds[3]-bounds[1]));
@@ -157,7 +239,7 @@ void draw(){
   clearMap();
   
   for(int i=0; i<objects.size(); i++){	
-    if(objects.get(i).x > 1000+width || objects.get(i).x < -1000 || objects.get(i).y > 1000+height || objects.get(i).y < -1000){
+    if(objects.get(i).x > 10000+width || objects.get(i).x < -10000 || objects.get(i).y > 10000+height || objects.get(i).y < -10000){
        objects.remove(i);
        i--;
     }
@@ -221,7 +303,7 @@ void draw(){
   cash+=cashflow;
   text("Cash: "+(double)(int)(cash*10000)/10000,10 - plrX, 70 - plrY);
   if(score>=nextLevel&& !upgradeScreen){
-    level++;
+    //level++;
     start=false;
     upgradeScreen=true;
     nextLevel*=100;
@@ -234,7 +316,7 @@ void draw(){
     text("Press space to start", 10 - plrX, 110 - plrY);
   }
     text("Score: "+score, 10 - plrX, 50 - plrY);
-    text("Level: "+level, 10 - plrX, 90 - plrY);
+    //text("Level: "+level, 10 - plrX, 90 - plrY);
     if(key=='['){
      debugDraw(); 
   }
@@ -280,7 +362,7 @@ void keyPressed(){
     objects.add(test4);
   }
   if(key=='o'){
-      objects.add(new Train()); 
+      objects.add(new Train(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
    }
   /*if(keyCode=='r'||keyCode=='R'){
      buildingAngle += HALF_PI;
@@ -290,10 +372,10 @@ void keyPressed(){
   }*/
   
   if(keyCode==' '||keyCode==' ' || key==' '){
-    start=true;
-  }
-  if(key == ' '){
-    // frameRate(2); 
+    if(levelTypes.peek().equals(Attack.PAUSE)){
+      levelTypes.remove(); 
+      framesPerAtk = levelNums.remove();
+    }
   }
 }
 
