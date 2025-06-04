@@ -365,6 +365,9 @@ void keyPressed(){
   if(key=='o'){
       objects.add(new Train(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
    }
+     if(key=='m'){
+      objects.add(new Missile(10, 10, plr)); 
+   }
   /*if(keyCode=='r'||keyCode=='R'){
      buildingAngle += HALF_PI;
   }
@@ -373,7 +376,7 @@ void keyPressed(){
   }*/
   
   if(keyCode==' '||keyCode==' ' || key==' '){
-    if(levelTypes.peek().equals(Attack.PAUSE)){
+    if(levelTypes.size()>0&&levelTypes.peek().equals(Attack.PAUSE)){
       levelTypes.remove(); 
       framesPerAtk = levelNums.remove();
     }
