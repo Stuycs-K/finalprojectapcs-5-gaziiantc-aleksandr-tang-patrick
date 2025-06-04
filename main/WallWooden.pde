@@ -1,7 +1,7 @@
 class WallWooden extends ADefense {	
 	public static final int maxHP = 5000;
 	public WallWooden(int x, int y){	
-		super(maxHP, x, y, 60, 20, 1000);
+		super(maxHP, x, y, 60, 20, 1000,50);
     this.attributes.add(Attribute.FLAMMABLE);
 	}
 	@Override
@@ -28,7 +28,18 @@ class WallWooden extends ADefense {
     popMatrix();
   }
 	@Override
-	public void tick(){	
-		this.doMovementTick();
-	}
+  public void tick(){  
+    if(hp<=0){
+      objects.remove(this);
+      return;
+    }
+    this.doMovementTick();
+  }
+    public void onHit(AObject obj){  
+    if(!(obj instanceof ADefense)){
+       double damage = 1000 * ((Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass);
+       this.hp -= damage;
+       score += (int)(damage * 0.05);
+    }
+  }
 }

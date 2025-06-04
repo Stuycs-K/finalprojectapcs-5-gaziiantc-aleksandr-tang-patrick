@@ -1,7 +1,7 @@
 class MainBase extends ADefense {
 	public static final int maxHP = 10000;
 	public MainBase(int x, int y){
-		super(maxHP, x, y, 50, 50, 25000); //can't really be moved the first time it gets hit
+		super(maxHP, x, y, 50, 50, 25000,25); //can't really be moved the first time it gets hit
 		this.clr = color(0);
 	}
   @Override
@@ -15,6 +15,9 @@ class MainBase extends ADefense {
 	public void onHit(AObject obj){	
     if(!(obj instanceof ADefense)){
   		this.hp -= (Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass;
+       double damage = 1000 * ((Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass);
+       score += (int)(damage * 0.05);
+    
       print("hit " + this.hp);
   		if(this.hp > 0){
   			//it gets weaker as it takes more damage n stuff

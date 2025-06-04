@@ -57,6 +57,8 @@ int nSel = 0; //how much are selected
 boolean pass = false;
 double[] alloc;
 int selIndex;
+AObject selobj = null; 
+
 void loadLevel(String path){
     try{
       Scanner sc = new Scanner(new File(path));
@@ -118,6 +120,12 @@ void setup(){
   Strattmap.put("ALLOC", Attack.ALLOC);
   Strattmap.put("SELINDEX", Attack.SELINDEX);
   Strattmap.put("WRITE", Attack.WRITE);
+  Strattmap.put("WRITEVSELOBJ", Attack.WRITE);
+  
+  
+  Strattmap.put("IFSLESSTHAN", Attack.IFSLESSTHAN);
+  Strattmap.put("ELSE", Attack.ELSE);
+  Strattmap.put("ENDIF", Attack.ENDIF);
   
   Strattmap.put("MUL_N_SPEED", Attack.MUL_N_SPEED);
   noStroke();
@@ -252,6 +260,18 @@ void draw(){
            levelNums.remove();
            levelTypes.remove();
            pass = true; 
+        }else if(a.equals(Attack.WRITEVLASTOBJ)){
+           AObject o = sel.getLast();
+           selobj = o;
+           alloc[selIndex] = Math.sqrt(o.dx * o.dx + o.dy * o.dy);
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true; 
+        }else if(a.equals(Attack.WRITEVSELOBJ)){
+           alloc[selIndex] = Math.sqrt(selobj.dx * selobj.dx + selobj.dy * selobj.dy);
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true; 
         }
         
         else if(a.equals(Attack.MUL_N_SPEED)){
@@ -308,7 +328,17 @@ void draw(){
   }
   
   
-  
+  for(int i = 0; i < objects.size(); i++) {
+    AObject obj = objects.get(i);
+    if(obj instanceof ADefense) {
+      ADefense defense = (ADefense)obj;
+      if(defense.hp <= 0) {
+        score += defense.pointValue;
+        objects.remove(i);
+        i--;
+       }
+     }
+  }
   
   
   if(keys['r']){
@@ -347,7 +377,7 @@ void draw(){
     //level++;
     start=false;
     upgradeScreen=true;
-    nextLevel*=3;
+    nextLevel*=100;
   }
   if(upgradeScreen){
     drawUpgradeScreen();
@@ -413,8 +443,10 @@ void keyPressed(){
   }*/
   
   if(keyCode==' '||keyCode==' ' || key==' '){
-    levelTypes.remove(); 
-    framesPerAtk = levelNums.remove().intValue();
+    if(levelTypes.peek().equals(Attack.PAUSE)){
+      levelTypes.remove(); 
+      framesPerAtk = levelNums.remove().intValue();
+    }
   }
 }
 
@@ -576,6 +608,7 @@ void applyUpgrade(int defenseIndex) {
     upgradeLevels[defenseIndex]++;
     switch(defenseIndex) {
         case 0:
+            
             break;
             
         case 1:

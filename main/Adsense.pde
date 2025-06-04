@@ -1,7 +1,7 @@
 class Adsense extends ADefense {  
   public static final int maxHP = 15000;
   public Adsense(int x, int y){  
-    super(maxHP, x, y, 50, 50, 3000);
+    super(maxHP, x, y, 50, 50, 3000,50);
   }
   @Override
   public void draw(){
@@ -23,5 +23,12 @@ class Adsense extends ADefense {
   public void tick(){  
     this.doMovementTick();
   }
+  public void onHit(AObject obj){  
+    if(!(obj instanceof ADefense)){
+       double damage = 1000 * ((Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass);
+       this.hp -= damage;
+       score += (int)(damage * 0.05);
+    }
+  } 
 
 }
