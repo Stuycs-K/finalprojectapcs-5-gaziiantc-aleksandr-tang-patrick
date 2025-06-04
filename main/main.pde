@@ -158,7 +158,7 @@ void setup(){
   objects.add(test3);
   
   
-  loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
+  loadLevel("/home/students/even/2026/ptang60/APCS_Sem_2/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
 }
 
 
@@ -478,7 +478,10 @@ void keyPressed(){
       objects.add(new Train(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
    }
      if(key=='m'){
-      objects.add(new Missile(10, 10, plr)); 
+      objects.add(new Missile(100, 100, plr)); 
+   }
+        if(key=='b'){
+      objects.add(new Bomb(100, 100, plr)); 
    }
   /*if(keyCode=='r'||keyCode=='R'){
      buildingAngle += HALF_PI;
