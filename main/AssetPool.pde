@@ -5,7 +5,7 @@ class AssetPool {
   }
   
   public void add(String str) { 
-     txMap.put(str, loadImage("assets/" + str));
+     txMap.put(str, loadImage("assets/textures/" + str));
   }
   public PImage get(String str){
     return txMap.get(str);
