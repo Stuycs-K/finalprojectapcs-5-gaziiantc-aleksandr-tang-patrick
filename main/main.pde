@@ -29,6 +29,7 @@ int cashTime=30000;
 double buildingAngle = -HALF_PI;
 boolean start=false;
 static int score=0;
+boolean cheatsEnabled = false;
 
 MainBase plr;
 int nextLevel=50;
@@ -377,6 +378,35 @@ void keyPressed(){
       framesPerAtk = levelNums.remove();
     }
   }
+  if(keyCode == 'C'||keyCode == 'c' && shiftisspecial) {
+    cheatsEnabled = !cheatsEnabled;
+    println("Cheats " + (cheatsEnabled ? "ENABLED" : "DISABLED"));
+    return;
+  }  
+  if(cheatsEnabled) {
+    switch(key) {
+      case 'M':
+        cash += 1000;
+        println("Added $1000");
+        break;     
+      case 'U':
+        for(int i = 0; i < upgradeLevels.length; i++) {
+          if(upgradeLevels[i] < 5) {
+            upgradeLevels[i]++;
+          }
+        }
+        println("All defenses upgraded");
+        break;      
+      case 'K': 
+        for(int i = objects.size()-1; i >= 0; i--) {
+          if(objects.get(i) instanceof AObject) {
+            objects.remove(i);
+          }
+        }
+        println("Killed All Enemies");
+        break;        
+      }
+    }
 }
 
 void mousePressed(){
