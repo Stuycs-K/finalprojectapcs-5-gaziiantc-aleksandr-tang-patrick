@@ -49,12 +49,14 @@ public int[] bounds = new int[]{0-sWidth*2, 0-sHeight*2, sWidth * 2, sHeight * 2
 
 
 public ArrayDeque<Attack> levelTypes = new ArrayDeque();
-public ArrayDeque<Integer> levelNums = new ArrayDeque();
+public ArrayDeque<Double> levelNums = new ArrayDeque();
 Map<String, Attack> Strattmap = new HashMap<>();
 int framesPerAtk = 1;
 ArrayDeque<AObject> sel = new ArrayDeque(); //selected objects
 int nSel = 0; //how much are selected
 boolean pass = false;
+double[] alloc;
+int selIndex;
 void loadLevel(String path){
     try{
       Scanner sc = new Scanner(new File(path));
@@ -62,13 +64,13 @@ void loadLevel(String path){
       while(sc.hasNextLine()){
         levelTypes.add(Attack.PAUSE);
         String[] arr = sc.nextLine().split("-");
-        levelNums.add(Integer.parseInt(arr[1]));
+        levelNums.add(Double.parseDouble(arr[1]));
         for(int i=2; i<arr.length; i+=2){
           //println(Strattmap.get(arr[i]));
           if(Strattmap.get(arr[i])==null){
             throw new IllegalArgumentException(arr[i]);
           }
-          levelNums.add(Integer.parseInt(arr[i+1]));
+          levelNums.add(Double.parseDouble(arr[i+1]));
           
           levelTypes.add(Strattmap.get(arr[i]));
           
@@ -106,11 +108,18 @@ void setup(){
   assets.add("void.png");
   assets.add("adsense.jpeg");
   //Strattmap = new HashMap<>();
-  Strattmap.put("Laser", Attack.LASER);
-  Strattmap.put("Train", Attack.TRAIN);
-  Strattmap.put("Frames", Attack.FRAMES);
-  Strattmap.put("Sel", Attack.SEL);
-  Strattmap.put("Freeze", Attack.FREEZE);
+  Strattmap.put("LASER", Attack.LASER);
+  Strattmap.put("TRAIN", Attack.TRAIN);
+  Strattmap.put("FRAMES", Attack.FRAMES);
+  Strattmap.put("SEL", Attack.SEL);
+  Strattmap.put("FREEZE", Attack.FREEZE);
+  Strattmap.put("MULSPEED", Attack.MULSPEED);
+  
+  Strattmap.put("ALLOC", Attack.ALLOC);
+  Strattmap.put("SELINDEX", Attack.SELINDEX);
+  Strattmap.put("WRITE", Attack.WRITE);
+  
+  Strattmap.put("MUL_N_SPEED", Attack.MUL_N_SPEED);
   noStroke();
   TestClass test = new TestClass();
   //test.applyForce(100, 100);
@@ -192,7 +201,7 @@ void draw(){
   if(levelTypes.size() > 0 && levelNums.size() > 0 && !(levelTypes.peek().equals(Attack.PAUSE))){
     if(frameCount%framesPerAtk == 0 || pass){
       pass = false;
-      int n = levelNums.remove();
+      double n = levelNums.remove();
       if(n > 0){
         levelNums.addFirst(n-1);
         Attack a = levelTypes.peek();
@@ -204,18 +213,60 @@ void draw(){
         }else if(a.equals(Attack.FRAMES)){
            //do nothing lol 
         }else if(a.equals(Attack.SEL)){
-           nSel = n;
+           nSel = (int)n;
            levelNums.remove();
            levelTypes.remove();
            pass = true;
         }else if(a.equals(Attack.FREEZE)){
            for(AObject o : sel){
+              if(n<=0){
+                break;
+              }
               o.dx = 0; o.dy = 0;
+              n--; 
+           }
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true;
+        }else if(a.equals(Attack.MULSPEED)){
+          for(AObject o : sel){
+            o.dx *= n; o.dy *= n; 
+          }
+          levelNums.remove();
+          levelTypes.remove();
+          pass = true;
+        }
+        
+        else if(a.equals(Attack.ALLOC)){
+          alloc=new double[(int)n];
+          levelNums.remove();
+          levelTypes.remove();
+          pass = true;
+        }else if(a.equals(Attack.SELINDEX)){
+           selIndex = (int)n;
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true;
+        }else if(a.equals(Attack.WRITE)){
+           alloc[selIndex] = n;
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true; 
+        }
+        
+        else if(a.equals(Attack.MUL_N_SPEED)){
+           for(AObject o : sel){
+              if(n<=0){
+                break;
+              }
+              o.dx *= alloc[selIndex]; o.dy *= alloc[selIndex];
+              n--; 
            }
            levelNums.remove();
            levelTypes.remove();
            pass = true;
         }
+        
         
         if(nSel > 0 && obj!=null){
            sel.addLast(obj);
@@ -363,7 +414,7 @@ void keyPressed(){
   
   if(keyCode==' '||keyCode==' ' || key==' '){
     levelTypes.remove(); 
-    framesPerAtk = levelNums.remove();
+    framesPerAtk = levelNums.remove().intValue();
   }
 }
 
