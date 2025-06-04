@@ -72,6 +72,9 @@ void loadLevel(String path){
           if(Strattmap.get(arr[i])==null){
             throw new IllegalArgumentException(arr[i]);
           }
+          System.out.println(i + "/" + arr[i] + " " + Arrays.toString(arr));
+          System.out.println(levelTypes);
+          System.out.println(levelNums);
           levelNums.add(Double.parseDouble(arr[i+1]));
           
           levelTypes.add(Strattmap.get(arr[i]));
@@ -81,7 +84,7 @@ void loadLevel(String path){
       
       sc.close();
     }catch(FileNotFoundException e){
-      println("File " + path + " not found");
+      throw new IllegalArgumentException("File " + path + " not found");
     }
     System.out.println(levelTypes);
     System.out.println(levelNums);
@@ -96,7 +99,7 @@ void setup(){
   for(int x=bounds[0]; x<bounds[2]; x+=Chunk.size){
     for(int y=bounds[1]; y<bounds[3]; y+=Chunk.size){
       map.add(new Chunk(x, y));
-      rect(x, y, Chunk.size, Chunk.size);
+      //rect(x, y, Chunk.size, Chunk.size);
     }
   }
   
@@ -120,10 +123,11 @@ void setup(){
   Strattmap.put("ALLOC", Attack.ALLOC);
   Strattmap.put("SELINDEX", Attack.SELINDEX);
   Strattmap.put("WRITE", Attack.WRITE);
-  Strattmap.put("WRITEVSELOBJ", Attack.WRITE);
+  Strattmap.put("WRITEVLASTOBJ", Attack.WRITEVLASTOBJ);
+  Strattmap.put("WRITEVSELOBJ", Attack.WRITEVSELOBJ);
   
   
-  Strattmap.put("IFSLESSTHAN", Attack.IFSLESSTHAN);
+  Strattmap.put("IFLESSTHAN", Attack.IFLESSTHAN);
   Strattmap.put("ELSE", Attack.ELSE);
   Strattmap.put("ENDIF", Attack.ENDIF);
   
@@ -153,7 +157,7 @@ void setup(){
   objects.add(test3);
   
   
-  loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl");
+  loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
 }
 
 
@@ -272,6 +276,43 @@ void draw(){
            levelNums.remove();
            levelTypes.remove();
            pass = true; 
+        }
+        
+        else if(a.equals(Attack.IFLESSTHAN)){
+           System.out.println("reading if statement");
+           if(alloc[selIndex] < n){
+               println("more than");
+               while(levelTypes.remove() != Attack.ELSE){
+                   levelNums.removeFirst();  
+               }
+               levelNums.removeFirst();
+               println("result: " + levelTypes);
+               println(levelNums);
+               println("if statement over");
+               pass = true;
+           }else{
+               println("less than");
+               ArrayDeque<Attack> storeTypes = new ArrayDeque<>();
+               ArrayDeque<Double> storeNums = new ArrayDeque<>();
+               while(levelTypes.peek() != Attack.ELSE){
+                 storeTypes.add(levelTypes.removeFirst());
+                 storeNums.add(levelNums.removeFirst());  
+               }
+               storeTypes.removeFirst(); storeNums.removeFirst(); //remove if statements
+               println("Finished storing");
+               println(storeTypes);
+               println(storeNums);
+               while(levelTypes.remove() != Attack.ENDIF){
+                   levelNums.removeFirst();  
+               }
+               levelNums.removeFirst();
+               while(storeTypes.size() > 0){
+                  levelTypes.addFirst(storeTypes.removeLast()); 
+                  levelNums.addFirst(storeNums.removeLast());
+               }
+               println(levelTypes);
+               println(levelNums);
+           }
         }
         
         else if(a.equals(Attack.MUL_N_SPEED)){
@@ -443,7 +484,7 @@ void keyPressed(){
   }*/
   
   if(keyCode==' '||keyCode==' ' || key==' '){
-    if(levelTypes.peek().equals(Attack.PAUSE)){
+    if(levelTypes.size() > 0 && levelTypes.peek().equals(Attack.PAUSE)){
       levelTypes.remove(); 
       framesPerAtk = levelNums.remove().intValue();
     }
