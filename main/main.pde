@@ -70,6 +70,7 @@ int selIndex;
 AObject selobj = null; 
 
 int level;
+boolean instruction=true;
 
 void loadLevel(String path){
     try{
@@ -482,6 +483,9 @@ void draw(){
     if(key=='['){
      debugDraw(); 
   }
+  if(instruction){
+    drawInstructionScreen();
+  }
 }
 
 void mouseDragged(){
@@ -517,6 +521,9 @@ void keyPressed(){
       placingDefense=false;
       selectedDefenseIndex=-1;
     }
+  }
+  if(keyCode=='i'||keyCode=='I'){
+    instruction=!instruction;
   }
   if(key=='o'){
       objects.add(new Train(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
@@ -798,6 +805,7 @@ void drawPath() {
 }
 
 void followPath() {
+    drawPath();
     if (pathComplete || pathPoints.size() < 2) return;
     
     if (currentTarget == null && pathPoints.size() > 1) {
@@ -848,4 +856,14 @@ void levelComplete() {
             objects.remove(i);
         }
     }
+}
+
+void drawInstructionScreen(){
+fill(200, 230, 200);
+    rect(width/2-plrX, height/2-plrY, 500, 500);
+    fill(0);
+    textSize(32);
+    text("How to Play", width/2-plrX-150, height/2 - 200-plrY);
+    textSize(16);
+    text(" Protect your moving base from attacks. \n \n Press E to open the shop and buy buildings and spells to stop attacks. \n \n Press space to show the path your base will follow and start the level. \n \n At the end of every level, you get to upgrade one building/spell. \n \n Press I to open/close this screen.", width/2-plrX-225, height/2 - 160-plrY);
 }
