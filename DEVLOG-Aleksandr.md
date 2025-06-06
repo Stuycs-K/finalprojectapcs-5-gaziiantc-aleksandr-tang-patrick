@@ -44,3 +44,11 @@ Made the MVP, did some cleaning in the code, and made building better (also fixe
 ### 2025-06-03
 
 Put the engine we made to good use by making the map 4 times as big
+
+### 2025-06-04 
+
+Started work on the level lang, got branches and whatnot 
+
+### 2025-06-06
+
+Added while loops to the level lang. It should theoretically be turing complete now

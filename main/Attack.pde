@@ -24,8 +24,7 @@ enum Attack{
    WRITEVLASTOBJ, //writes the total velocity of the last selected object to index n of the array. Binds the used object to a pointer. 
    WRITEVSELOBJ, //writes the total velocity of the object that was appointed by the previous function. 
 
-   WRITEVLASTOBJ, //writes the total velocity of the last object in selection and put sit into the Selected Index of ALLOC.
-   WRITEVOBJ, //writes the total velocity of the nth object in AllocObj and puts 
+   WRITEVOBJ, //writes the total velocity of the nth object in AllocObj and puts it in selected index
    
    
    //Logic
