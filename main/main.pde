@@ -65,6 +65,7 @@ ArrayDeque<AObject> sel = new ArrayDeque(); //selected objects
 int nSel = 0; //how much are selected
 boolean pass = false;
 double[] alloc;
+AObject[] allocObj;
 int selIndex;
 AObject selobj = null; 
 
@@ -140,12 +141,12 @@ void setup(){
   Strattmap.put("BUFFERLASTOBJ", Attack.BUFFERLASTOBJ);
   
   Strattmap.put("WRITEVLASTOBJ", Attack.WRITEVLASTOBJ);
-  Strattmap.put("WRITEVSELOBJ", Attack.WRITEVSELOBJ);
   
   
   Strattmap.put("IFLESSTHAN", Attack.IFLESSTHAN);
+  Strattmap.put("WHILELESSTHAN", Attack.WHILELESSTHAN);
   Strattmap.put("ELSE", Attack.ELSE);
-  Strattmap.put("ENDIF", Attack.ENDIF);
+  Strattmap.put("END", Attack.END);
   
   Strattmap.put("MUL_N_SPEED", Attack.MUL_N_SPEED);
   noStroke();
@@ -173,8 +174,9 @@ void setup(){
   objects.add(test3);
   
   
-  loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer
   //loadLevel("/Users/ptang/OneDrive/Documents/APCS Code Semester 2/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
+  loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
+
 }
 
 
@@ -288,8 +290,8 @@ void draw(){
            levelNums.remove();
            levelTypes.remove();
            pass = true; 
-        }else if(a.equals(Attack.WRITEVSELOBJ)){
-           alloc[selIndex] = Math.sqrt(selobj.dx * selobj.dx + selobj.dy * selobj.dy);
+        }else if(a.equals(Attack.ALLOCOBJ)){
+           allocObj = new AObject[(int)n];
            levelNums.remove();
            levelTypes.remove();
            pass = true; 
@@ -319,7 +321,7 @@ void draw(){
                println("Finished storing");
                println(storeTypes);
                println(storeNums);
-               while(levelTypes.remove() != Attack.ENDIF){
+               while(levelTypes.remove() != Attack.END){
                    levelNums.removeFirst();  
                }
                levelNums.removeFirst();
@@ -331,6 +333,35 @@ void draw(){
                println(levelNums);
            }
         }
+        else if(a.equals(Attack.WHILELESSTHAN)){
+           println("while statement"); 
+           Attack whilestatement = levelTypes.removeFirst();
+           Double whilenum = n;
+           ArrayDeque<Attack> storeTypes = new ArrayDeque<>();
+           ArrayDeque<Double> storeNums = new ArrayDeque<>();
+           while(levelTypes.peek() != Attack.END){
+             storeTypes.add(levelTypes.removeFirst());
+             storeNums.add(levelNums.removeFirst());  
+           }
+           println("removed stuff");
+           println(alloc[selIndex] + " - " + n);
+           if(alloc[selIndex] < n){
+             println("is less"); 
+             for(Attack moorevariables : storeTypes){
+                levelTypes.addFirst(moorevariables);
+             }
+             for(Double d : storeNums){
+                levelNums.addFirst(d); 
+             }
+              levelTypes.addFirst(whilestatement);
+              levelNums.addFirst(whilenum);
+              while(storeTypes.size() > 0){
+                  levelTypes.addFirst(storeTypes.removeLast()); 
+                  levelNums.addFirst(storeNums.removeLast());
+               }
+               
+           }
+        }  
         
         else if(a.equals(Attack.MUL_N_SPEED)){
            for(AObject o : sel){
