@@ -31,6 +31,14 @@ boolean start=false;
 static int score=0;
 boolean cheatsEnabled = false;
 
+ArrayList<PVector> pathPoints = new ArrayList<PVector>();
+boolean pathComplete = false;
+float pathProgress = 0;
+float baseSpeed = 0.3; 
+PVector currentTarget;
+int currentTargetIndex = 0;
+boolean drawingPath = false;
+
 MainBase plr;
 int nextLevel=50;
 public AssetPool assets; //using a class in case i want to add shaders for whatever reason
@@ -59,6 +67,8 @@ boolean pass = false;
 double[] alloc;
 int selIndex;
 AObject selobj = null; 
+
+int level;
 
 void loadLevel(String path){
     try{
@@ -163,7 +173,8 @@ void setup(){
   objects.add(test3);
   
   
-  loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
+  loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer
+  //loadLevel("/Users/ptang/OneDrive/Documents/APCS Code Semester 2/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
 }
 
 
@@ -420,12 +431,13 @@ void draw(){
   }
   cash+=cashflow;
   text("Cash: "+(double)(int)(cash*10000)/10000,10 - plrX, 70 - plrY);
-  if(score>=nextLevel&& !upgradeScreen){
-    //level++;
-    start=false;
-    upgradeScreen=true;
-    nextLevel*=100;
-  }
+  if(drawingPath){
+    drawPath();
+    text("Press SPACE to start moving", width/2 - 100 - plrX, height/2 - plrY);
+   } 
+   if(start && !pathComplete){
+     followPath();
+   }
   if(upgradeScreen){
     drawUpgradeScreen();
     return;
@@ -499,6 +511,16 @@ void keyPressed(){
     if(levelTypes.size() > 0 && levelTypes.peek().equals(Attack.PAUSE)){
       levelTypes.remove(); 
       framesPerAtk = levelNums.remove().intValue();
+    }
+    if (!start && !drawingPath){
+      generateRandomPath();
+    }else if(!start && drawingPath){
+      if(pathPoints.size() > 1){
+        start = true;
+        drawingPath = false;
+        currentTargetIndex = 1;
+        currentTarget = pathPoints.get(currentTargetIndex);
+     }
     }
   }
   if(keyCode == 'C'||keyCode == 'c' && shiftisspecial) {
@@ -704,5 +726,99 @@ void applyUpgrade(int defenseIndex) {
             
         case 6:
             break;
+    }
+}
+
+void generateRandomPath() {
+    pathPoints.clear();
+    pathComplete = false;
+    pathProgress = 0;
+    currentTargetIndex = 0;
+    currentTarget = null;
+    pathPoints.add(new PVector((float)plr.x, (float)plr.y));
+    int segments = (int)random(3, 6);
+    float segmentLength = random(150, 300);
+    for(int i=0;i<segments;i++){
+        float angle = random(TWO_PI);
+        PVector lastPoint = pathPoints.get(pathPoints.size()-1);
+        PVector newPoint = new PVector(
+            lastPoint.x + cos(angle) * segmentLength,
+            lastPoint.y + sin(angle) * segmentLength
+        );
+        pathPoints.add(newPoint);
+    }
+    drawingPath = true;
+}
+
+void drawPath() {
+    if(pathPoints.size() < 2) return;
+    stroke(0, 255, 0, 150);
+    strokeWeight(3);
+    noFill();
+    
+    beginShape();
+    for (PVector point : pathPoints) {
+        vertex(point.x, point.y);
+    }
+    endShape();
+    fill(0, 255, 0);
+    ellipse(pathPoints.get(0).x, pathPoints.get(0).y, 10, 10);
+    fill(255, 0, 0);
+    ellipse(pathPoints.get(pathPoints.size()-1).x, 
+           pathPoints.get(pathPoints.size()-1).y, 10, 10);
+    
+    noStroke();
+}
+
+void followPath() {
+    if (pathComplete || pathPoints.size() < 2) return;
+    
+    if (currentTarget == null && pathPoints.size() > 1) {
+        currentTargetIndex = 1;
+        currentTarget = pathPoints.get(currentTargetIndex);
+    }
+    
+    PVector currentPos = new PVector((float)plr.x, (float)plr.y);
+    float distanceToTarget = PVector.dist(currentPos, currentTarget);
+    
+    if (distanceToTarget < baseSpeed) {
+        plr.x = currentTarget.x;
+        plr.y = currentTarget.y;
+        currentTargetIndex++;
+        
+        if (currentTargetIndex >= pathPoints.size()) {
+            pathComplete = true;
+            levelComplete();
+            return;
+        }
+        currentTarget = pathPoints.get(currentTargetIndex);
+    } else {
+        PVector direction = PVector.sub(currentTarget, currentPos).normalize();
+        plr.x += direction.x * baseSpeed;
+        plr.y += direction.y * baseSpeed;
+    }
+    
+    if (currentTargetIndex > 0 && currentTargetIndex < pathPoints.size()) {
+        PVector prevPoint = pathPoints.get(currentTargetIndex-1);
+        float segmentLength = PVector.dist(prevPoint, currentTarget);
+        float remainingDistance = PVector.dist(currentPos, currentTarget);
+        pathProgress = (currentTargetIndex-1 + (1 - remainingDistance/segmentLength)) / (pathPoints.size() - 1);
+    }
+}
+
+void levelComplete() {
+    score += 1000 * level;
+    level++;
+    start = false;
+    drawingPath = false;
+    if (level <= 21) {
+        nextLevel = level * 100;
+    }
+    
+
+    for (int i = objects.size()-1; i >= 0; i--) {
+        if (objects.get(i) instanceof Laser) {
+            objects.remove(i);
+        }
     }
 }
