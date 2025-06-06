@@ -32,8 +32,9 @@ class MainBase extends ADefense {
 
   @Override
   public void tick(){
-     this.doMovementTick(); 
-     this.angle += this.dx / 180 * 3.14;
+    if(!start || pathComplete){
+      doMovementTick();
+    }
   }
   
   @Override
