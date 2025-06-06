@@ -19,7 +19,7 @@ abstract class AObject {
   public Stack<Chunk> chunks;
   public int iframes;
 
-  public static final double FRICTION_CONST = 4;
+  public static final double FRICTION_CONST = 1;
 
   public ArrayList<Attribute> attributes; 
 
