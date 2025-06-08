@@ -175,8 +175,8 @@ void setup(){
   objects.add(test3);
   
   
-  loadLevel("/home/students/even/2026/ptang60/APCS_Sem_2/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
-  //loadLevel("/Users/ptang/OneDrive/Documents/APCS Code Semester 2/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
+  //loadLevel("/home/students/even/2026/ptang60/APCS_Sem_2/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
+  loadLevel("/Users/ptang/OneDrive/Documents/APCS Code Semester 2/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
   //loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
 
 }
@@ -451,7 +451,7 @@ void draw(){
   for(int i=0; i<objects.size(); i++){
      e+=objects.get(i).mass * (Math.pow(objects.get(i).dx, 2) + Math.pow(objects.get(i).dy, 2));
   }
-  //text("Total energy in system: " + e, 100, 10);
+  text("Total energy in system: " + e, 100, 10);
   if(shop){
     drawShop();
   }
