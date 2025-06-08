@@ -37,3 +37,12 @@ Added hp and death for defenses
 
 ### 2024-06-04
 Created better scoring system and added cheats
+
+### 2024-06-05
+Created pathfinding system for main base
+
+### 2024-06-06
+Created instruction screen
+
+### 2024-06-07
+Created special attacks for bomb and missile
