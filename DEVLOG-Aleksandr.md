@@ -56,3 +56,6 @@ Added while loops to the level lang. It should theoretically be turing complete 
 ### 2025-06-08
 
 Just some final cleanup. Nothing worthy of mention
+
+### Confirmation by Patrick
+I believe this document accurately reflects the contributions of my teammate.
