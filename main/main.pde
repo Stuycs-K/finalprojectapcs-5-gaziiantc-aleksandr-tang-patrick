@@ -52,11 +52,11 @@ int currentTargetIndex = 0;
 boolean drawingPath = false;
 
 MainBase plr;
-int nextLevel=50;
+int nextLevel=500;
 public AssetPool assets; //using a class in case i want to add shaders for whatever reason
 boolean upgradeScreen = false;
 int[] upgradeLevels;
-int[] upgradeCosts = {50, 100, 200, 500, 1000}; 
+int[] upgradeCosts = {100, 200, 1000}; 
 String[][] upgradeDescriptions = {{"+50% Health", "+100% Health", "+50% Size"},
     {"+50% Health", "+100% Health", "+50% Size"},
     {"+50% Health", "+100% Health", "+50% Size"},
@@ -84,6 +84,7 @@ AObject selobj = null;
 
 int level;
 boolean instruction=true;
+boolean lose=false;
 
 void loadLevel(String path){
       String[] lvl = loadStrings(path);
@@ -524,6 +525,10 @@ void draw(){
    if(start && !pathComplete){
      followPath();
    }
+   if(score>nextLevel){
+     nextLevel+=15000;
+     upgradeScreen=true;
+   }
   if(upgradeScreen){
     drawUpgradeScreen();
     return;
@@ -630,7 +635,7 @@ void keyPressed(){
         //println("All defenses upgraded");
         break;      
       case 'L': 
-        
+        score+=15000;
         break;        
       }
     }
@@ -698,7 +703,7 @@ void mousePressed(){
      
   if (upgradeScreen) {
     for (int i = 0; i < defenses.length; i++) {
-      if (upgradeLevels[i] >= 5) continue;   
+      if (upgradeLevels[i] >= 3) continue;   
        float x = width/2 - 200 + (i%4)*130-plrX;
        float y = height/2 - 100 + floor(i/4)*150-plrY;
        if (mouseX+plrX>x&&mouseX-plrX<x+50&&mouseY+plrY>y&&mouseY-plrY<y+50) {
@@ -772,9 +777,16 @@ void drawUpgradeScreen(){
     textSize(16);
     text("Choose one upgrade", width/2-plrX, height/2 - 160-plrY);
     for (int i = 0; i < defenses.length; i++) {
-        if (upgradeLevels[i] >= 5) continue;
         float x = width/2 - 200 + (i%4)*130-plrX;
         float y = height/2 - 100 + floor(i/4)*150-plrY;
+        if(upgradeLevels[i] >= 3){
+          fill(150, 150, 150);     
+          text(defenseNames[i], x, y);
+          text("MAXED", x, y+60);
+          continue;
+        }
+        fill(0, 0, 0);
+
         pushMatrix();
         translate(x+50, y+30);
         scale(0.3);
@@ -792,8 +804,11 @@ void drawUpgradeScreen(){
     }
 }
 void applyUpgrade(int defenseIndex){
-  if(upgradeLevels[defenseIndex] >= 5 || cash < upgradeCosts[upgradeLevels[defenseIndex]]){
+  if(upgradeLevels[defenseIndex] >= 3){
     return;
+  }
+  if(cash < upgradeCosts[upgradeLevels[defenseIndex]]){
+    return; 
   }
   cash -= upgradeCosts[upgradeLevels[defenseIndex]];
   upgradeLevels[defenseIndex]++;  
@@ -999,6 +1014,7 @@ void followPath(){
         if (currentTargetIndex >= pathPoints.size()) {
             pathComplete = true;
             levelComplete();
+            score+=10000;
             return;
         }
         currentTarget = pathPoints.get(currentTargetIndex);
