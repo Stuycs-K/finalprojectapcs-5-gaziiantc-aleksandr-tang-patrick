@@ -4,6 +4,8 @@ enum Attack{
    PAUSE, //Pause until space bar
    LASER, //Spawn a laser
    FRAMES, //Wait n frames
+   BOMB,
+   MISSILE,
    TRAIN, //Spawn a train
    SEL, //add n objects to selection
    DESEL, //remove n objects from selection, removes from the end. 
@@ -31,7 +33,7 @@ enum Attack{
    
    IFLESSTHAN, //Compares selected index of n, if it is false it skips the next instruction, otherwise it skips the instruction after, In theory if loops are possible then this would make the program turing complete. 
    ELSE, //Syntax for the above function, refer to the explanation below tbh. n does not matter for this function.
-   END, //More syntax for the if statement. Also applies to the WHILELESSTHAN. 
+   ENDIF, //More syntax for the if statement.
    /*
      IFLESSTHAN-N-Instruction1-N-ELSE-N-Instruction2-N-ENDIF
      If sel < N, Instruction 1 gets executed and Instruction 2 does not. 
@@ -41,8 +43,9 @@ enum Attack{
    */
   
    WHILELESSTHAN, //Like IFLESSTHAN, but it repeats the instructions in front instead of branching. This should in theory make the level editor turing complete. Requires END to not crash. 
-   
+   ENDWHILE, //Consult ENDIF
    //Functions with _ mean that they use the selected memory value in them. arr[index] is the selected value. 
-   
+   ADD_N, //Adds n to the selected index 
+   MODULO_N, //sets alloc[selIndex] to alloc[selIndex]%n
    MUL_N_SPEED, //Multiplies the speed of the first n selected objects by arr[index]
 }

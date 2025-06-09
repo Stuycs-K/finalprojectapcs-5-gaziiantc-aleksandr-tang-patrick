@@ -95,13 +95,13 @@ void loadLevel(String path){
         String[] arr = lvl[n].split("-");
         levelNums.add(Double.parseDouble(arr[1]));
         for(int i=2; i<arr.length; i+=2){
-          //println(Strattmap.get(arr[i]));
+          ////println(Strattmap.get(arr[i]));
           if(Strattmap.get(arr[i])==null){
             throw new IllegalArgumentException(arr[i]);
           }
-          System.out.println(i + "/" + arr[i] + " " + Arrays.toString(arr));
-          System.out.println(levelTypes);
-          System.out.println(levelNums);
+          //System.out.println(i + "/" + arr[i] + " " + Arrays.toString(arr));
+          //System.out.println(levelTypes);
+          //System.out.println(levelNums);
           levelNums.add(Double.parseDouble(arr[i+1]));
           
           levelTypes.add(Strattmap.get(arr[i]));
@@ -110,8 +110,8 @@ void loadLevel(String path){
       }
       
     
-    System.out.println(levelTypes);
-    System.out.println(levelNums);
+    //System.out.println(levelTypes);
+    //System.out.println(levelNums);
 }
 
 
@@ -146,9 +146,12 @@ void setup(){
   assets.add("laser.png");
   assets.add("void.png");
   assets.add("adsense.jpeg");
+  assets.add("train.png");
   //Strattmap = new HashMap<>();
   Strattmap.put("LASER", Attack.LASER);
   Strattmap.put("TRAIN", Attack.TRAIN);
+  Strattmap.put("BOMB", Attack.BOMB);
+  Strattmap.put("MISSILE", Attack.MISSILE);
   Strattmap.put("FRAMES", Attack.FRAMES);
   Strattmap.put("SEL", Attack.SEL);
   Strattmap.put("FREEZE", Attack.FREEZE);
@@ -168,8 +171,10 @@ void setup(){
   Strattmap.put("IFLESSTHAN", Attack.IFLESSTHAN);
   Strattmap.put("WHILELESSTHAN", Attack.WHILELESSTHAN);
   Strattmap.put("ELSE", Attack.ELSE);
-  Strattmap.put("END", Attack.END);
-  
+  Strattmap.put("ENDIF", Attack.ENDIF);
+  Strattmap.put("ENDWHILE", Attack.ENDWHILE);
+  Strattmap.put("ADD_N", Attack.ADD_N);
+  Strattmap.put("MODULO_N", Attack.MODULO_N);
   Strattmap.put("MUL_N_SPEED", Attack.MUL_N_SPEED);
   noStroke();
   TestClass test = new TestClass();
@@ -197,7 +202,7 @@ void setup(){
   
   
   //loadLevel("/home/students/even/2026/ptang60/APCS_Sem_2/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
-  loadLevel("assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
+  loadLevel("assets/levels/main.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
   //loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
 
 }
@@ -264,7 +269,12 @@ void draw(){
           obj = (new Laser(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
         }else if(a.equals(Attack.TRAIN)){
           obj = (new Train(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
-        }else if(a.equals(Attack.FRAMES)){
+        }else if(a.equals(Attack.BOMB)){
+          obj = (new Bomb(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
+        }else if(a.equals(Attack.MISSILE)){
+          obj = (new Missile(Math.cos(frameCount / 5) * width * 1.2, Math.sin(frameCount / 5) * height * 1.2, plr)); 
+        }
+        else if(a.equals(Attack.FRAMES)){
            //do nothing lol 
         }else if(a.equals(Attack.SEL)){
            nSel = (int)n;
@@ -321,19 +331,19 @@ void draw(){
         }
         
         else if(a.equals(Attack.IFLESSTHAN)){
-           System.out.println("reading if statement");
+           //System.out.println("reading if statement");
            if(alloc[selIndex] < n){
-               println("more than");
+               //println("more than");
                while(levelTypes.remove() != Attack.ELSE){
                    levelNums.removeFirst();  
                }
                levelNums.removeFirst();
-               println("result: " + levelTypes);
-               println(levelNums);
-               println("if statement over");
+               //println("result: " + levelTypes);
+               //println(levelNums);
+               //println("if statement over");
                pass = true;
            }else{
-               println("less than");
+               //println("less than");
                ArrayDeque<Attack> storeTypes = new ArrayDeque<>();
                ArrayDeque<Double> storeNums = new ArrayDeque<>();
                while(levelTypes.peek() != Attack.ELSE){
@@ -341,10 +351,10 @@ void draw(){
                  storeNums.add(levelNums.removeFirst());  
                }
                storeTypes.removeFirst(); storeNums.removeFirst(); //remove if statements
-               println("Finished storing");
-               println(storeTypes);
-               println(storeNums);
-               while(levelTypes.remove() != Attack.END){
+               //println("Finished storing");
+               //println(storeTypes);
+               //println(storeNums);
+               while(levelTypes.remove() != Attack.ENDIF){
                    levelNums.removeFirst();  
                }
                levelNums.removeFirst();
@@ -352,24 +362,26 @@ void draw(){
                   levelTypes.addFirst(storeTypes.removeLast()); 
                   levelNums.addFirst(storeNums.removeLast());
                }
-               println(levelTypes);
-               println(levelNums);
+               //println(levelTypes);
+               //println(levelNums);
            }
         }
         else if(a.equals(Attack.WHILELESSTHAN)){
-           println("while statement"); 
+           //println("while statement"); 
            Attack whilestatement = levelTypes.removeFirst();
+           levelNums.removeFirst();
            Double whilenum = n;
+           //println("this is the array rn " + levelNums);
            ArrayDeque<Attack> storeTypes = new ArrayDeque<>();
            ArrayDeque<Double> storeNums = new ArrayDeque<>();
-           while(levelTypes.peek() != Attack.END){
-             storeTypes.add(levelTypes.removeFirst());
-             storeNums.add(levelNums.removeFirst());  
+           while(levelTypes.peek() != Attack.ENDWHILE){
+             storeTypes.addFirst(levelTypes.removeFirst());
+             storeNums.addFirst(levelNums.removeFirst());  
            }
-           println("removed stuff");
-           println(alloc[selIndex] + " - " + n);
+           //println("removed stuff");
+           //println(alloc[selIndex] + " - " + n);
            if(alloc[selIndex] < n){
-             println("is less"); 
+             //println("is less"); 
              for(Attack moorevariables : storeTypes){
                 levelTypes.addFirst(moorevariables);
              }
@@ -379,12 +391,20 @@ void draw(){
               levelTypes.addFirst(whilestatement);
               levelNums.addFirst(whilenum);
               while(storeTypes.size() > 0){
-                  levelTypes.addFirst(storeTypes.removeLast()); 
-                  levelNums.addFirst(storeNums.removeLast());
+                  levelTypes.addFirst(storeTypes.removeFirst()); 
+                  levelNums.addFirst(storeNums.removeFirst());
                }
                
            }
-        }  
+        }else if(a.equals(Attack.ENDIF)){
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true;  
+        }else if(a.equals(Attack.ENDWHILE)){
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true;  
+        }
         
         else if(a.equals(Attack.MUL_N_SPEED)){
            for(AObject o : sel){
@@ -397,6 +417,16 @@ void draw(){
            levelNums.remove();
            levelTypes.remove();
            pass = true;
+        }else if(a.equals(Attack.ADD_N)){
+           alloc[selIndex] += n;
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true; 
+        }else if(a.equals(Attack.MODULO_N)){
+           alloc[selIndex] = alloc[selIndex] % n;
+           levelNums.remove();
+           levelTypes.remove();
+           pass = true; 
         }
         
         
@@ -411,13 +441,13 @@ void draw(){
         levelTypes.remove();
       }
       System.out.println(levelTypes);
-    System.out.println(levelNums);
+      System.out.println(levelNums);
     }
   }
   rect(bounds[0],bounds[1], 2 * (bounds[2]-bounds[0]), 2 * (bounds[3]-bounds[1]));
   //print(bounds[2] + " - " + bounds[0] + " = ");
-  //println(bounds[2]-bounds[0]); //1800-(-1000), should be 2800
-  //println(objects.get(0).getLoc(bounds[0]+1, bounds[1]+1));
+  ////println(bounds[2]-bounds[0]); //1800-(-1000), should be 2800
+  ////println(objects.get(0).getLoc(bounds[0]+1, bounds[1]+1));
   
   clearMap();
   
@@ -460,7 +490,7 @@ void draw(){
     buildingAngle -= (0.075);
   }
   
-  if(millis()>cashTime){
+  if(millis()>cashTime && (levelTypes.size() == 0 || !levelTypes.peek().equals(Attack.PAUSE))){
     cashflow+=0.7;
     cashTime*=3;
   }
@@ -483,7 +513,9 @@ void draw(){
     defenses[selectedDefenseIndex].draw();
     popMatrix();
   }
-  cash+=cashflow;
+  if(levelTypes.size() == 0 || !levelTypes.peek().equals(Attack.PAUSE)){
+    cash+=cashflow;
+  }
   text("Cash: "+(double)(int)(cash*10000)/10000,10 - plrX, 70 - plrY);
   if(drawingPath){
     drawPath();
@@ -580,14 +612,14 @@ void keyPressed(){
   }
   if(keyCode == 'C'||keyCode == 'c') {
     cheatsEnabled = !cheatsEnabled;
-    println("Cheats " + (cheatsEnabled ? "ENABLED" : "DISABLED"));
+    //println("Cheats " + (cheatsEnabled ? "ENABLED" : "DISABLED"));
     return;
   }  
   if(cheatsEnabled) {
     switch(key) {
       case 'M':
         cash += 1000;
-        println("Added $1000");
+        //println("Added $1000");
         break;     
       case 'U':
         for(int i = 0; i < upgradeLevels.length; i++) {
@@ -595,7 +627,7 @@ void keyPressed(){
             upgradeLevels[i]++;
           }
         }
-        println("All defenses upgraded");
+        //println("All defenses upgraded");
         break;      
       case 'L': 
         
@@ -614,7 +646,7 @@ void mousePressed(){
       //print(mouseX-plrX<x+50);
       //print(mouseY+plrY>y);
       //print(mouseY-plrY<y+50);
-      //println();
+      ////println();
       if(mouseX+plrX>x&&mouseX-plrX<x+50&&mouseY+plrY>y&&mouseY-plrY<y+50&&cash>=cost[i]){
         selectedDefenseIndex=i;
         placingDefense=true;

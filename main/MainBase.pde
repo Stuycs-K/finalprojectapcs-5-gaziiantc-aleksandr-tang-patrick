@@ -18,7 +18,7 @@ class MainBase extends ADefense {
        double damage = 1000 * ((Math.abs(obj.dx) + Math.abs(obj.dy)) * obj.mass);
        score += (int)(damage * 0.05);
     
-      print("hit " + this.hp);
+      //print("hit " + this.hp);
   		if(this.hp > 0){
   			//it gets weaker as it takes more damage n stuff
   			this.mass = 2000 * (double)this.hp/maxHP + 500; 

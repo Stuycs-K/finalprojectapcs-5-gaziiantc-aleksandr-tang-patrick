@@ -52,3 +52,7 @@ Started work on the level lang, got branches and whatnot
 ### 2025-06-06
 
 Added while loops to the level lang. It should theoretically be turing complete now
+
+### 2025-06-08
+
+Just some final cleanup. Nothing worthy of mention
