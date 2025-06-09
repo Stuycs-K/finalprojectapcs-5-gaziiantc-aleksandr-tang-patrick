@@ -46,3 +46,6 @@ Created instruction screen
 
 ### 2024-06-07
 Created special attacks for bomb and missile
+
+### 2024-06-08
+Fixed upgrade stuff and missile logic
