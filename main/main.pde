@@ -246,7 +246,7 @@ void draw(){
      }
   }
   if(keys['d']){
-     if(plrY > bounds[0] + sHeight){
+     if(plrX > bounds[0] + sHeight){
        plrX -= 5;  
      }
   }
@@ -256,7 +256,7 @@ void draw(){
      }
   }
   if(keys['a']){
-     if(plrY < bounds[2] - sHeight){
+     if(plrX < bounds[2] - sHeight){
        plrX += 5;  
      }
   }
@@ -547,13 +547,6 @@ void draw(){
   }
 }
 
-void mouseDragged(){
-   stroke(0);
-   line(mouseX, mouseY, pmouseX, pmouseY);
-   noStroke();
-   objects.get(1).applyForce((mouseX-pmouseX) / 2, (mouseY-pmouseY) / 2); 
-}
-
 boolean[] keys = new boolean[200]; //oversized because i dont trust processing
 boolean shiftisspecial;
 void keyReleased(){
@@ -653,7 +646,7 @@ void mousePressed(){
       //print(mouseY+plrY>y);
       //print(mouseY-plrY<y+50);
       ////println();
-      if(mouseX+plrX>x&&mouseX-plrX<x+50&&mouseY+plrY>y&&mouseY-plrY<y+50&&cash>=cost[i]){
+      if(mouseX-plrX>x&&mouseX-plrX<x+50&&mouseY-plrY>y&&mouseY-plrY<y+50&&cash>=cost[i]){
         selectedDefenseIndex=i;
         placingDefense=true;
         shop=false;
@@ -664,7 +657,7 @@ void mousePressed(){
       float x=250+75*(i-5)-plrX;
       float y=320-plrY;
       //rect(x-plrX, y-plrY, 50, 50);
-      if(mouseX+plrX>x&&mouseX-plrX<x+50&&mouseY+plrY>y&&mouseY-plrY<y+50&&cash>=cost[i]){
+      if(mouseX-plrX>x&&mouseX-plrX<x+50&&mouseY-plrY>y&&mouseY-plrY<y+50&&cash>=cost[i]){
         selectedDefenseIndex=i;
         placingDefense=true;
         shop=false;
@@ -707,7 +700,7 @@ void mousePressed(){
       if (upgradeLevels[i] >= 3) continue;   
        float x = width/2 - 200 + (i%4)*130-plrX;
        float y = height/2 - 100 + floor(i/4)*150-plrY;
-       if (mouseX+plrX>x&&mouseX-plrX<x+50&&mouseY+plrY>y&&mouseY-plrY<y+50) {
+       if (mouseX-plrX>x&&mouseX-plrX<x+50&&mouseY-plrY>y&&mouseY-plrY<y+50) {
          if (cash >= upgradeCosts[upgradeLevels[i]]) {
            cash -= upgradeCosts[upgradeLevels[i]];
            applyUpgrade(i);
