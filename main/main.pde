@@ -73,12 +73,13 @@ int level;
 boolean instruction=true;
 
 void loadLevel(String path){
-    try{
-      Scanner sc = new Scanner(new File(path));
-      
-      while(sc.hasNextLine()){
+      String[] lvl = loadStrings(path);
+      if(lvl.length <= 0){
+        throw new IllegalArgumentException("Invalid level " + path);
+      }
+      for(int n=0; n<lvl.length; n++){
         levelTypes.add(Attack.PAUSE);
-        String[] arr = sc.nextLine().split("-");
+        String[] arr = lvl[n].split("-");
         levelNums.add(Double.parseDouble(arr[1]));
         for(int i=2; i<arr.length; i+=2){
           //println(Strattmap.get(arr[i]));
@@ -95,10 +96,7 @@ void loadLevel(String path){
         }
       }
       
-      sc.close();
-    }catch(FileNotFoundException e){
-      throw new IllegalArgumentException("File " + path + " not found");
-    }
+    
     System.out.println(levelTypes);
     System.out.println(levelNums);
 }
@@ -176,7 +174,7 @@ void setup(){
   
   
   //loadLevel("/home/students/even/2026/ptang60/APCS_Sem_2/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
-  loadLevel("/Users/ptang/OneDrive/Documents/APCS Code Semester 2/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
+  loadLevel("assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
   //loadLevel("/home/bread/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
 
 }
