@@ -139,7 +139,7 @@ void setup(){
   }
   
   assets = new AssetPool();
-  assets.add("testclass.png");
+  assets.add("testclass.jpg");
   assets.add("shield.jpg");
   assets.add("sheetmetal.jpg");
   assets.add("woodwall.jpg");
@@ -193,7 +193,7 @@ void setup(){
   test.x += 150;
   test2.x += 150;
   
-  WallWooden test3 = new WallWooden(width/2-100, height/2);
+  WallWooden test3 = new WallWooden(900, 900);
   
   plr = new MainBase(0, 0);
   objects.add(plr);
@@ -225,6 +225,11 @@ void debugDraw(){
     }
     rect(map.get(i).y, map.get(i).x, Chunk.size, Chunk.size);
   }
+  int e = 0;
+  for(int i=0; i<objects.size(); i++){
+     e+=objects.get(i).mass * (Math.pow(objects.get(i).dx, 2) + Math.pow(objects.get(i).dy, 2));
+  }
+  text("Total energy in system: " + e, 100, 10);
 }
 
 void clearMap(){
@@ -499,11 +504,7 @@ void draw(){
   objects.get(2).angle+=objects.get(2).dx/25;
   fill(0);
   textSize(25);
-  int e = 0;
-  for(int i=0; i<objects.size(); i++){
-     e+=objects.get(i).mass * (Math.pow(objects.get(i).dx, 2) + Math.pow(objects.get(i).dy, 2));
-  }
-  text("Total energy in system: " + e, 100, 10);
+
   if(shop){
     drawShop();
   }

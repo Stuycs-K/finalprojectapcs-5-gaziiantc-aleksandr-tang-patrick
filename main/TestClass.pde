@@ -17,7 +17,7 @@ class TestClass extends AObject{
     translate((float)this.x, (float)this.y);
     beginShape();
     tint(255, 255);
-    texture(assets.get("testclass.png"));
+    texture(assets.get("testclass.jpg"));
     textureMode(NORMAL);
     vertex(-0.5 * this.sizeX, -0.5 * this.sizeY, 0, 0);
     vertex(0.5 * this.sizeX, -0.5 * this.sizeY, 1, 0);
