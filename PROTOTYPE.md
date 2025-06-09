@@ -13,6 +13,14 @@ Critical Features: First we make physics, then we add gameplay. These are the re
 Nice to have features: Multiplayer PVP
 Diagrams
 
+UPDATED UML
+
+
+![image](https://github.com/user-attachments/assets/26a49e91-58e9-415a-b9f5-c2c4badd5d94)
+
+
+
+
 uml
 
 ![image](https://github.com/user-attachments/assets/4733150e-be4f-4298-8e09-c5d1804fc0a2)
