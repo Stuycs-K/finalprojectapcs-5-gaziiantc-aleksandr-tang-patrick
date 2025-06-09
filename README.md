@@ -14,6 +14,7 @@ Features:
 - Economy management with cash flow
 - Score system with level progression
 - Cheat system for testing/experimentation
+- Custom levels
 
 Defenses:
 | Name | Feature |
@@ -51,3 +52,7 @@ Controls:
 | `b` | Spawns a bomb (for debug purposes) |  
 | `m` | Spawns a missile (for debug purposes) | 
 | `o` | Spawns a train (for debug purposes) |  
+
+Level editor:
+
+The level editor is documented in the Attack.pde enum. You write a string, and then put it into a file in assets/levels/, and load it in the setup() function and it will read that level. There are two examples in the folder already.
