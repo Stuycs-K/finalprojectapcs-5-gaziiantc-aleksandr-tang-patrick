@@ -244,7 +244,7 @@ void draw(){
      }
   }
   if(keys['d']){
-     if(plrY > bounds[0] + sHeight){
+     if(plrX > bounds[0] + sHeight){
        plrX -= 5;  
      }
   }
@@ -254,7 +254,7 @@ void draw(){
      }
   }
   if(keys['a']){
-     if(plrY < bounds[2] - sHeight){
+     if(plrX < bounds[2] - sHeight){
        plrX += 5;  
      }
   }
@@ -544,8 +544,11 @@ void draw(){
   }
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 464a09701c216083bbc5430694b06697b56806e8
 boolean[] keys = new boolean[200]; //oversized because i dont trust processing
 boolean shiftisspecial;
 void keyReleased(){
@@ -645,7 +648,7 @@ void mousePressed(){
       //print(mouseY+plrY>y);
       //print(mouseY-plrY<y+50);
       ////println();
-      if(mouseX+plrX>x&&mouseX-plrX<x+50&&mouseY+plrY>y&&mouseY-plrY<y+50&&cash>=cost[i]){
+      if(mouseX-plrX>x&&mouseX-plrX<x+50&&mouseY-plrY>y&&mouseY-plrY<y+50&&cash>=cost[i]){
         selectedDefenseIndex=i;
         placingDefense=true;
         shop=false;
