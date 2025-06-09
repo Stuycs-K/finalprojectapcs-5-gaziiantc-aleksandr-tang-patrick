@@ -787,7 +787,7 @@ void drawUpgradeScreen(){
         text(defenseNames[i], x, y);
         text(upgradeDescriptions[i][upgradeLevels[i]], x, y+20);
         text("$"+upgradeCosts[upgradeLevels[i]], x, y+40);
-        if (mouseX+plrX>x&&mouseX-plrX<x+50&&mouseY+plrY>y&&mouseY-plrY<y+50) {
+        if (mouseX-plrX>x&&mouseX-plrX<x+50&&mouseY-plrY>y&&mouseY-plrY<y+50) {
             noFill();
             stroke(0, 255, 0);
             rect(x, y, 100, 80);
