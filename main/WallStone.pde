@@ -1,7 +1,7 @@
 class WallStone extends ADefense {  
   public static final int maxHP = 15000;
   public WallStone(int x, int y){  
-    super(maxHP, x, y, 75, 25, 3000,75);
+    super(DefenseStats.STONE[0], x, y, DefenseStats.STONE[3], DefenseStats.STONE[4], DefenseStats.STONE[5], DefenseStats.STONE[6]);
   }
   @Override
   public void doCollisionStuff(AObject obj){  

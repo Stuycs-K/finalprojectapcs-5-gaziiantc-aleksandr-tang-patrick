@@ -1,9 +1,10 @@
 class Shield extends ADefense {  
   public static final int maxHP = 15000;
-  static final int duration = 10000;
   public int spawnTime;
+  public float duration;
   public Shield(int x, int y, int spawnTime){  
-    super(maxHP, x, y, 100,100, 3000,50);
+    super(DefenseStats.SHIELD[0], x, y, DefenseStats.SHIELD[3], DefenseStats.SHIELD[4], DefenseStats.SHIELD[5], DefenseStats.SHIELD[6]);
+    this.duration = defenseBaseStats[4];
     this.spawnTime = spawnTime;
   }
   @Override

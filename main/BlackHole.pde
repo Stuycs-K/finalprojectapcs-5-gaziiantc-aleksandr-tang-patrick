@@ -1,8 +1,11 @@
 class BlackHole extends ADefense {  
   public static final int maxHP = 15000;
-  static final int duration = 5000;
+  public float duration;
+  public float radius; 
   public BlackHole(int x, int y, int spawnTime){  
-    super(maxHP, x, y, 50,50, 3000,50);
+    super(DefenseStats.BLACKHOLE[0], x, y, DefenseStats.BLACKHOLE[3], DefenseStats.BLACKHOLE[4], DefenseStats.BLACKHOLE[5], DefenseStats.BLACKHOLE[6]);
+    this.radius = defenseBaseStats[5];
+    this.duration = 5000;
     this.spawnTime = spawnTime;
   }
   @Override

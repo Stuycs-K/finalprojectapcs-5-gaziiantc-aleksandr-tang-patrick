@@ -1,7 +1,9 @@
 class Adsense extends ADefense {  
   public static final int maxHP = 15000;
+  public float multiplier;
   public Adsense(int x, int y){  
-    super(maxHP, x, y, 50, 50, 3000,50);
+    super(DefenseStats.ADSENSE[0], x, y, DefenseStats.ADSENSE[3], DefenseStats.ADSENSE[4], DefenseStats.ADSENSE[5], DefenseStats.ADSENSE[6]);
+    this.multiplier = defenseBaseStats[6];
   }
   @Override
   public void draw(){
