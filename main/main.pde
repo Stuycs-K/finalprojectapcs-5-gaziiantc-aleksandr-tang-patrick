@@ -52,7 +52,7 @@ int currentTargetIndex = 0;
 boolean drawingPath = false;
 
 MainBase plr;
-int nextLevel=500;
+int nextLevel=500000;
 public AssetPool assets; //using a class in case i want to add shaders for whatever reason
 boolean upgradeScreen = false;
 int[] upgradeLevels;
@@ -197,9 +197,7 @@ void setup(){
   
   plr = new MainBase(0, 0);
   objects.add(plr);
-  objects.add(test);
-  objects.add(test2);
-  objects.add(test3);
+
   
   
   //loadLevel("/home/students/even/2026/ptang60/APCS_Sem_2/finalprojectapcs-5-gaziiantc-aleksandr-tang-patrick/main/assets/levels/test.lvl"); //this needs to be changed asap because it will literally not run on any other computer.
@@ -500,8 +498,7 @@ void draw(){
     cashflow+=0.7;
     cashTime*=3;
   }
-  objects.get(1).angle+=objects.get(1).dx/25;
-  objects.get(2).angle+=objects.get(2).dx/25;
+
   fill(0);
   textSize(25);
 
@@ -547,12 +544,7 @@ void draw(){
   }
 }
 
-void mouseDragged(){
-   stroke(0);
-   line(mouseX, mouseY, pmouseX, pmouseY);
-   noStroke();
-   objects.get(1).applyForce((mouseX-pmouseX) / 2, (mouseY-pmouseY) / 2); 
-}
+
 
 boolean[] keys = new boolean[200]; //oversized because i dont trust processing
 boolean shiftisspecial;
@@ -664,7 +656,7 @@ void mousePressed(){
       float x=250+75*(i-5)-plrX;
       float y=320-plrY;
       //rect(x-plrX, y-plrY, 50, 50);
-      if(mouseX+plrX>x&&mouseX-plrX<x+50&&mouseY+plrY>y&&mouseY-plrY<y+50&&cash>=cost[i]){
+      if(mouseX-plrX>x&&mouseX-plrX<x+50&&mouseY-plrY>y&&mouseY-plrY<y+50&&cash>=cost[i]){
         selectedDefenseIndex=i;
         placingDefense=true;
         shop=false;
@@ -707,7 +699,7 @@ void mousePressed(){
       if (upgradeLevels[i] >= 3) continue;   
        float x = width/2 - 200 + (i%4)*130-plrX;
        float y = height/2 - 100 + floor(i/4)*150-plrY;
-       if (mouseX+plrX>x&&mouseX-plrX<x+50&&mouseY+plrY>y&&mouseY-plrY<y+50) {
+       if (mouseX-plrX>x&&mouseX-plrX<x+50&&mouseY-plrY>y&&mouseY-plrY<y+50) {
          if (cash >= upgradeCosts[upgradeLevels[i]]) {
            cash -= upgradeCosts[upgradeLevels[i]];
            applyUpgrade(i);
@@ -1057,5 +1049,5 @@ fill(200, 230, 200);
     textSize(32);
     text("How to Play", width/2-plrX-150, height/2 - 200-plrY);
     textSize(16);
-    text(" Protect your moving base from attacks. \n \n Press E to open the shop and buy buildings and spells to stop attacks. \n \n Press space to show the path your base will follow and start the level. \n \n At the end of every level, you get to upgrade one building/spell. \n \n Press I to open/close this screen.", width/2-plrX-225, height/2 - 160-plrY);
+    text(" Protect your moving base from attacks. \n \n Press E to open the shop and buy buildings and spells to stop attacks. \n \n Press space to show the path your base will follow and start the level. \n \n Once you reach a certain score, you get to upgrade one building/spell. \n \n UPGRADES WILL ONLY UPGRADE PRE_EXISTING BUILDINGS. \n \n Press I to open/close this screen.", width/2-plrX-225, height/2 - 160-plrY);
 }

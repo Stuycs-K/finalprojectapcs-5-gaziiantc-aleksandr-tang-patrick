@@ -21,7 +21,7 @@ class MainBase extends ADefense {
       //print("hit " + this.hp);
   		if(this.hp > 0){
   			//it gets weaker as it takes more damage n stuff
-  			this.mass = 2000 * (double)this.hp/maxHP + 500; 
+  			//this.mass = 2000 * (double)this.hp/maxHP + 500; 
   			this.clr = color((int)((maxHP-hp) * (200.0d/maxHP)), (int)((maxHP-hp) * (200.0d/maxHP)), (int)((maxHP-hp) * (200.0d/maxHP)));
   		}else{
         exit();
