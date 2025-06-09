@@ -15,7 +15,7 @@ class Shield extends ADefense {
   }
   @Override
   public void draw(){
-     if (millis()-spawnTime > duration) {
+     if (millis()-spawnTime < duration) {
       pushMatrix();
       translate((float)this.x, (float)this.y);
       beginShape();
@@ -33,7 +33,7 @@ class Shield extends ADefense {
   }
   @Override
   public void tick(){  
-    if(millis()-spawnTime < duration) {
+    if(millis()-spawnTime > duration) {
        objects.remove(this);
        return;
     }

@@ -580,7 +580,7 @@ void keyPressed(){
      }
     }
   }
-  if(keyCode == 'C'||keyCode == 'c' && shiftisspecial) {
+  if(keyCode == 'C'||keyCode == 'c') {
     cheatsEnabled = !cheatsEnabled;
     println("Cheats " + (cheatsEnabled ? "ENABLED" : "DISABLED"));
     return;
@@ -599,13 +599,8 @@ void keyPressed(){
         }
         println("All defenses upgraded");
         break;      
-      case 'K': 
-        for(int i = objects.size()-1; i >= 0; i--) {
-          if(objects.get(i) instanceof AObject) {
-            objects.remove(i);
-          }
-        }
-        println("Killed All Enemies");
+      case 'L': 
+        
         break;        
       }
     }
