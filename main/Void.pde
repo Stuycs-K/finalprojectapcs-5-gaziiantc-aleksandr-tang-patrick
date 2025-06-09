@@ -1,7 +1,9 @@
 class Void extends ADefense {  
   public static final int maxHP = 15000;
+  public float radius;
   public Void(int x, int y){  
-    super(maxHP, x, y, 25, 25, 3000,300);
+    super(DefenseStats.VOID[0], x, y, DefenseStats.VOID[3], DefenseStats.VOID[4], DefenseStats.VOID[5], DefenseStats.VOID[6]);
+    this.radius = defenseBaseStats[3];
   }
   @Override
   public void draw(){

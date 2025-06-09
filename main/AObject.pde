@@ -189,8 +189,8 @@ abstract class AObject {
   }
 
   public void destroy(){	
-	this.x = 10000;
-	this.y = 10000; 
+	this.x = 10000000;
+	this.y = 10000000; 
 	//game loop should remove objects that are significantly out of bounds like this one
   }
   

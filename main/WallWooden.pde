@@ -1,9 +1,9 @@
 class WallWooden extends ADefense {	
 	public static final int maxHP = 5000;
-	public WallWooden(int x, int y){	
-		super(maxHP, x, y, 60, 20, 1000,50);
+  public WallWooden(int x, int y){  
+    super(DefenseStats.WOODEN[0], x, y, DefenseStats.WOODEN[3], DefenseStats.WOODEN[4], DefenseStats.WOODEN[5], DefenseStats.WOODEN[6]);
     this.attributes.add(Attribute.FLAMMABLE);
-	}
+  }
 	@Override
 	public void doCollisionStuff(AObject obj){	
 		this.applyForce(obj.dx * obj.mass, obj.dy * obj.mass);

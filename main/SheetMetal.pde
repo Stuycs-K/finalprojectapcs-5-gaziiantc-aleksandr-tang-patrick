@@ -1,7 +1,7 @@
 class SheetMetal extends ADefense {  
   public static final int maxHP = 30000;
   public SheetMetal(int x, int y){  
-    super(maxHP, x, y, 85, 20, 3000,125);
+    super(DefenseStats.METAL[0], x, y, DefenseStats.METAL[3], DefenseStats.METAL[4], DefenseStats.METAL[5], DefenseStats.METAL[6]);
   }
 
   @Override

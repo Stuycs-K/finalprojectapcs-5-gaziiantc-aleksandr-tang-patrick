@@ -1,6 +1,16 @@
 import java.util.*;
 import java.io.*;
 
+static class DefenseStats {
+    static final int[] WOODEN = {100, 0, 0, 60, 20, 10, 10}; 
+    static final int[] STONE = {200, 0, 0, 70, 25, 20, 20};
+    static final int[] METAL = {300, 0, 0, 85, 20, 30, 30};
+    static final int[] VOID = {50, 0, 0, 25, 25, 5, 5};
+    static final int[] SHIELD = {500, 0, 0, 50, 50, 5, 50};
+    static final int[] BLACKHOLE = {750, 0, 0, 50, 50, 100, 100};
+    static final int[] ADSENSE = {100, 0, 0, 50, 50, 1, 200};
+}
+
 
 static final int sHeight = 700;
 static final int sWidth = 700;
@@ -10,7 +20,9 @@ List<Chunk> map;
 ArrayList<AObject> objects;
 
 int selectedDefenseIndex=-1;
-ADefense[] defenses={new WallWooden(0,0),new WallStone(0,0),new SheetMetal(0,0),new Void(0,0),new Shield(0,0, Integer.MAX_VALUE),new BlackHole(0,0, Integer.MAX_VALUE),new Adsense(0,0)};
+ADefense[] defenses;
+float[] defenseBaseStats = {5000,7500,10000,100,10000,150,1.0};
+float[] defenseSizeMultipliers = {1.0,1.0,1.0,1.0,1.0,1.0,1.0};
 int[] baseCost = {50,75,125,50,175,250,400};
 int purchaseCount[] = new int[baseCost.length]; 
 int[] cost = baseCost.clone();
@@ -43,7 +55,7 @@ MainBase plr;
 int nextLevel=50;
 public AssetPool assets; //using a class in case i want to add shaders for whatever reason
 boolean upgradeScreen = false;
-int[] upgradeLevels = new int[defenses.length];
+int[] upgradeLevels;
 int[] upgradeCosts = {50, 100, 200, 500, 1000}; 
 String[][] upgradeDescriptions = {{"+50% Health", "+100% Health", "+50% Size"},
     {"+50% Health", "+100% Health", "+50% Size"},
@@ -52,6 +64,7 @@ String[][] upgradeDescriptions = {{"+50% Health", "+100% Health", "+50% Size"},
     {"+50% Duration", "+100% Duration", "+50% Size"},
     {"+50% Radius", "+100% Radius", "+50% Duration"},
     {"+50% Cash Flow", "+100% Cash Flow", "+25% Score"}};
+
 
 public int plrX = (int)(0.5 * sWidth); public int plrY = (int)(0.5 * sHeight);
 public int[] bounds = new int[]{0-sWidth*2, 0-sHeight*2, sWidth * 2, sHeight * 2}; //left x y, right x y
@@ -103,6 +116,16 @@ void loadLevel(String path){
 
 
 void setup(){
+   defenses = new ADefense[]{
+    new WallWooden(0, 0),
+    new WallStone(0, 0), 
+    new SheetMetal(0, 0),
+    new Void(0, 0),
+    new Shield(0, 0, Integer.MAX_VALUE),
+    new BlackHole(0, 0, Integer.MAX_VALUE),
+    new Adsense(0, 0)
+  };
+  upgradeLevels = new int[defenses.length];
   objects = new ArrayList<>();
   size(700, 700, P2D);
   map = new ArrayList<>();
@@ -555,7 +578,7 @@ void keyPressed(){
      }
     }
   }
-  if(keyCode == 'C'||keyCode == 'c' && shiftisspecial) {
+  if(keyCode == 'C'||keyCode == 'c') {
     cheatsEnabled = !cheatsEnabled;
     println("Cheats " + (cheatsEnabled ? "ENABLED" : "DISABLED"));
     return;
@@ -574,13 +597,8 @@ void keyPressed(){
         }
         println("All defenses upgraded");
         break;      
-      case 'K': 
-        for(int i = objects.size()-1; i >= 0; i--) {
-          if(objects.get(i) instanceof AObject) {
-            objects.remove(i);
-          }
-        }
-        println("Killed All Enemies");
+      case 'L': 
+        
         break;        
       }
     }
@@ -634,6 +652,7 @@ void mousePressed(){
         break;
     }
     if(placing != null){
+      applyDefenseUpgrades(placing, selectedDefenseIndex);
       placing.angle = buildingAngle;
       objects.add(placing);
       //print(objects.get(objects.size()-1));
@@ -712,7 +731,7 @@ void drawShop(){
   textSize(24);
   text("Shop",350-plrX,175-plrY);
 }
-void drawUpgradeScreen() {
+void drawUpgradeScreen(){
     fill(200, 230, 200);
     rect(width/2-plrX, height/2-plrY, 500, 500);
     fill(0);
@@ -740,28 +759,154 @@ void drawUpgradeScreen() {
         }
     }
 }
-void applyUpgrade(int defenseIndex) {
-    upgradeLevels[defenseIndex]++;
-    switch(defenseIndex) {
-        case 0:
-            
-            break;
+void applyUpgrade(int defenseIndex){
+  if(upgradeLevels[defenseIndex] >= 5 || cash < upgradeCosts[upgradeLevels[defenseIndex]]){
+    return;
+  }
+  cash -= upgradeCosts[upgradeLevels[defenseIndex]];
+  upgradeLevels[defenseIndex]++;  
+  switch(defenseIndex){
+    case 0:
+      if(upgradeLevels[defenseIndex] == 1) defenseBaseStats[0] *= 1.5;
+      else if(upgradeLevels[defenseIndex] == 2) defenseBaseStats[0] *= 2;
+      else if(upgradeLevels[defenseIndex] == 3) defenseSizeMultipliers[0] *= 1.5;
+      for(AObject obj : objects){
+        if(obj instanceof WallWooden){
+          WallWooden wall = (WallWooden)obj;
+          wall.hp = (int)defenseBaseStats[0];
+          wall.sizeX = (int)(60*defenseSizeMultipliers[0]);
+          wall.sizeY = (int)(20*defenseSizeMultipliers[0]);
+        }
+      }
+      break;
             
         case 1:
+            if(upgradeLevels[defenseIndex] == 1) defenseBaseStats[1] *= 1.5;
+            else if(upgradeLevels[defenseIndex] == 2) defenseBaseStats[1] *= 2;
+            else if(upgradeLevels[defenseIndex] == 3) defenseSizeMultipliers[1] *= 1.5;
+            for(AObject obj : objects){
+                if(obj instanceof WallStone){
+                    WallStone wall = (WallStone)obj;
+                    wall.hp = (int)defenseBaseStats[1];
+                    wall.sizeX = (int)(70*defenseSizeMultipliers[1]);
+                    wall.sizeY = (int)(25*defenseSizeMultipliers[1]);
+                }
+            }
             break;
             
-        case 5:
+        case 2:
+            if(upgradeLevels[defenseIndex] == 1) defenseBaseStats[2] *= 1.5;
+            else if(upgradeLevels[defenseIndex] == 2) defenseBaseStats[2] *= 2;
+            else if(upgradeLevels[defenseIndex] == 3) defenseSizeMultipliers[2] *= 1.5;
+            for(AObject obj : objects){
+                if(obj instanceof SheetMetal){
+                    SheetMetal wall = (SheetMetal)obj;
+                    wall.hp = (int)defenseBaseStats[2];
+                    wall.sizeX = (int)(80*defenseSizeMultipliers[2]);
+                    wall.sizeY = (int)(30*defenseSizeMultipliers[2]);
+                }
+            }
+            break;
+            
+        case 3:
+            if(upgradeLevels[defenseIndex] == 1) defenseBaseStats[3] *= 1.5;
+            else if(upgradeLevels[defenseIndex] == 2) defenseBaseStats[3] *= 2;
+            else if(upgradeLevels[defenseIndex] == 3) cost[3] *= 0.5;
+            for(AObject obj : objects){
+                if(obj instanceof Void){
+                    Void v = (Void)obj;
+                    v.radius = defenseBaseStats[3];
+                    if (upgradeLevels[defenseIndex] == 3) {
+                        v.sizeX = (int)(40*defenseSizeMultipliers[3]);
+                        v.sizeY = (int)(40*defenseSizeMultipliers[3]);
+                    }
+                }
+            }
             break;
             
         case 4:
+            if(upgradeLevels[defenseIndex] == 1) defenseBaseStats[4] *= 1.5;
+            else if(upgradeLevels[defenseIndex] == 2) defenseBaseStats[4] *= 2;
+            else if(upgradeLevels[defenseIndex] == 3) defenseSizeMultipliers[4] *= 1.5;            
+            for(AObject obj : objects){
+                if(obj instanceof Shield){
+                    Shield s = (Shield)obj;
+                    s.duration = defenseBaseStats[4];
+                    s.sizeX = (int)(50*defenseSizeMultipliers[4]);
+                    s.sizeY = (int)(50*defenseSizeMultipliers[4]);
+                }
+            }
+            break;
+            
+        case 5:
+            if(upgradeLevels[defenseIndex] == 1) defenseBaseStats[5] *= 1.5;
+            else if(upgradeLevels[defenseIndex] == 2) defenseBaseStats[5] *= 2;
+            else if(upgradeLevels[defenseIndex] == 3) defenseSizeMultipliers[5] *= 1.5;
+            
+            for(AObject obj : objects){
+                if(obj instanceof BlackHole){
+                    BlackHole bh = (BlackHole)obj;
+                    bh.radius = defenseBaseStats[5];
+                    bh.sizeX = (int)(60*defenseSizeMultipliers[5]);
+                    bh.sizeY = (int)(60*defenseSizeMultipliers[5]);
+                }
+            }
             break;
             
         case 6:
+            if(upgradeLevels[defenseIndex] == 1){
+                defenseBaseStats[6] *= 1.5;
+                cashflow *= 1.5;
+            }
+            else if(upgradeLevels[defenseIndex] == 2){
+                defenseBaseStats[6] *= 2;
+                cashflow *= 2;
+            }
+            else if(upgradeLevels[defenseIndex] == 3){
+                defenseSizeMultipliers[6] *= 1.25;
+                cashflow *= 3;
+            }
+            
+            for(AObject obj : objects){
+                if(obj instanceof Adsense){
+                    Adsense ad = (Adsense)obj;
+                    ad.multiplier = defenseBaseStats[6];
+                    ad.sizeX = (int)(30*defenseSizeMultipliers[6]);
+                    ad.sizeY = (int)(30*defenseSizeMultipliers[6]);
+                }
+            }
             break;
     }
 }
-
-void generateRandomPath() {
+void applyDefenseUpgrades(ADefense defense, int typeIndex){
+    switch(typeIndex){
+        case 0:
+            ((WallWooden)defense).hp = (int)defenseBaseStats[0];
+            break;
+        case 1:
+            ((WallStone)defense).hp = (int)defenseBaseStats[1];
+            break;
+        case 2:
+            ((SheetMetal)defense).hp = (int)defenseBaseStats[2];
+            break;
+        case 3:
+            ((Void)defense).radius = defenseBaseStats[3];
+            break;
+        case 4:
+            ((Shield)defense).duration = defenseBaseStats[4];
+            break;
+        case 5:
+            ((BlackHole)defense).radius = defenseBaseStats[5];
+            break;
+        case 6:
+            ((Adsense)defense).multiplier = defenseBaseStats[6];
+            break;
+    }
+    
+    defense.sizeX = (int)(defense.sizeX * defenseSizeMultipliers[typeIndex]);
+    defense.sizeY = (int)(defense.sizeY * defenseSizeMultipliers[typeIndex]);
+}
+void generateRandomPath(){
     pathPoints.clear();
     pathComplete = false;
     pathProgress = 0;
@@ -782,7 +927,7 @@ void generateRandomPath() {
     drawingPath = true;
 }
 
-void drawPath() {
+void drawPath(){
     if(pathPoints.size() < 2) return;
     stroke(0, 255, 0, 150);
     strokeWeight(3);
@@ -802,7 +947,7 @@ void drawPath() {
     noStroke();
 }
 
-void followPath() {
+void followPath(){
     drawPath();
     if (pathComplete || pathPoints.size() < 2) return;
     
@@ -839,7 +984,7 @@ void followPath() {
     }
 }
 
-void levelComplete() {
+void levelComplete(){
     score += 1000 * level;
     level++;
     start = false;
