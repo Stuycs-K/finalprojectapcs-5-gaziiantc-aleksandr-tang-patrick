@@ -544,11 +544,7 @@ void draw(){
   }
 }
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 464a09701c216083bbc5430694b06697b56806e8
 boolean[] keys = new boolean[200]; //oversized because i dont trust processing
 boolean shiftisspecial;
 void keyReleased(){
